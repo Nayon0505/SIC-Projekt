@@ -38,3 +38,7 @@ Die oben genannten Teammitglieder erklären an Eides statt:
 
 {: .fs-2 }
 Last build: {{ site.time | date: '%d %b %Y, %R%:z' }}
+
+<!-- Notizen: 
+Ctrl + shift + V oder ctrl + K dann V um die Preview zu sehen
+die commits immer im present tense schreiben, kurz und aussagend-->
