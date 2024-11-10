@@ -8,24 +8,24 @@ nav_order: 0
 >
 > You may delete this `attention` box.
 
-# [Project Name]
+# [SIC!]
 
-[Project description]
+[Der Sustainable Innovation Check ermöglicht es KMUs kostengünstig ihr Unternehmen Nachhaltiger zu machen!]
 
 ## Team members
 
-### [Jane Dane]
+### [Anil Öker]
 
 About
-: Some info about Jane
+: Wirtschaftsinformatik Student
 
 Matr.-Nr.
 : 1234567
 
-### [Joe Doe]
+### [Nayon Lenz]
 
 About
-: Some info about Joe
+: Wirtschaftsinformatik Student
 
 Matr.-Nr.
 : 1234567
