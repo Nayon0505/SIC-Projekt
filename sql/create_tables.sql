@@ -1,0 +1,6 @@
+CREATE TABLE user_data (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL,
+    password INTEGER NOT NULL
+);
+

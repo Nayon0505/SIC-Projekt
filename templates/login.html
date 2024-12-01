@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmelden</title>
+</head>
+<body>
+    <form action="/login" method="POST"></form>
+        <h3>Jetzt anmelden</h3>
+        <div class="form">
+            <label for="username">E-Mail</label>
+            <input type="text" id="username" name="username" placeholder="E-Mail" required>
+        </div>
+        <div class="form">
+            <label for="password">Passwort</label>
+            <input type="password" id="password" name="password" placeholder="Passwort" required>
+        </div>
+        <div class="form">
+            <button type="submit">Anmelden</button>
+        </div>
+        <div class="form">
+            <a href="/">Passwort vergessen?</a>
+            <a href="/register">Registrieren</a>
+        </div>
+    </form>
+</body>
+</html>
