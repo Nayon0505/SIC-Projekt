@@ -27,7 +27,7 @@ nav_order: 1
 
 ## Target user
 
-[- **Primäre Zielgruppe:** Kleine und mittlere Unternehmen (KMUs) im Gastronomiebereich (Restaurants, Cafés, Imbisse), die steuerliche Transparenz verbessern möchten.
+[ - **Primäre Zielgruppe:** Kleine und mittlere Unternehmen (KMUs) im Gastronomiebereich (Restaurants, Cafés, Imbisse), die steuerliche Transparenz verbessern möchten.
 - **Sekundäre Zielgruppe:** Steuerberater und Buchhalter, die Gastronomie-KMUs unterstützen und Interesse an Transparenztools haben.]
 
 ## Customer journey
@@ -36,4 +36,4 @@ nav_order: 1
 2. Der Schnellcheck bringt den Nutzer direkt zu einem komprimierten Formular, um die wichtigsten Mängel herauszufinden.
 3. Der ausführliche Check erfordert die Anmeldung vom Nutzer, nach welcher er in einen Privaten Bereich kommt mit vergangenen Checks. Hier sind ihm die Möglichkeiten geboten einen neuen Check zu machen oder einen alten einzusehen.
 4. Nach Abschluss jenes Checks, folgt die Auswertung und die Möglichkeit die Ergebnisse herunterzuladen.]
-   ![CustomerJourney](docs\CustomerJourney.png "CustomerJourney")
+![CustomerJourney](docs\assets\images\CustomerJourney.png)
