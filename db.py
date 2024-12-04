@@ -1,30 +1,93 @@
-import sqlite3
 import click
-import os #Navigation im Dateisystem
-from flask import current_app, g
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import orm
+from app import app
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import input_required, Length, ValidationError
 
-def get_db_con():
-    if 'db_con' not in g:
-        g.db_con = sqlite3.connect(
-        current_app.config['DATABASE'],
-        detect_types = sqlite3.PARSE_DECLTYPES
-        )
-        g.db_con.row_factory = sqlite3.Row
-    return g.db_con
-#Standardvorgehensweise zum verbinden einer Datenbank
 
-def close_db_con(e=None):
-    db_con = g.pop('db_con', None)
-    if db_con is not None:
-        db_con.close()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite'
+
+
+db = SQLAlchemy()
+db.init_app(app)
+
+login_manager = LoginManager() 
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+
+class User(db.Model, UserMixin):
+    id = db.Column("id", db.Integer, primary_key=True)
+    username = db.Column("username", db.String(20), nullable=False, unique=True)
+    password = db.Column("password", db.String(80), nullable=False)
+
+    def populate_lists(self, user_ids):
+        users = []
+        for id in user_ids:
+            if id > 0: users.append(db.session.get(users, id))
+        self.users = users
+
+    #def __init__(self, username, password):
+    #    self.username = username
+    #    self.password = password
+
+class RegisterForm(FlaskForm):
+    username = StringField(validators=[input_required(),Length(
+        min=3, max=15)], render_kw={"placeholder": "Nutzername"})
+    password = PasswordField(validators=[input_required(),Length(
+        min=3, max=15)], render_kw={"placeholder": "Passwort"})    
+    submit = SubmitField("Registrieren")
+
+    def validate_username(self, username):
+        existing_user_username = User.query.filter_by(
+            username=username.data).first()
+        if existing_user_username:
+            raise ValidationError(
+                'Der Name ist vergeben. Bitte nehme einen anderen.')
+        
+class LoginForm(FlaskForm):
+    username = StringField(validators=[
+                           input_required(), Length(min=4, max=20)], render_kw={"placeholder": "Nutzername"})
+
+    password = PasswordField(validators=[
+                            input_required(), Length(min=3, max=20)], render_kw={"placeholder": "Passwort"})
+
+    submit = SubmitField('Anmelden')
+
+with app.app_context():
+    db.create_all()
 
 @click.command('init-db')
-def init_db():
-    try:
-        os.makedirs(current_app.instance_path) #verweist auf instances ordner
-    except OSError:
-        pass
-    db_con = get_db_con()
-    with current_app.open_resource('sql/create_table.sql') as f:
-        db_con.executescript(f.read().decode('utf-8'))
-    click.echo('Initialized the Database.')
+def init():  # (1.)
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+    click.echo('Database has been initialized.')
+
+app.cli.add_command(init)  # (2.)
+
+def insert_sample():
+    # Delete all existing data, if any
+    db.session.execute(db.delete(User))
+
+
+    # Create sample to-do items
+    user1 = User(username = 'Nayon', password= '1')
+    user2 = User(username = 'Mert', password= '12')
+    user3 = User(username = 'Anil', password= '123')
+    user4 = User(username = 'Tamer', password= '1234')
+    user5 = User(username = 'Anas', password= '12345') 
+
+
+    # Add all objects to the queue and commit them to the database
+    db.session.add_all([user1, user2, user3, user4, user5])
+    db.session.commit()

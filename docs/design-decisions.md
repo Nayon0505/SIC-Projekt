@@ -4,7 +4,7 @@ nav_order: 3
 ---
 
 {: .label }
-[Jane Dane]
+[Nayon Lenz]
 
 {: .no_toc }
 # Design decisions
@@ -16,31 +16,42 @@ nav_order: 3
 {: toc }
 </details>
 
-## 01: [Title]
+## 01: [Standart SQL oder SQLAlechemy]
 
 ### Meta
 
 Status
-: **Work in progress** - Decided - Obsolete
+: Work in progress - **Decided** - Obsolete
 
 Updated
-: DD-MMM-YYYY
+: 04-12-2024
 
 ### Problem statement
 
-[Describe the problem to be solved or the goal to be achieved. Include relevant context information.]
+Wir müssen Nutzerdaten, sowie unsere Fragebögen und Nachhaltigkeitsberichte in einer Datenbank speichern. Wir haben nun die Wahl zwischen standart SQL oder SQLAlchemy. SQL würde uns einfacher fallen, da wir schon einige Kenntnisse haben, jedoch wäre für später geplanter Ausbau der Applikation SQLAlchemy besser.
+<!-- [Describe the problem to be solved or the goal to be achieved. Include relevant context information.] -->
 
 ### Decision
 
-[Describe **which** design decision was taken for **what reason** and by **whom**.]
+Wir entschieden uns für SQLAlchemy um der zukünftigen Notwendigkeit einer komplexeren Datenbank vorzubeugen. Zudem möchten wir Erfahrungen mit anderen Datenbank-Modellen machen. Diese Entscheidung wurde von Nayon getroffen.
+<!-- [Describe **which** design decision was taken for **what reason** and by **whom**.] -->
 
 ### Regarded options
 
-[Describe any possible design decision that will solve the problem. Assess these options, e.g., via a simple pro/con list.]
+Wir betrachteten folgende Optionen:
+
++Standard SQL
++SQLAlchemy
+
+| Kriterium | Standart SQL | SQLAlchemy |
+| --- | --- | --- |
+| **Know-how** | ✔️ Wir kennen bereits SQL | ❌ Wir müssen SQLAlchemy von Grund auf lernen |
+| **Change DB schema** | ❌ Unordentliches SQL | ✔️ Ordentlich überschaubare Klassen |
+| **Switch DB engine** | ❌ Man benötigt einen anderen SQL-Dialekt | ✔️ Einfacher wechsel |
 
 ---
 
-## [Example, delete this section] 01: How to access the database - SQL or SQLAlchemy 
+<!-- ## [Example, delete this section] 01: How to access the database - SQL or SQLAlchemy 
 
 ### Meta
 
@@ -89,4 +100,4 @@ We regarded two alternative options:
 | **Change DB schema** | ❌ SQL scattered across code | ❔ Good: classes, bad: need Alembic on top |
 | **Switch DB engine** | ❌ Different SQL dialect | ✔️ Abstracts away DB engine |
 
----
+--- -->
