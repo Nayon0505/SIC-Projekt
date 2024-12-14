@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schnelltest</title>
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block title %}Startseite{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
     <h1>Der SIC-Schnelltest!</h1>
     <p>Bitte beantworten Sie folgende Fragen um eine einfache Bewertung zu bekommen:</p>
 
@@ -67,12 +64,10 @@
 
     <div class="questons">
 
-
-
-
-
     </div>
+</div>
+{% endblock %}
+
 
     
-</body>
-</html>
+    

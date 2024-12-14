@@ -69,6 +69,6 @@ def logout():
 def schnelltest():
     return render_template('schnelltest.html')
 
-@app.route('/ausführlicherTest')
+@app.route('/ausführlicherTest') 
 def ausführlicherTest():
     return render_template('ausführlicherTest.html')
