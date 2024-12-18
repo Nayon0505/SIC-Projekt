@@ -1,12 +1,10 @@
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, render_template,redirect, render_template, url_for
 from flask_bcrypt import Bcrypt
+from reportlab.pdfgen import canvas
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 
-app = Flask(__name__) #__name__ is convention
+app = Flask(__name__) 
 bcrypt = Bcrypt(app)
-
-
-
 
 app.config.from_mapping(
     SECRET_KEY = 'secret_key_just_for_dev_environment',
@@ -14,12 +12,9 @@ app.config.from_mapping(
 
 from db import db, User, insert_sample, RegisterForm, LoginForm
 
-
 @app.route('/', methods=['GET', 'POST'])   #Homepage
 def index():
     return render_template('index.html')
-
-#flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -42,6 +37,10 @@ def register():
             db.session.commit()
             return redirect(url_for('login'))  
      return render_template('register.html', form = form)
+
+@app.route('/schnellcheck-formular', methods=['GET', 'POST'])
+def schnellCheck():
+    return render_template('schnelltest.html')
 
 @app.route('/mein-bereich', methods=['GET', 'POST'])
 @login_required

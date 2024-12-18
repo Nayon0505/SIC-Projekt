@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schnellcheck Fragebogen</title>
+</head>
+<body>
+    <div class="container">
+        <h1><u><strong>Schnellcheck - Fragebogen</strong></u></h1>
+    
+        <form id="fragebogen" action="/schnellcheck-formular" method="POST">
+            <div class="question">
+                <p>1. Wie ist Ihr Gastronomiebetrieb strukturiert?</p>
+                <label><input type="radio" name="struktur" value="Restaurant"> Restaurant</label>
+                <label><input type="radio" name="struktur" value="Café"> Café</label>
+                <label><input type="radio" name="struktur" value="Bar"> Bar</label>
+                <label><input type="radio" name="struktur" value="Imbiss"> Imbiss</label>
+                <label><input type="radio" name="struktur" value="Catering"> Catering</label>
+                <label><input type="radio" name="struktur" value="Hotel mit Gastronomie"> Hotel mit Gastronomie</label>
+                <label>Sonstige: <input type="text" name="struktur_sonstige"></label>
+            </div>
+
+            <div class="question">
+                <p>2. Erfüllt Ihr Kassensystem die Anforderungen einer zertifizierten technischen Sicherheitseinrichtung (TSE)?</p>
+                <label><input type="radio" name="tse" value="Ja"> Ja</label>
+                <label><input type="radio" name="tse" value="Nein"> Nein</label>
+            </div>
+
+            <div class="question">
+                <p>3. Geben Sie für jede Transaktion einen Beleg aus?</p>
+                <label><input type="radio" name="belegausgabe" value="Ja"> Ja</label>
+                <label><input type="radio" name="belegausgabe" value="Teilweise"> Teilweise</label>
+            </div>
+            <div class="question">
+                 <p>4 . Wurde Ihr Kassensystem innerhalb der letzten 12 Monate geprüft oder zertifiziert? </p>
+                 <label><input type="radio" name="geprüft" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="geprüft" value="Nein"> Nein</label><br><br>
+            </div>
+            <div class="question">
+                 <p>5. Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt in Ihrer Buchhaltung? </p>
+                 <label><input type="radio" name="buchhaltung" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="buchhaltung" value="Nein"> Nein</label><br><br>
+            </div>
+            <div class="question">
+                 <p>6. Erfassen Sie alle Einnahmen aus Barzahlungen, Kartenzahlungen und Lieferdiensten vollständig? </p>
+                 <label><input type="radio" name="erfassung" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="erfassung" value="Nein"> Nein</label><br><br>
+            </div>
+            <div class="question">
+                 <p>7. Reichen Sie Ihre Steuererklärungen immer fristgerecht ein? </p>
+                 <label><input type="radio" name="steuer" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="steuer" value="Nein"> Nein</label><br><br>
+            </div>
+            <div class="question">
+                 <p>8. Haben Sie in den letzten 2 Jahren Umsatzsteuer-Nachforderungen erhalten? </p>
+                 <label><input type="radio" name="nachforderung" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="nachforderung" value="Nein"> Nein</label><br><br>
+             </div>
+             <div class="question">
+                 <p>9. Dokumentieren Sie Trinkgelder gemäß den steuerlichen Vorgaben? </p>
+                 <label><input type="radio" name="dokumentation" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="dokumentation" value="Nein"> Nein</label><br><br>
+            </div>
+            <div class="question">
+                 <p>10. Werden Ihre Mitarbeitenden regelmäßig zu steuerlichen Vorgaben geschult (z.B. Kassensicherungsverordnung, Trinkgeldregelung?) </p>
+                 <label><input type="radio" name="schulung" value="Ja"> Ja</label><br>
+                 <label><input type="radio" name="schulung" value="Nein"> Nein</label><br><br>
+            </div>
+
+            <button type="submit">Absenden</button>
+
+        </form>
+    </div>
+
+</body>
+</html>
