@@ -1,11 +1,13 @@
 
 from flask import Flask, redirect, render_template, url_for, request, send_file, jsonify, session
+from flask_bootstrap import Bootstrap5
 import os
 import json
 from io import BytesIO
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from Formular import SchnellCheckFormular
+
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter 
@@ -77,6 +79,11 @@ def meinBereich(name):
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/home')
+def home():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @app.route('/schnelltest', methods=['GET', 'POST'])
