@@ -1,4 +1,4 @@
----
+<!--  ---
 title: UI Components
 nav_order: 99
 ---
@@ -58,8 +58,9 @@ For a quick reference of the markdown syntax, visit [this page](https://github.c
 
 ```mermaid
 graph TD;
-    A-->B;
-    A-->C;
+    A(-)->B;
+    A(-)->C; //Wegen kommentar das - geklammert
 ```
 
 Visit the [Mermaid docs](https://mermaid.js.org/intro/) for a thorough description of the charting possibilities.
+-->

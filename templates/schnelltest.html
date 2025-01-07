@@ -1,10 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schnellcheck Fragebogen</title>
-
+    {% extends "base.html" %}
+    {% block title %}Startseite{% endblock %}
+    {% block content %}
+    <div class="jumbotron text-center">
      
 </head>
 <body>
@@ -70,3 +74,5 @@
     <a href="{{url_for('index')}}"><button>Zurück zur Startseite </button></a>
 </body>
 </html>
+  {% endblock %}
+

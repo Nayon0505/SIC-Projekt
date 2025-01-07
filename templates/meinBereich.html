@@ -1,12 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mein Bereich</title>
-</head>
-<body>
-    <h1>Mein Bereich</h1>
+{% extends "base.html" %}
+
+{% block title %}Mein Bereich{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+        <h1>Mein Bereich</h1>
+    <h1>Hallo, {{content}}</h1>
+
+    <div class="reportContainer">
+        <a href="{{url_for('schnelltest')}}"><button>Neuer Schnelltest</button> </a>
+        <a href="{{url_for('ausführlicherTest')}}"> <button>Neuer ausführlicher Test</button></a>
+        <list class="reportListe">
+            <ol></ol>
+            <ol></ol>
+            <ol></ol>
+            <ol></ol>
+            <ol></ol>
+            <ol></ol>
+            <ol></ol>
+            <ol></ol>
+        </list>
+    </div>
+
     <a href="{{url_for('logout')}}">Hier abmelden</a>
-</body>
-</html>
+</div>
+{% endblock %}
+
+

@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anmelden</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Hier registrieren{% endblock %}
+
+{% block content %}
     <form method="POST" action="">
 
         <h3>Jetzt registrieren</h3>
@@ -17,24 +14,7 @@
         {{ form.submit }}
 
         <a href="{{url_for('login')}}">Sie haben ein Konto. Hier anmelden</a>
-        <!-- 
-        <div class="form">
-            
-            <input type="text" id="username" name="username" placeholder="E-Mail" required>
-        </div>
-        <div class="form">
-            
-            <input type="password" id="password" name="password" placeholder="Passwort" required>
-            <label for="confirmPassword">Passwort erneut eingeben</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Passwort bestätigen" required>
-        </div>
-        </div>
-        <div class="form">
-            <button type="submit">Anmelden</button>
-        </div>
-        <div class="form">
-            
-        </div> -->
+       
     </form>
-</body>
-</html>
+{% endblock %}
+

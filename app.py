@@ -1,3 +1,4 @@
+
 from flask import Flask, redirect, render_template, url_for, request, send_file, jsonify, session
 import os
 import json
@@ -16,9 +17,13 @@ from reportlab.lib.pagesizes import letter
 app = Flask(__name__) 
 bcrypt = Bcrypt(app)
 
+
 app.config.from_mapping(
     SECRET_KEY = 'secret_key_just_for_dev_environment',
+    BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
 )
+
+bootstrap = Bootstrap5(app)
 
 from db import db, User, insert_sample, RegisterForm, LoginForm
 
@@ -29,6 +34,11 @@ def index():
 
 #flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
 
+@app.route('/insert/sample')
+def run_insert_sample():
+    insert_sample()
+    return 'Database flushed and populated with some sample data.'
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -37,7 +47,13 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for('meinBereich'))
+                flash("Anmeldung erforlgreich!")
+                return redirect(url_for('meinBereich', name=user.username))
+            else: 
+                flash("Falsches Passwort")
+        else:
+            flash("Der Nutzer existiert nicht.")
+
     return render_template('login.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -51,16 +67,17 @@ def register():
             return redirect(url_for('login'))  
      return render_template('register.html', form = form)
 
-@app.route('/mein-bereich', methods=['GET', 'POST'])
+@app.route('/mein-bereich/<string:name>', methods=['GET', 'POST'])
 @login_required
-def meinBereich():
-    return render_template('meinBereich.html')
+def meinBereich(name):
+    return render_template('meinBereich.html', content=name)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
 
 @app.route('/schnelltest', methods=['GET', 'POST'])
 def schnelltest(): 
@@ -384,3 +401,4 @@ def download_pdf(filename):
 
 if __name__ == "__main__":
     app.run(debug=True)
+

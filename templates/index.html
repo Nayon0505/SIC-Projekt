@@ -1,157 +1,40 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIC</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" 
-    rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" 
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-    <section>
+{% extends "base.html" %}
 
-    <header>
-        <h2>SIC!- Der Sustainable Innovation Check!</h2>
-        <nav>
-            <a class="darkerText" href="{{url_for('register')}}">Registrieren</a> <!--  target="_blank um neue Seite öffnen zu lassen-->
-            <a class="darkerText" href="{{url_for('login')}}"">Anmelden</a> 
-        </nav>
-    </header>
-    <main>
-        <div class="nameContainer">
-            <h1>Was ist der SIC?</h1>
+{% block title %}Startseite{% endblock %}
 
-            <h2>Das Problem:</h2>
-            <p>Ein Imbiss besitzer, der ich nicht mit den Steuergesetzen, möglicher Weise noch aus dem Ausland kommt und 
+{% block content %}
+<div class="jumbotron text-center">
+
+    <div class="container py-5">
+    <div class="row">
+        
+        <div class="col-md-6">
+            <div class="p-4 bg-light border rounded">
+                <h3>Das Problem:</h3>
+                <p class="mb-4 pb-2 border-bottom text-muted">
+                Ein Imbiss besitzer, der ich nicht mit den Steuergesetzen, möglicher Weise noch aus dem Ausland kommt und 
                 kaum die Steuergesetze Deutschlands versteht, möchte sein Betrieb Steuertranzparenter machen um Nachhaltiger zu wirtschaften. Da Gastrobetriebe öfters um das 
-                wirtschaftliche überleben kämpfen müssen, steht ein Steuerberater außer Frage. 
-                </p>
-
-            <h2>Unsere Lösung</h2>
-            <p class="darkerText">Der Sustainable Innovation Check soll klein bis mittleren Unternehmern die Chance geben sich kostengünstig, simpel und schnell Nachhaltig zu verhalten. 
-                In einem Online Check kann der Nutzer seine Situation beschreiben indem unser Team die relevante, rechtliche Lage verständnisvoll darlegt.
-                 Nach dem Check bekommt der Nutzer einen Nachhaltigkeitsbericht(Einschätzung), welche Ihm Probleme, mögliche Probleme und Verbesserung vorschlägt.</p>
+                wirtschaftliche überleben kämpfen müssen, steht ein Steuerberater außer Frage.</p>
+            </div>
         </div>
-
-        <a href="{{url_for('schnelltest')}}"><button>Zum ausführlichem Test</button></a>
+      
+        <div class="col-md-6">
+            <div class="p-4 bg-light border rounded">
+                <h3>Die Lösung:</h3>
+                <p>
+                Der Sustainable Innovation Check soll klein bis mittleren Unternehmern die Chance geben sich kostengünstig, simpel und schnell Nachhaltig zu verhalten. 
+                In einem Online Check kann der Nutzer seine Situation beschreiben indem unser Team die relevante, rechtliche Lage verständnisvoll darlegt. 
+                Nach dem Check bekommt der Nutzer einen Nachhaltigkeitsbericht(Einschätzung), welche Ihm Probleme, mögliche Probleme und Verbesserung vorschlägt.</p>
+                </p>
+            </div>
+        </div>
+    </div>
+    </div>
+        <a href ="{{url_for('schnelltest')}}"><button>Zum Schnelltest</button></a>
         <a href="{{url_for('register')}}"><button>Zum ausführlichem Test</button></a>
 
-        <!-- <div class="statsContainer">
-            <div class="imgContainer">
-                <img src="57c27985-a246-4ccb-93aa-7e7bebc219cb.jpg" 
-                alt="Profilbild" />
-            </div>
-            <div class="stats darkerText">
-                <div>
-                    <div>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
-                    <p>4. Semester</p>
-                </div>
-                <div>
-                    <div>
-                        <i class="fa-brands fa-github"></i>
-                    </div>
-                    <p>3 GitHub Repositories</p>
+</div>
+{% endblock %}
 
-                </div>
-                    <div>
-                <div>
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                    </div>
-                    <p>9 IT-Kurse absolviert</p>
-                </div>
-            </div>
-    </div>
-    <p class="aboutMe">Hi, ich bin Nayon, ich studiere Wirtschaftsinformatik und strebe eine Karriere in der Softwareentwicklung an.
-        Diese Seite wurde von mir in HTML und CSS programmiert und dient als eine Übersicht über mich, von mir bestrittene Projekte, Erfolge, und als eine Anlaufstelle an meine Person.
-    </p>
     
-    <p> <h3 class="darkerText">Was ist Wirtschaftsinformatik?</h3>
-        In meinem Studium lerne ich über die Programmierung mit verschiedenen Sprachen, Entwicklungsumbebungen und wie man sie 
-        im Realem Leben anwendet. Zudem bringen Wirtschaftsinformatiker, neben ihren Informatik-Kenntnissen wirtschaftliches Wissen mit.
-        Dies kann den Umgang mit Informatikern und dem Wirtschaftlichen Teil eines Unternehmens bemerkenswert erleichtern. 
-        Das Studium umfasst an IT beispielsweise Gebiete wie: Objektorientierte Programmierung
-        , Datenbanken, Rechnerarchitekturen, Statistik, Betriebliche Informationssysteme, App-Entwicklung,
-        Entwicklung von Web-Anwendungen, Unternehmensmodellierung, Projekt-Software-Engineering, Cybersecurity
-        und mehr.
-    </p>
-        <div>
-            <a href="mailto:lenz.nayon@gmail.com" class="outreach">
-                <i class="fa-solid fa-arrow-right"></i>
-                <p class="darkerText">Sende mir eine Mail</p>
-            </a>
-        </div>
-    </section>
-    
-    <section class="projectContainer">
-        <p class="darkerText headerText">vorgestellte Projekte</p>
-        <div class="projectItem">
-            <div>
-                <p class="darkerText">07.07.2024</p>
-                <p>Eine Fitnessapp entwickelt mit Java und XML in Android Studios, mit Funktionen wie <br> Nutzerlogin, Personalisierung,
-                    Kalorien-und Makronährstofftracking und weiterem.ㅤㅤㅤ<br> Ermöglicht durch ein voll kompatible Datenbank.
-                <div class="linkContainer">
-                    <a target="_blank" href="https://github.com/Nayon0505/Mountanguy" class="linkItem">
-                        <div>
-                            <i class="fa-solid fa-bolt"></i>
-                        </div>
-                            <p>Github</p>
-                    </a>
-                    <a target="_blank" href="https://github.com/Nayon0505/Dummy" class="linkItem">
-                        <div>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <p>Live Code</p>
-                    </a>
-                </div>
-            </div>
-            <div>
-                <a class="darkerText" href="Fitnessapp-Projekt-Dokumentation-seiten-gelöscht.pdf">PDF öffnen</a>
-                <iframe src="Fitnessapp-Projekt-Dokumentation-seiten-gelöscht.pdf#toolbar=0" width="100%" height="700px"></iframe>
-            <img src="" alt="MountangGuy">
-            </div>
-        </div>
-        <div class="projectItem">
-            <div>
-                <p class="darkerText">11.8.2023</p>
-                <p>Das Tikal-Projekt ist eines meiner ersten Projekte. Es ging darum einem fiktivem <br> Unternehmen eine 
-                    vollständige SWOT-Analyse, eine HTML-und Weebly-Seite zu erstellen <br> und dies alles in einer Dokumentation
-                    festzuhalten.
-                </p>
-                <div class="linkContainer">
-                    <a target="_blank" href="https://github.com/Nayon0505/Dummy" class="linkItem">
-                        <div>
-                            <i class="fa-solid fa-bolt"></i>
-                        </div>
-                            <p>Github</p>
-                    </a>
-                    <a target="_blank" href="https://github.com/Nayon0505/Dummy" class="linkItem">
-                        <div>
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <p>Live Code</p>
-                    </a>
-                </div>
-            </div>
-            <div>
-                <a class="darkerText" href="Tikal-Projekt-Dokumentation-seiten-gelöscht.pdf">PDF öffnen</a>
-                <iframe src="Tikal-Projekt-Dokumentation-seiten-gelöscht.pdf#toolbar=0" width="100%" height="700px"></iframe>
-            <img src="" alt="MountangGuy">
-            </div>
-        </div>
-        
-        <p class="darkerText">Zertifikate auf Anfrage   <i class="fa-regular fa-face-smile"></i></p> 
-    -->
-
-    </section>
-
-    </main>
-    
-</body>
-</html>
+       

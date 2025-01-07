@@ -67,7 +67,7 @@ with app.app_context():
     db.create_all()
 
 @click.command('init-db')
-def init():  # (1.)
+def init():  
     with app.app_context():
         db.drop_all()
         db.create_all()
@@ -75,19 +75,19 @@ def init():  # (1.)
 
 app.cli.add_command(init)  # (2.)
 
-def insert_sample():
-    # Delete all existing data, if any
+def insert_sample(): #Diese Methode funktioniert noch nicht, ich weiß nicht warum
+    
     db.session.execute(db.delete(User))
 
 
-    # Create sample to-do items
-    user1 = User(username = 'Nayon', password= '1')
-    user2 = User(username = 'Mert', password= '12')
-    user3 = User(username = 'Anil', password= '123')
-    user4 = User(username = 'Tamer', password= '1234')
-    user5 = User(username = 'Anas', password= '12345') 
+    # Sample Daten die Passwörter sind nicht bcrypted, was dazu führt, dass sie nicht richtig geprüft werden können, wegen dem derzeitigen Aufbau des codes/ Diese Methode sollte nicht benutzt werden
+    # user1 = User(username = 'Nayon', password= '1')
+    # user2 = User(username = 'Mert', password= '12')
+    # user3 = User(username = 'Anil', password= '123')
+    # user4 = User(username = 'Tamer', password= '1234')
+    # user5 = User(username = 'Anas', password= '12345') 
 
 
-    # Add all objects to the queue and commit them to the database
-    db.session.add_all([user1, user2, user3, user4, user5])
-    db.session.commit()
+   
+    # db.session.add_all([user1, user2, user3, user4, user5])
+    # db.session.commit()

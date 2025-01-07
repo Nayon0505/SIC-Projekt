@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anmelden</title>
-</head>
-<body>
-    <form method="POST" action="">
+{% extends "base.html" %}
+
+{% block title %}Anmeldung{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <<form method="POST" action="">
 
         <h3>Jetzt anmelden</h3>
         {{ form.hidden_tag() }}
-        <label>E-Mail</label>
+        <label>Nutzername</label>
         {{ form.username }}
         <label>Passwort</label>
         {{ form.password }}
@@ -18,22 +16,16 @@
 
         <a href="{{url_for('index')}}">Passwort vergessen?</a>
         <a href="{{url_for('register')}}">Registrieren</a>
-        
-        <!-- <h3>Jetzt anmelden</h3>
-        <div class="form">
-            <label for="username">E-Mail</label>
-            <input type="text" id="username" name="username" placeholder="E-Mail" required>
-        </div>
-        <div class="form">
-            <label for="password">Passwort</label>
-            <input type="password" id="password" name="password" placeholder="Passwort" required>
-        </div>
-        <div class="form">
-            <button type="submit">Anmelden</button>
-        </div>
-        <div class="form">
+        </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      
+    {% endif %}
+  {% endwith %}
+</div>
+{% endblock %}
 
-        </div> -->
-    </form>
-</body>
-</html>
