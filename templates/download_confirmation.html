@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Bestätigung</title>
+    <style>
+        .ampel {
+            font-size: 30px;
+            text-align: center;
+            margin: 20px;
+        }
+        .gruen {
+            color: green;
+        }
+        .gelb {
+            color: yellow;
+        }
+        .rot {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Das Ergebnis ihres Schnellchecks</h1>
+    <p>Bei bedarf können sie unten die Ergebnisse in Form einer PDF downloaden</p>
+
+    <div class="ampel {{ ampelfarbe }}">
+        {% if ampelfarbe == 'grün' %}
+            🟢 Herzlichen Glückwunsch! Ihr Gastronomiebetrieb erfüllt in allen Bereichen die wichtigsten Anforderungen für eine hohe Steuertransparenz. Sie haben ein starkes System, das nicht nur den gesetzlichen Vorschriften entspricht, sondern auch Ihr Engagement für ordnungsgemäße steuerliche Praktiken zeigt.
+        {% elif ampelfarbe == 'gelb' %}
+            🟡 Ihr Gastronomiebetrieb hat bereits einige gute Ansätze, aber es gibt noch Verbesserungspotential. Einige Aspekte Ihrer Steuertransparenz könnten optimiert werden, um sicherzustellen, dass Sie alle gesetzlichen Anforderungen in vollem Umfang erfüllen. Es empfiehlt sich, die Bereiche zu überprüfen, in denen noch Unsicherheiten oder Lücken bestehen.
+        {% else %}
+            🔴 Ihr Gastronomiebetrieb weist in mehreren Bereichen Defizite auf, die dringend behoben werden sollten. Um sicherzustellen, dass Sie keine steuerlichen Risiken eingehen, empfehlen wir eine umfassende Überprüfung und Anpassung Ihrer Prozesse. Besondere Aufmerksamkeit sollte den Bereichen geschenkt werden, in denen Sie gesetzliche Anforderungen nicht vollständig erfüllen
+        {% endif %}
+ </div>
+
+    <h3>1. Gastronomiebetrieb:</h3>
+    <p>{{ form_data['Betrieb'] }}</p>
+    <p><strong>Hinweis:</strong> {{ form_data['Hinweis_Betrieb'] }}</p>
+
+    <a href="{{ url_for('download_pdf', filename=filename) }}">Ergebnisse als PDF herunterladen</a>
+</body>
+</html>
+
+
+
+
+

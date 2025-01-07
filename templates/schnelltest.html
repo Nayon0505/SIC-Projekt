@@ -1,73 +1,78 @@
-{% extends "base.html" %}
 
-{% block title %}Startseite{% endblock %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schnellcheck Fragebogen</title>
+    {% extends "base.html" %}
+    {% block title %}Startseite{% endblock %}
+    {% block content %}
+    <div class="jumbotron text-center">
+     
+</head>
+<body>
+        <h1><u><strong>Schnellcheck - Fragebogen</strong></u></h1>
+    
+     <form method="POST" action="/schnelltest">
+    {{ form.hidden_tag() }}
 
-{% block content %}
-<div class="jumbotron text-center">
-    <h1>Der SIC-Schnelltest!</h1>
-    <p>Bitte beantworten Sie folgende Fragen um eine einfache Bewertung zu bekommen:</p>
-
-    <form method="POST" action="">
-        
-        <label for="name">1. Wie lautet Ihr Name?</label>
-        <input type="text" id="name" name="name" required placeholder="Ihr Name">
-    
-        <!-- E-Mail -->
-        <label for="email">2. Wie lautet Ihre E-Mail-Adresse?</label>
-        <input type="email" id="email" name="email" required placeholder="Ihre E-Mail-Adresse">
-    
-        <!-- Multiple-Choice -->
-        <label>3. Welche dieser Optionen treffen auf Sie zu? (Mehrfachauswahl möglich)</label>
-        <input type="checkbox" id="option1" name="options" value="Option 1">
-        <label for="option1">Option 1</label>
-        <input type="checkbox" id="option2" name="options" value="Option 2">
-        <label for="option2">Option 2</label>
-        <input type="checkbox" id="option3" name="options" value="Option 3">
-        <label for="option3">Option 3</label>
-    
-        <!-- Bewertungsskala -->
-        <label>4. Wie bewerten Sie unsere Dienstleistung?</label>
-        <label>
-            <input type="radio" name="rating" value="1"> 1 - Sehr schlecht
-        </label>
-        <label>
-            <input type="radio" name="rating" value="2"> 2 - Schlecht
-        </label>
-        <label>
-            <input type="radio" name="rating" value="3"> 3 - In Ordnung
-        </label>
-        <label>
-            <input type="radio" name="rating" value="4"> 4 - Gut
-        </label>
-        <label>
-            <input type="radio" name="rating" value="5"> 5 - Sehr gut
-        </label>
-    
-        <!-- Dropdown -->
-        <label for="satisfaction">5. Wie zufrieden sind Sie insgesamt?</label>
-        <select id="satisfaction" name="satisfaction" required>
-            <option value="">Bitte auswählen</option>
-            <option value="sehr-zufrieden">Sehr zufrieden</option>
-            <option value="zufrieden">Zufrieden</option>
-            <option value="neutral">Neutral</option>
-            <option value="unzufrieden">Unzufrieden</option>
-            <option value="sehr-unzufrieden">Sehr unzufrieden</option>
-        </select>
-    
-        <!-- Textbereich -->
-        <label for="feedback">6. Haben Sie weiteres Feedback?</label>
-        <textarea id="feedback" name="feedback" rows="4" placeholder="Ihr Feedback"></textarea>
-    
-        <!-- Absenden -->
-        <button type="submit">Absenden</button>
-    </form>
-
-    <div class="questons">
-
+    <div>
+        {{ form.betrieb.label }}
+        {{ form.betrieb }}
     </div>
-</div>
-{% endblock %}
-
-
     
+    <div>
+        {{ form.tse.label }}
+        {{ form.tse }}
+    </div>
     
+    <div>
+        {{ form.beleg.label }}
+        {{ form.beleg }}
+    </div>
+    
+    <div>
+        {{ form.pruefung.label }}
+        {{ form.pruefung }}
+    </div>
+    
+    <div>
+        {{ form.trennung.label }}
+        {{ form.trennung }}
+    </div>
+    
+    <div>
+        {{ form.einnahmen.label }}
+        {{ form.einnahmen }}
+    </div>
+    
+    <div>
+        {{ form.steuererklärungen.label }}
+        {{ form.steuererklärungen }}
+    </div>
+    
+    <div>
+        {{ form.nachforderungen.label }}
+        {{ form.nachforderungen }}
+    </div>
+    
+    <div>
+        {{ form.trinkgelder.label }}
+        {{ form.trinkgelder }}
+    </div>
+    
+    <div>
+        {{ form.schulung.label }}
+        {{ form.schulung }}
+    </div>
+
+    <div>
+        <button type="submit">{{ form.submit.label }}</button>
+    </div>
+</form>
+    <a href="{{url_for('index')}}"><button>Zurück zur Startseite </button></a>
+</body>
+</html>
+  {% endblock %}
+
