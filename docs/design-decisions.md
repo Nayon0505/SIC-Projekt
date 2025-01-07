@@ -33,7 +33,8 @@ Wir müssen Nutzerdaten, sowie unsere Fragebögen und Nachhaltigkeitsberichte in
 
 ### Decision
 
-Wir entschieden uns für SQLAlchemy um der zukünftigen Notwendigkeit einer komplexeren Datenbank vorzubeugen. Zudem möchten wir Erfahrungen mit anderen Datenbank-Modellen machen. Diese Entscheidung wurde von Nayon getroffen.
+Wir entschieden uns für SQLAlchemy um der zukünftigen Notwendigkeit einer komplexeren Datenbank vorzubeugen. Zudem möchten wir Erfahrungen mit anderen Datenbank-Modellen machen. 
+*Entscheindung wurde getroffen von* github.com/nayon0505
 <!-- [Describe **which** design decision was taken for **what reason** and by **whom**.] -->
 
 ### Regarded options
@@ -43,13 +44,91 @@ Wir betrachteten folgende Optionen:
 +Standard SQL
 +SQLAlchemy
 
-| Kriterium | Standart SQL | SQLAlchemy |
+---
+
+02: Das stylen unserer Website - Bootstrap oder standart CSS
+
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 3-Jan-2025
+
+### Problem statement
+
+Sollten wir Bootstrap oder CSS für das Stylen unserer Website verwenden?
+CSS ist uns bekannt und hat weniger Lernbedarf. Bootstrap ist eine neue herangehensweise, welche wir dadurch erlernen können.
+
+
+Deshalb werden wir:
+
++ Bootstrap erstmals benutzen um die neuen Erfahrungen zusammeln
++ Falls wir nicht weiterkommen CSS einbinden
+
+### Decision
+
+Wir verwenden Bootstrap
+
+Bootstrap bietet uns neue Kenntnisse und im Rahmen eines Kurses, in welchen wir versuchen, das Fullstack Web developing zu lernen, erscheint uns diese Herangehensweise am sinnvollsten.
+*Entscheindung wurde getroffen von* github.com/nayon0505
+
+### Regarded options
+
+Wir zogen diese beiden Optionen in Betracht
+
++ CSS
++ Bootstrap
+
+| Kriterien | CSS | BOOTSTRAP |
 | --- | --- | --- |
-| **Know-how** | ✔️ Wir kennen bereits SQL | ❌ Wir müssen SQLAlchemy von Grund auf lernen |
-| **Change DB schema** | ❌ Unordentliches SQL | ✔️ Ordentlich überschaubare Klassen |
-| **Switch DB engine** | ❌ Man benötigt einen anderen SQL-Dialekt | ✔️ Einfacher wechsel |
+| **Know-how** | ✔️ Wir kennen CSS | ❌ Wir müssen Bootstrap von grundauf lernen |
+| **Simplizität** | ❌ CSS | ✔️ Bootstrap gibt eine komplette Stylevorlage |
+
+
 
 ---
+
+02: Das Nutzen einer Navbar - Ja oder Nein
+
+### Meta
+
+Status
+: Work in **progress** - Decided - Obsolete
+
+Updated
+: 7-Jan-2025
+
+### Problem statement
+
+Sollten wir eine Nav-bar für schnelle Navigation zwischen unseren Seiten verwenden? Bis her würden wir nur anmelden und registrieren als Optionen auf ihr haben, deshalb evaluieren wir wichtigkeit und Aufwand.  Im späteren Verlauf könnten wir jedoch ein FAQ, Impressum, usw. haben.
+
+
+Deshalb werden wir wahrschieinlich:
+
++ im Verlauf schauen ob es villeicht mehr Anwendungsmöglichkeiten gibt
+
+<!--
+### Decision steht aus
+
+We stick with plain SQL.
+
+Our team still has to come to grips with various technologies new to us, like Python and CSS. Adding another element to our stack will slow us down at the moment.
+
+Also, it is likely we will completely re-write the app after MVP validation. This will create the opportunity to revise tech choices in roughly 4-6 months from now.
+*Decision was taken by:* github.com/joe, github.com/jane, github.com/maxi
+
+### Regarded options
+
+We regarded two alternative options:
+
++ Plain SQL
++ SQLAlchemy-->
+
+
+
+
 
 <!-- ## [Example, delete this section] 01: How to access the database - SQL or SQLAlchemy 
 

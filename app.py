@@ -1,16 +1,19 @@
 from flask import Flask, redirect, render_template, url_for, flash
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
+from flask_bootstrap import Bootstrap5 
+
 
 app = Flask(__name__) #__name__ is convention
 bcrypt = Bcrypt(app)
 
 
-
-
 app.config.from_mapping(
     SECRET_KEY = 'secret_key_just_for_dev_environment',
+    BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
 )
+
+bootstrap = Bootstrap5(app)
 
 from db import db, User, insert_sample, RegisterForm, LoginForm
 
@@ -71,4 +74,7 @@ def schnelltest():
 
 @app.route('/ausführlicherTest') 
 def ausführlicherTest():
-    return render_template('ausführlicherTest.html')
+    return render_template('ausführlicherTest.html')     
+@app.route('/home') 
+def home():   
+    return render_template('index.html')
