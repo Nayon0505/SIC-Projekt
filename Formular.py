@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, RadioField, SubmitField
 from wtforms.validators import DataRequired
 
-class SchnellCheckFormular(FlaskForm):
+class SchnellCheckFormular(FlaskForm): 
      #Frage 1
      betrieb = RadioField('Wie ist Ihr Gastronomiebetrieb strukturiert?',
                          choices=[('restaurant', 'Restaurant'),
@@ -13,10 +13,12 @@ class SchnellCheckFormular(FlaskForm):
                                   ('hotel', 'Hotel mit Gastronomie'),
                                   ('sonstiges', 'Sonstiges')],
                          validators=[DataRequired()])
+                         
      #Frage 2
      tse = RadioField('Erfüllt Ihr Kassensystem die Anforderungen einer zertifizierten technischen Sicherheitseinrichtung (TSE)?',
                      choices=[('ja', 'Ja'), ('nein', 'Nein'), ('unsicher', 'Unsicher')],
                      validators=[DataRequired()])
+     
      #Frage 3
      beleg = RadioField('Geben Sie für jede Transaktion einen Beleg aus?',
                        choices=[('ja', 'Ja'), ('teilweise', 'Teilweise')],

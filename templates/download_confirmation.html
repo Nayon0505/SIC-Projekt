@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Bestätigung</title>
+{% extends "base.html" %}
+
+{% block title %}Testauswertung{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    
     <style>
         .ampel {
             font-size: 30px;
@@ -35,13 +36,14 @@
         {% endif %}
  </div>
 
-    <h3>1. Gastronomiebetrieb:</h3>
-    <p>{{ form_data['Betrieb'] }}</p>
+    <h3>Gastronomiebetrieb:</h3>
+    <h2>{{ form_data['Betrieb'] }}</h2>
     <p><strong>Hinweis:</strong> {{ form_data['Hinweis_Betrieb'] }}</p>
 
-    <a href="{{ url_for('download_pdf', filename=filename) }}">Ergebnisse als PDF herunterladen</a>
+   <a href="{{ url_for('download_pdf', filename=filename) }}" class="btn btn-primary">Ergebnisse als PDF herunterladen</a>
 </body>
-</html>
+
+{% endblock %}
 
 
 

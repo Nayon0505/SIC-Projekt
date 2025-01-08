@@ -1,22 +1,17 @@
 
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schnellcheck Fragebogen</title>
+
     {% extends "base.html" %}
+    {% import "bootstrap/form.html" as wtf %}
     {% block title %}Startseite{% endblock %}
-    {% block content %}
-    <div class="jumbotron text-center">
-     
-</head>
-<body>
+    {%block content %}
+    
+    
         <h1><u><strong>Schnellcheck - Fragebogen</strong></u></h1>
     
      <form method="POST" action="/schnelltest">
     {{ form.hidden_tag() }}
 
+<div class="p-4 bg-light border rounded">
     <div>
         {{ form.betrieb.label }}
         {{ form.betrieb }}
@@ -72,7 +67,77 @@
     </div>
 </form>
     <a href="{{url_for('index')}}"><button>Zurück zur Startseite </button></a>
-</body>
-</html>
+</div>
   {% endblock %}
 
+
+{# wtforms und bootstrap mögen sich nicht, alles übereinander #}
+    {# {% extends "base.html" %}
+    {% import "bootstrap/form.html" as etf%}
+    {% block title %}Startseite{% endblock %}
+    {% block content %}
+    
+  
+<h1><u><strong>Schnellcheck - Fragebogen</strong></u></h1>
+
+<div class="p-4 bg-light border rounded">
+    <form method="POST" action="/schnelltest">
+        {{ form.hidden_tag() }}
+
+        <div class="form-check">
+            {{ form.betrieb.label(class="form-check-label") }}
+            {{ form.betrieb(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.tse.label }}
+            {{ form.tse(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.beleg.label }}
+            {{ form.beleg(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.pruefung.label }}
+            {{ form.pruefung(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.trennung.label }}
+            {{ form.trennung(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.einnahmen.label }}
+            {{ form.einnahmen(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.steuererklärungen.label }}
+            {{ form.steuererklärungen(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.nachforderungen.label }}
+            {{ form.nachforderungen(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.trinkgelder.label }}
+            {{ form.trinkgelder(class="form-check-input") }}
+        </div>
+
+        <div class="form-check">
+            {{ form.schulung.label }}
+            {{ form.schulung(class="form-check-input") }}
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Fertig</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Zurück zur Startseite</a>
+        </div>
+    </form>
+</div>
+{% endblock %} #}

@@ -49,7 +49,7 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                flash("Anmeldung erforlgreich!")
+                
                 return redirect(url_for('meinBereich', name=user.username))
             else: 
                 flash("Falsches Passwort")
@@ -407,5 +407,5 @@ def download_pdf(filename):
     return send_file(filename, as_attachment=True)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
 
