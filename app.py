@@ -1,5 +1,5 @@
 
-from flask import Flask, redirect, render_template, url_for, request, send_file, jsonify, session
+from flask import Flask, flash, redirect, render_template, url_for, request, send_file, jsonify, session
 from flask_bootstrap import Bootstrap5
 import os
 import json
@@ -9,7 +9,7 @@ from flask_login import login_user, LoginManager, login_required, logout_user, c
 from Formular import SchnellCheckFormular
 
 
-from reportlab.pdfgen import canvas
+from reportlab.pdfgen import canvas 
 from reportlab.lib.pagesizes import letter 
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -35,6 +35,9 @@ def index():
     return render_template('index.html')
 
 #flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
+@app.route('/ausführlicherTest', methods=['GET', 'POST'])   #Homepage
+def ausführlicherTest():
+    return render_template('ausführlicherTest.html')
 
 @app.route('/insert/sample')
 def run_insert_sample():
@@ -139,7 +142,7 @@ def download_confirmation():
     if form_data['Schulung'] == "ja":
         pos_answers += 7
 
-    if (pos_answers < 50) :
+    if (pos_answers < 50) :       
         ampelfarbe = "rot"
     elif (pos_answers <= 64):
         ampelfarbe = "gelb"
@@ -195,7 +198,7 @@ def generate_pdf(form):
     "h2ueberschrift", 
     parent=normal_style,
     fontName="Helvetica-Bold", 
-    fontSize=14,
+    fontSize=14, 
     alignment=1 
 )
 
@@ -221,7 +224,7 @@ def generate_pdf(form):
     story.append(Paragraph("", abstand_style))
 
     pos_answers = 0
-    if form.tse.data == "ja" :
+    if form.tse.data == "ja" :   
         pos_answers += 10
     if form.beleg.data == "ja":
         pos_answers += 9

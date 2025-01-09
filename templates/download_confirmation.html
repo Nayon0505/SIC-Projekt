@@ -3,44 +3,65 @@
 {% block title %}Testauswertung{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center">
     
-    <style>
-        .ampel {
-            font-size: 30px;
-            text-align: center;
-            margin: 20px;
-        }
-        .gruen {
-            color: green;
-        }
-        .gelb {
-            color: yellow;
-        }
-        .rot {
-            color: red;
-        }
-    </style>
 </head>
 <body>
-    <h1>Das Ergebnis ihres Schnellchecks</h1>
-    <p>Bei bedarf können sie unten die Ergebnisse in Form einer PDF downloaden</p>
+    <h1 class="text-center">Das Ergebnis ihres Schnellchecks</h1>
+   
 
     <div class="ampel {{ ampelfarbe }}">
-        {% if ampelfarbe == 'grün' %}
-            🟢 Herzlichen Glückwunsch! Ihr Gastronomiebetrieb erfüllt in allen Bereichen die wichtigsten Anforderungen für eine hohe Steuertransparenz. Sie haben ein starkes System, das nicht nur den gesetzlichen Vorschriften entspricht, sondern auch Ihr Engagement für ordnungsgemäße steuerliche Praktiken zeigt.
-        {% elif ampelfarbe == 'gelb' %}
-            🟡 Ihr Gastronomiebetrieb hat bereits einige gute Ansätze, aber es gibt noch Verbesserungspotential. Einige Aspekte Ihrer Steuertransparenz könnten optimiert werden, um sicherzustellen, dass Sie alle gesetzlichen Anforderungen in vollem Umfang erfüllen. Es empfiehlt sich, die Bereiche zu überprüfen, in denen noch Unsicherheiten oder Lücken bestehen.
-        {% else %}
-            🔴 Ihr Gastronomiebetrieb weist in mehreren Bereichen Defizite auf, die dringend behoben werden sollten. Um sicherzustellen, dass Sie keine steuerlichen Risiken eingehen, empfehlen wir eine umfassende Überprüfung und Anpassung Ihrer Prozesse. Besondere Aufmerksamkeit sollte den Bereichen geschenkt werden, in denen Sie gesetzliche Anforderungen nicht vollständig erfüllen
-        {% endif %}
- </div>
+       
+    {% if ampelfarbe == 'grün' %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="static\css\img\ampelgrün.jpg" class="img-fluid w-50" alt="Rote Ampel" style="width: 200px; height: auto;" />
+                </div>
+                <div class="col-md-9">
+                    <div class="p-3 fs-3 bg-light">
+                        Herzlichen Glückwunsch! Ihr Gastronomiebetrieb erfüllt in allen Bereichen die wichtigsten Anforderungen für eine hohe Steuertransparenz. Sie haben ein starkes System, das nicht nur den gesetzlichen Vorschriften entspricht, sondern auch Ihr Engagement für ordnungsgemäße steuerliche Praktiken zeigt.
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elif ampelfarbe == 'gelb' %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="static\css\img\ampelgelb.jpg" class="img-fluid w-50" alt="Rote Ampel" style="width: 200px; height: auto;" />
+                </div>
+                <div class="col-md-9">
+                    <div class="p-3 fs-3 bg-light">
+                        Ihr Gastronomiebetrieb hat bereits einige gute Ansätze, aber es gibt noch Verbesserungspotential. Einige Aspekte Ihrer Steuertransparenz könnten optimiert werden, um sicherzustellen, dass Sie alle gesetzlichen Anforderungen in vollem Umfang erfüllen. Es empfiehlt sich, die Bereiche zu überprüfen, in denen noch Unsicherheiten oder Lücken bestehen.
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="static\css\img\ampelrot.jpg" class="img-fluid w-50" alt="Rote Ampel" style="width: 200px; height: auto;" />
+                </div>
+                <div class="col-md-9">
+                    <div class="p-3 fs-3 bg-light">
+                        Ihr Gastronomiebetrieb weist in mehreren Bereichen Defizite auf, die dringend behoben werden sollten. Um sicherzustellen, 
+                        dass Sie keine steuerlichen Risiken eingehen, empfehlen wir eine umfassende Überprüfung und Anpassung Ihrer Prozesse. Besondere Aufmerksamkeit sollte den Bereichen geschenkt werden, in denen Sie gesetzliche Anforderungen nicht vollständig erfüllen
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <h3>Gastronomiebetrieb:</h3>
+              {% endif %}
+    </div>
+     
+    {# <h3>Gastronomiebetrieb:</h3>
     <h2>{{ form_data['Betrieb'] }}</h2>
-    <p><strong>Hinweis:</strong> {{ form_data['Hinweis_Betrieb'] }}</p>
-
-   <a href="{{ url_for('download_pdf', filename=filename) }}" class="btn btn-primary">Ergebnisse als PDF herunterladen</a>
+    {{ form_data['Hinweis_Betrieb'] }}</p> #}
+    <div class="text-center">
+   <a href="{{ url_for('download_pdf', filename=filename) }}" class="btn btn-primary ">Ergebnisse als PDF herunterladen</a>
+   <a href="{{ url_for('home') }}" class="btn btn-secondary ">Zur Startseite</a>
+    </div>
 </body>
 
 {% endblock %}
