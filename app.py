@@ -135,7 +135,7 @@ def download_confirmation():
         pos_answers += 10
     if form_data['Steuererklärungen'] == "ja":
         pos_answers += 8
-    if form_data['Nachforderungen'] == "ja":
+    if form_data['Nachforderungen'] == "nein":
         pos_answers += 9
     if form_data['Trinkgelder'] == "ja":
         pos_answers += 8
@@ -144,7 +144,7 @@ def download_confirmation():
 
     if (pos_answers < 50) :       
         ampelfarbe = "rot"
-    elif (pos_answers <= 64):
+    elif (pos_answers <= 68):
         ampelfarbe = "gelb"
     else:
         ampelfarbe = "grün"
@@ -236,7 +236,7 @@ def generate_pdf(form):
         pos_answers += 10
     if form.steuererklärungen.data == "ja":
         pos_answers += 8
-    if form.nachforderungen.data == "ja":
+    if form.nachforderungen.data == "nein":
         pos_answers += 9
     if form.trinkgelder.data == "ja":
         pos_answers += 8
