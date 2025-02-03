@@ -1,0 +1,32 @@
+    {% extends "base.html" %}
+{% import "bootstrap/form.html" as wtf %}
+
+{% block title %}Test{% endblock %}
+
+{% block content %}
+
+<h1><u><strong>Ausführlicher Test - Fragebogen</strong></u></h1>
+
+<!-- Fortschrittsanzeige -->
+<p>Schritt {{ session['step'] }} von 5</p>
+
+<form method="POST" action="{{ url_for('ausführlicherTest') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="p-4 bg-light border rounded">
+
+        <!-- Dynamische Felder -->
+        {% for field in form if field.name != "csrf_token" and field.name != "submit" %}
+            <div class="mb-3">
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            </div>
+        {% endfor %}
+
+        <div>
+            <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

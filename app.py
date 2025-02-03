@@ -1,20 +1,12 @@
 
-from flask import Flask, flash, redirect, render_template, url_for, request, send_file, jsonify, session
+from flask import Flask, flash, redirect, render_template, url_for, request, send_file, session
 from flask_bootstrap import Bootstrap5
-import os
-import json
-from io import BytesIO
 from flask_bcrypt import Bcrypt
-from flask_login import login_user, LoginManager, login_required, logout_user, current_user
-from Formular import SchnellCheckFormular
+from flask_login import login_user, login_required, logout_user
+from CalculateResult import CalculateResult
+from SchnellCheckFormular import SchnellCheckFormular
+from AusführlicherCheckFormular import *
 
-
-from reportlab.pdfgen import canvas 
-from reportlab.lib.pagesizes import letter 
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph
-from reportlab.lib.pagesizes import letter
 from PdfGenerator import PdfGenerator
 
 app = Flask(__name__) 
@@ -30,22 +22,16 @@ app.config.from_mapping(
 
 bootstrap = Bootstrap5(app)
 
-from db import db, User, insert_sample, RegisterForm, LoginForm
+from db import db, User, RegisterForm, LoginForm
 
 
 @app.route('/', methods=['GET', 'POST'])   #Homepage
 def index():
+    session['step'] = 1
     return render_template('index.html')
 
 #flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
-@app.route('/ausführlicherTest', methods=['GET', 'POST'])   #Homepage
-def ausführlicherTest():
-    return render_template('ausführlicherTest.html')
 
-@app.route('/insert/sample')
-def run_insert_sample():
-    insert_sample()
-    return 'Database flushed and populated with some sample data.'
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -94,7 +80,9 @@ def home():
 
 @app.route('/schnelltest', methods=['GET', 'POST'])
 def schnelltest(): 
-    form = SchnellCheckFormular()
+    test_type = 'Schnell'
+    session['test_type'] = test_type
+    form = SchnellCheckFormular() 
     if form.validate_on_submit():
     
         data = {
@@ -110,56 +98,63 @@ def schnelltest():
             'Schulung': form.schulung.data
         }
         filename = pdf_generator.generate_pdf(form)
-        return redirect(url_for('download_confirmation', filename=filename))
+        return redirect(url_for('result', filename=filename))
 
     return render_template('schnelltest.html', form=form)
 
 
 
-@app.route("/download_confirmation")
-def download_confirmation():
+@app.route("/result")
+def result():
     filename = request.args.get('filename')
     form_data = session.get('form_data')
-    ampelfarbe = session.get('ampelfarbe')
+    test_type = session.get('test_type') 
     
     if form_data is None:
         return "Fehler: Formulardaten nicht gefunden."
-    
-    pos_answers = 0
-    if form_data['TSE'] == "ja" or form_data['TSE'] == "unsicher":
-        pos_answers += 10
-    if form_data['Beleg'] == "ja":
-        pos_answers += 9
-    if form_data['Pruefung'] == "ja":
-        pos_answers += 8
-    if form_data['Trennung'] == "ja":
-        pos_answers += 10
-    if form_data['Einnahmen'] == "ja":
-        pos_answers += 10
-    if form_data['Steuererklärungen'] == "ja":
-        pos_answers += 8
-    if form_data['Nachforderungen'] == "nein":
-        pos_answers += 9
-    if form_data['Trinkgelder'] == "ja":
-        pos_answers += 8
-    if form_data['Schulung'] == "ja":
-        pos_answers += 7
+    if test_type is None:
+        return "Fehler: Testtyp nicht definiert."
 
-    if (pos_answers < 50) :       
-        ampelfarbe = "rot"
-    elif (pos_answers <= 68):
-        ampelfarbe = "gelb"
-    else:
-        ampelfarbe = "grün"
-    
-    return render_template("download_confirmation.html", filename=filename, form_data=form_data, ampelfarbe=ampelfarbe)
+    calculator = CalculateResult(test_type, form_data)  
+    ampelfarbe = calculator.calcResults() 
 
-
+    return render_template("result.html", filename=filename, form_data=form_data, ampelfarbe=ampelfarbe)
 
 
 @app.route("/download/<filename>")
 def download_pdf(filename):
     return send_file(filename, as_attachment=True)
+
+
+@app.route('/ausführlicherTest', methods=['GET', 'POST'])
+def ausführlicherTest():
+    test_type = 'Ausführlich'
+    session['test_type'] = test_type
+
+    if 'step' not in session:
+        session['step'] = 1
+        session['form_data'] = {}
+
+    form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
+                    AusführlicherCheck4, AusführlicherCheck5]
+
+    if 1 <= session['step'] <= 5:
+        form = form_classes[session['step'] - 1]()
+        if form.validate_on_submit():
+            session['form_data'].update({field.name: field.data for field in form})
+            if session['step'] == 5:
+                return redirect(url_for('result'))
+            else:
+                session['step'] += 1
+                return redirect(url_for('ausführlicherTest'))
+    else:
+        filename = pdf_generator.generate_pdf(form)
+        return redirect(url_for('result', filename=filename))
+        
+        
+    return render_template('ausführlicherTest.html', form=form)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True) 
