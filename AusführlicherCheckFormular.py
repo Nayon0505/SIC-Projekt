@@ -49,7 +49,7 @@ class AusführlicherCheck2(FlaskForm):
                      validators=[DataRequired()])
      
      #Frage 3
-     tse = RadioField('Erfüllt Ihr Kassensystem die Anforderungen einer zertizierten technischen Sicherheitseinrichtung (TSE)?',
+     tse1 = RadioField('Erfüllt Ihr Kassensystem die Anforderungen einer zertizierten technischen Sicherheitseinrichtung (TSE)?',
                      choices=[('Ja'), ('Nein'), ('Unsicher')],
                      validators=[DataRequired()])
      #Frage 4

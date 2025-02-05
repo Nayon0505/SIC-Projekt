@@ -9,10 +9,19 @@ from AusführlicherCheckFormular import *
 
 from PdfGenerator import PdfGenerator
 
+import logging
+
+# app.logger.setLevel(logging.DEBUG)  # Setze den Log-Level auf DEBUG
+# app.logger.debug("Das ist eine Debug-Nachricht.")
+# app.logger.info("Das ist eine Info-Nachricht.")
+# app.logger.warning("Das ist eine Warnung.")
+
+
 app = Flask(__name__) 
 bcrypt = Bcrypt(app)
 pdf_generator = PdfGenerator()
 
+app.logger.setLevel(logging.DEBUG)  # Setze den Log-Level auf DEBUG
 
 
 app.config.from_mapping(
@@ -27,7 +36,10 @@ from db import db, User, RegisterForm, LoginForm
 
 @app.route('/', methods=['GET', 'POST'])   #Homepage
 def index():
-    session['step'] = 1
+    # session['step'] = 1
+    session.pop('form_data', default= None)
+    session.pop('step', default= None)
+
     return render_template('index.html')
 
 #flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
@@ -82,43 +94,85 @@ def home():
 def schnelltest(): 
     test_type = 'Schnell'
     session['test_type'] = test_type
+    
     form = SchnellCheckFormular() 
     if form.validate_on_submit():
-    
-        data = {
-            'Betrieb': form.betrieb.data,
-            'TSE': form.tse.data,
-            'Beleg': form.beleg.data,
-            'Pruefung': form.pruefung.data,
-            'Trennung': form.trennung.data,
-            'Einnahmen': form.einnahmen.data,
-            'Steuererklärungen': form.steuererklärungen.data,
-            'Nachforderungen': form.nachforderungen.data,
-            'Trinkgelder': form.trinkgelder.data,
-            'Schulung': form.schulung.data
-        }
-        filename = pdf_generator.generate_pdf(form)
+        
+        
+        session['form_data'] = {field.name: field.data for field in form}  
+        app.logger.debug(f'Form data Schnelltest: {session['form_data']} Test Type: {test_type}-----------------------------------')
+
+
+        calculator = CalculateResult(test_type, session['form_data'])  
+        app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
+
+        ampelfarbe, _ = calculator.calcResults() 
+        _, punkte = calculator.calcResults()
+        session['ampelfarbe'] = ampelfarbe
+        app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
+
+        filename = pdf_generator.generate_pdf(session['form_data'])
+        
         return redirect(url_for('result', filename=filename))
 
     return render_template('schnelltest.html', form=form)
+
+
+@app.route('/ausführlicherTest', methods=['GET', 'POST'])
+def ausführlicherTest():
+    test_type = 'Ausführlich'
+    session['test_type'] = test_type
+    app.logger.debug(f'Session Data1: {session}')
+
+    if 'step' not in session:     #Step wird bei Index definiert, deswegen geht er hier eigtl nicht rein
+        session['step'] = 1
+        session['form_data'] = {}
+        app.logger.debug(f'Session Data3: {session['form_data']}')
+
+
+
+    form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
+                    AusführlicherCheck4, AusführlicherCheck5]
+
+    if 1 <= session['step'] <= 5:
+ 
+        form = form_classes[session['step'] - 1]()
+        if form.validate_on_submit():
+            session['form_data'].update({field.name: field.data for field in form})
+            app.logger.debug(f'Form Data: {session['form_data']}')
+            if session['step'] == 5:
+                calculator = CalculateResult(test_type, session['form_data'])  
+                app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
+
+                ampelfarbe, _ = calculator.calcResults() 
+                _, punkte = calculator.calcResults()
+                session['ampelfarbe'] = ampelfarbe
+                app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
+
+              
+                filename = pdf_generator.generate_pdf(session['form_data'])
+                app.logger.debug(f'Filename-------------------------------------------------------------------------------------------------------:')
+                return redirect(url_for('result', filename = filename))
+            else:
+                session['step'] += 1
+                app.logger.debug(f'Session Step:------------------------------------------------------------------------ {session['step']}')
+                return redirect(url_for('ausführlicherTest'))
+    else:
+        filename = pdf_generator.generate_pdf(session['form_data'])
+        app.logger.debug(f'Filename-------------------------------------------------------------------------------------------------------:')
+
+        return redirect(url_for('result', filename=filename))
+        
+        
+    return render_template('ausführlicherTest.html', form=form)
 
 
 
 @app.route("/result")
 def result():
     filename = request.args.get('filename')
-    form_data = session.get('form_data')
-    test_type = session.get('test_type') 
-    
-    if form_data is None:
-        return "Fehler: Formulardaten nicht gefunden."
-    if test_type is None:
-        return "Fehler: Testtyp nicht definiert."
 
-    calculator = CalculateResult(test_type, form_data)  
-    ampelfarbe = calculator.calcResults() 
-
-    return render_template("result.html", filename=filename, form_data=form_data, ampelfarbe=ampelfarbe)
+    return render_template("result.html", filename=filename, ampelfarbe = session['ampelfarbe'])
 
 
 @app.route("/download/<filename>")
@@ -126,33 +180,7 @@ def download_pdf(filename):
     return send_file(filename, as_attachment=True)
 
 
-@app.route('/ausführlicherTest', methods=['GET', 'POST'])
-def ausführlicherTest():
-    test_type = 'Ausführlich'
-    session['test_type'] = test_type
 
-    if 'step' not in session:
-        session['step'] = 1
-        session['form_data'] = {}
-
-    form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
-                    AusführlicherCheck4, AusführlicherCheck5]
-
-    if 1 <= session['step'] <= 5:
-        form = form_classes[session['step'] - 1]()
-        if form.validate_on_submit():
-            session['form_data'].update({field.name: field.data for field in form})
-            if session['step'] == 5:
-                return redirect(url_for('result'))
-            else:
-                session['step'] += 1
-                return redirect(url_for('ausführlicherTest'))
-    else:
-        filename = pdf_generator.generate_pdf(form)
-        return redirect(url_for('result', filename=filename))
-        
-        
-    return render_template('ausführlicherTest.html', form=form)
 
 
 
