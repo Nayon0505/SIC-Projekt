@@ -1,7 +1,6 @@
 import click
 from flask import json
 from flask_sqlalchemy import SQLAlchemy as sa
-from sqlalchemy import orm
 from app import app
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -15,26 +14,25 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = sa()
 db.init_app(app)
 
-# class form(db.Model):
-#     id = db.Column("ID", db.Integer, primary_key = True)
-#     questions = db.Column("Question", db.String(300), nullable = False)
-#     answersOptions = db.Column("Answer options", db.String(50), nullable = False)
-#     correctAnswer = db.Column("Correct answer", db.String(50), nullable = False)
+@click.command('init-db')
+def init():  
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+    click.echo('Database has been initialized.')
 
-#     def set_questions(self, question_list):
-#         self.answersOptions = json.dumps(question_list)
+app.cli.add_command(init)  
+
+
+class Report(db.Model):
+    id = db.Column("ID", db.Integer, primary_key = True, autoincrement=True)
+    file = db.Column("Reportfile",db.LargeBinary, nullable=False)
+    parent_id = db.mapped_column(db.ForeignKey("user.id"))
+    parent = db.relationship("User", back_populates="children")
     
-#     def get_questions(self):
-#         return json.loads(self.answersOptions)
 
-#     def set_answers(self, answers_list):
-#         """Speichert die Antwortoptionen als JSON-String."""
-#         self.answersOptions = json.dumps(answers_list)
-
-#     def get_answers(self):
-#         """Liest die Antwortoptionen als Python-Liste."""
-#         return json.loads(self.answersOptions) 
-
+    
+  
 
 
 login_manager = LoginManager() 
@@ -52,6 +50,8 @@ class User(db.Model, UserMixin):
     id = db.Column("id", db.Integer, primary_key=True)
     username = db.Column("username", db.String(20), nullable=False, unique=True)
     password = db.Column("password", db.String(80), nullable=False)
+    children = db.relationship("Report", back_populates="parent")
+
 
     def populate_lists(self, user_ids):
         users = []
@@ -59,9 +59,6 @@ class User(db.Model, UserMixin):
             if id > 0: users.append(db.session.get(users, id))
         self.users = users
 
-    #def __init__(self, username, password):
-    #    self.username = username
-    #    self.password = password
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[input_required(),Length(
@@ -86,16 +83,6 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField('Anmelden')
 
-with app.app_context():
-    db.create_all()
 
-@click.command('init-db')
-def init():  
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-    click.echo('Database has been initialized.')
-
-app.cli.add_command(init)  
 
 

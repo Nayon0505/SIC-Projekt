@@ -9,6 +9,7 @@ nav_order: 2
 
 {: .no_toc }
 # Data model
+![alt text](image.png)
 
 <details open markdown="block">
 {: .text-delta }

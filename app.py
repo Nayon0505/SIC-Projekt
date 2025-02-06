@@ -11,17 +11,13 @@ from PdfGenerator import PdfGenerator
 
 import logging
 
-# app.logger.setLevel(logging.DEBUG)  # Setze den Log-Level auf DEBUG
-# app.logger.debug("Das ist eine Debug-Nachricht.")
-# app.logger.info("Das ist eine Info-Nachricht.")
-# app.logger.warning("Das ist eine Warnung.")
 
 
 app = Flask(__name__) 
 bcrypt = Bcrypt(app)
 pdf_generator = PdfGenerator()
 
-app.logger.setLevel(logging.DEBUG)  # Setze den Log-Level auf DEBUG
+app.logger.setLevel(logging.DEBUG)  
 
 
 app.config.from_mapping(
@@ -31,7 +27,7 @@ app.config.from_mapping(
 
 bootstrap = Bootstrap5(app)
 
-from db import db, User, RegisterForm, LoginForm
+from db import *
 
 
 @app.route('/', methods=['GET', 'POST'])   #Homepage
@@ -54,7 +50,7 @@ def login():
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
                 
-                return redirect(url_for('meinBereich', name=user.username))
+                return redirect(url_for('meinBereich', name=user.username, id = user.id))
             else: 
                 flash("Falsches Passwort")
         else:
@@ -106,14 +102,19 @@ def schnelltest():
         calculator = CalculateResult(test_type, session['form_data'])  
         app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
 
-        ampelfarbe, _ = calculator.calcResults() 
-        _, punkte = calculator.calcResults()
+        ampelfarbe, punkte = calculator.calcResults() 
         session['ampelfarbe'] = ampelfarbe
         app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
 
         filename = pdf_generator.generate_pdf(session['form_data'])
-        
+        with open(filename, 'rb') as file:
+            pdf_data = file.read()
+            report = Report(file = pdf_data)
+            db.session.add(report)
+            db.session.commit()
+
         return redirect(url_for('result', filename=filename))
+
 
     return render_template('schnelltest.html', form=form)
 
@@ -144,14 +145,32 @@ def ausführlicherTest():
                 calculator = CalculateResult(test_type, session['form_data'])  
                 app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
 
-                ampelfarbe, _ = calculator.calcResults() 
-                _, punkte = calculator.calcResults()
+                ampelfarbe, punkte = calculator.calcResults() 
                 session['ampelfarbe'] = ampelfarbe
                 app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
 
               
                 filename = pdf_generator.generate_pdf(session['form_data'])
-                app.logger.debug(f'Filename-------------------------------------------------------------------------------------------------------:')
+
+                with open(filename, 'rb') as file:
+                            pdf_data = file.read()
+
+                            from flask_login import current_user
+                            if current_user.is_authenticated:
+                                # Benutzer ist eingeloggt
+                                report = Report(parent_id=current_user.id, file=pdf_data)
+                                db.session.add(report)
+                                db.session.commit()
+                            else:
+                                # Fehlerbehandlung, falls der Benutzer nicht eingeloggt ist
+                                flash("Bitte melden Sie sich an.", "danger")
+                                return redirect(url_for('login'))  # Beispiel für Weiterleitung zur Login-Seite
+                            
+                            # report = Report(user_id = session['user_id'], file = pdf_data)
+                            # app.logger.debug(f'User Id: {session['user_id']} ----------------------------+++++++++++++++++++++++++++--------------')
+                            # db.session.add(report)
+                            # db.session.commit()
+
                 return redirect(url_for('result', filename = filename))
             else:
                 session['step'] += 1
