@@ -2,7 +2,8 @@
 from flask import Flask, flash, redirect, render_template, url_for, request, send_file, session
 from flask_bootstrap import Bootstrap5
 from flask_bcrypt import Bcrypt
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
+
 from CalculateResult import CalculateResult
 from SchnellCheckFormular import SchnellCheckFormular
 from AusführlicherCheckFormular import *
@@ -72,17 +73,19 @@ def register():
 @app.route('/mein-bereich/<string:name>', methods=['GET', 'POST'])
 @login_required
 def meinBereich(name):
-    return render_template('meinBereich.html', content=name)
+    user_reports = Report.query.filter_by(parent_id=current_user.id).all()
+    app.logger.debug(f'Past Checks:{user_reports}')
+
+    return render_template('meinBereich.html', content=name, reports = user_reports)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
-def logout():
+def logout(): 
     logout_user()
     return redirect(url_for('login'))
 
 @app.route('/home')
 def home():
-    logout_user()
     return redirect(url_for('index'))
 
 
@@ -120,6 +123,7 @@ def schnelltest():
 
 
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
+@login_required
 def ausführlicherTest():
     test_type = 'Ausführlich'
     session['test_type'] = test_type
@@ -155,7 +159,6 @@ def ausführlicherTest():
                 with open(filename, 'rb') as file:
                             pdf_data = file.read()
 
-                            from flask_login import current_user
                             if current_user.is_authenticated:
                                 # Benutzer ist eingeloggt
                                 report = Report(parent_id=current_user.id, file=pdf_data)
@@ -198,6 +201,21 @@ def result():
 def download_pdf(filename):
     return send_file(filename, as_attachment=True)
 
+from flask import send_file, abort
+import io
+
+@app.route('/download_pdf/<int:report_id>')
+@login_required
+def download_pdf_meinBereich(report_id):
+    report = Report.query.get(report_id)
+    
+    if not report or report.parent_id != current_user.id:
+        abort(403) 
+    
+    pdf_stream = io.BytesIO(report.file)   
+    pdf_stream.seek(0)
+
+    return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
 
 
 

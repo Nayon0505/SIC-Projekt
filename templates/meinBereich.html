@@ -12,14 +12,16 @@
         <a href="{{url_for('ausführlicherTest')}}"> <button>Neuer ausführlicher Test</button></a>
         
         <list class="reportListe">
-            <ol></ol>
-            <ol></ol>
-            <ol></ol>
-            <ol></ol>
-            <ol></ol>
-            <ol></ol>
-            <ol></ol>
-            <ol></ol>
+            <ul>
+                {% for report in reports %}
+                    <li>
+                        Bericht {{ loop.index }} - 
+                        <a href="{{ url_for('download_pdf_meinBereich', report_id=report.id) }}" download>
+                            PDF herunterladen
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
         </list>
     </div>
 

@@ -3,18 +3,15 @@ title: Home
 nav_order: 0
 ---
 
-{: .attention }
-> Any text enclosed by `[ ]` are placeholders, including the opening and closing brackets.
->
-> You may delete this `attention` box.
 
-# [SIC!]
 
-[Der Sustainable Innovation Check ermöglicht es KMUs kostengünstig ihr Unternehmen Nachhaltiger zu machen!]
+# SIC!
+
+Der Sustainable Innovation Check ermöglicht es KMUs kostengünstig ihr Unternehmen Nachhaltiger zu machen!
 
 ## Team members
 
-### [Anil Öker]
+### Anil Öker
 
 About
 : Wirtschaftsinformatik Student
@@ -22,13 +19,13 @@ About
 Matr.-Nr.
 : 1234567
 
-### [Nayon Lenz]
+### Nayon Lenz
 
 About
 : Wirtschaftsinformatik Student
 
 Matr.-Nr.
-: 1234567
+: 77211988435
 
 ## Eidesstattliche Erklärung
 

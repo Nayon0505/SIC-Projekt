@@ -16,7 +16,7 @@ nav_order: 3
 {: toc }
 </details>
 
-## 01: [Standart SQL oder SQLAlechemy]
+## 01: Standart SQL oder SQLAlechemy
 
 ### Meta
 
