@@ -37,7 +37,11 @@ def index():
     session.pop('form_data', default= None)
     session.pop('step', default= None)
 
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        return render_template('index.html',hide_login_register = True)
+    else:
+        return render_template('index.html',hide_mein_bereich = True)
+    
 
 #flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
 
@@ -57,7 +61,7 @@ def login():
         else:
             flash("Der Nutzer existiert nicht.")
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form,hide_mein_bereich = True,hide_login_register = True)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -68,21 +72,22 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))  
-     return render_template('register.html', form = form)
+     return render_template('register.html', form = form,hide_mein_bereich = True,hide_login_register = True)
 
-@app.route('/mein-bereich/<string:name>', methods=['GET', 'POST'])
+@app.route('/mein-bereich', methods=['GET', 'POST'])
 @login_required
-def meinBereich(name):
+def meinBereich():
+    user_name = current_user.username
     user_reports = Report.query.filter_by(parent_id=current_user.id).all()
     app.logger.debug(f'Past Checks:{user_reports}')
 
-    return render_template('meinBereich.html', content=name, reports = user_reports)
+    return render_template('meinBereich.html', name=user_name, reports = user_reports,hide_mein_bereich = True,hide_login_register = True)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout(): 
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 @app.route('/home')
 def home():
@@ -116,11 +121,12 @@ def schnelltest():
             db.session.add(report)
             db.session.commit()
 
-        return redirect(url_for('result', filename=filename))
+        return redirect(url_for('result', filename = filename))
 
-
-    return render_template('schnelltest.html', form=form)
-
+    if current_user.is_authenticated:
+        return render_template('schnelltest.html', form=form, hide_login_register = True)
+    else:
+        return render_template('schnelltest.html', form=form,hide_mein_bereich = True)
 
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
 @login_required
@@ -133,8 +139,6 @@ def ausführlicherTest():
         session['step'] = 1
         session['form_data'] = {}
         app.logger.debug(f'Session Data3: {session['form_data']}')
-
-
 
     form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
                     AusführlicherCheck4, AusführlicherCheck5]
@@ -153,7 +157,6 @@ def ausführlicherTest():
                 session['ampelfarbe'] = ampelfarbe
                 app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
 
-              
                 filename = pdf_generator.generate_pdf(session['form_data'])
 
                 with open(filename, 'rb') as file:
@@ -187,15 +190,20 @@ def ausführlicherTest():
         
         
     return render_template('ausführlicherTest.html', form=form)
-
+    if current_user.is_authenticated:
+        return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
+    else:
+        return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True)
 
 
 @app.route("/result")
 def result():
     filename = request.args.get('filename')
 
-    return render_template("result.html", filename=filename, ampelfarbe = session['ampelfarbe'])
-
+    if current_user.is_authenticated:
+        return render_template("result.html", filename=filename, ampelfarbe = session['ampelfarbe'], hide_login_register = True)
+    else:
+        return render_template("result.html", filename=filename, ampelfarbe = session['ampelfarbe'],hide_mein_bereich = True)
 
 @app.route("/download/<filename>")
 def download_pdf(filename):

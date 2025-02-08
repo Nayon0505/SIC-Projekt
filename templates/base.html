@@ -14,8 +14,13 @@
         <a class="navbar-brand text-white py-3" href="{{url_for('home')}}">SIC!- Der Sustainable Innovation Check!</a>
 
         <div class="d-flex">
-            <a href="{{url_for('login')}}" class="btn btn-primary me-2">Anmelden</a>
-            <a href="{{url_for('register')}}" class="btn btn-secondary">Registrieren</a>
+            {% if not hide_login_register %}
+                <a href="{{url_for('login')}}" class="btn btn-primary me-2">Anmelden</a>
+                <a href="{{url_for('register')}}" class="btn btn-secondary">Registrieren</a>
+            {% endif %}
+            {% if not hide_mein_bereich %}
+                <a href="{{ url_for('meinBereich', name='deinWert') }}" class="btn btn-secondary">Mein Bereich</a>
+            {% endif %}
         </div>
     </div>
 </nav>
