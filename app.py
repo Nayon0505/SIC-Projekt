@@ -188,7 +188,6 @@ def ausführlicherTest():
 
         return redirect(url_for('result', filename=filename))
         
-        
     return render_template('ausführlicherTest.html', form=form)
     if current_user.is_authenticated:
         return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
@@ -224,10 +223,6 @@ def download_pdf_meinBereich(report_id):
     pdf_stream.seek(0)
 
     return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
-
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True) 
