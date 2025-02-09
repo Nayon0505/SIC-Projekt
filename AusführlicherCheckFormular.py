@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, RadioField, StringField, SubmitField
+from wtforms import FormField, IntegerField, RadioField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
 class AusführlicherCheck1(FlaskForm): 
-
+     title = 'Step One'
      #Frage 1
      betrieb = RadioField('Wie ist Ihr Gastronomiebetrieb strukturiert?',
                          choices=[('restaurant', 'Restaurant'),
@@ -31,10 +31,11 @@ class AusführlicherCheck1(FlaskForm):
                           choices=[('0-25 %'), ('26-50 %'), ('51-75 %'), ('Über 75%')],
                           validators=[DataRequired()])
      
-     submit = SubmitField('Weiter')
+     #submit = SubmitField('Weiter')
 
 
 class AusführlicherCheck2(FlaskForm): 
+     title = 'Step Two'
 
      #Frage 1
      kassensystem = RadioField('Nutzen Sie für den Verkauf Kassensysteme mit digitaler Aufzeichnungspicht (nach Kassensicherungsverordnung)?',
@@ -66,10 +67,12 @@ class AusführlicherCheck2(FlaskForm):
                           choices=[('Täglich'), ('Wöchentlich'), ('Monatlich'), ('Nicht regelmäßig')],
                           validators=[DataRequired()])
 
-     submit = SubmitField('Weiter')
+     #submit = SubmitField('Weiter')
 
 
 class AusführlicherCheck3(FlaskForm): 
+    title = 'Step Three'
+
     # Frage 1
     trennung_essen_trinken = RadioField('Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt in Ihrer Buchhaltung?',
                                             choices=[('Ja'), 
@@ -101,9 +104,10 @@ class AusführlicherCheck3(FlaskForm):
                                           ('Nein')],
                                  validators=[DataRequired()])
     
-    submit = SubmitField('Weiter')
+    #submit = SubmitField('Weiter')
 
 class AusführlicherCheck4(FlaskForm): 
+    title = 'Step Four'
     # Frage 1
     steuererklärungen = RadioField('Reichen Sie Ihre Steuererklärungen immer fristgerecht ein?',
                                    choices=[('Ja, immer'), 
@@ -146,10 +150,11 @@ class AusführlicherCheck4(FlaskForm):
                                          ('Nein')],
                                 validators=[DataRequired()])
     
-    submit = SubmitField('Weiter')
+    #submit = SubmitField('Weiter')
 
 
 class AusführlicherCheck5(FlaskForm): 
+    title = 'Step Five'
     # Frage 1
     trinkgelder_dokumentation = RadioField('Werden Trinkgelder korrekt dokumentiert?',
                                            choices=[('Ja, vollständig'), 
@@ -170,4 +175,14 @@ class AusführlicherCheck5(FlaskForm):
                                                ('Nein')],
                                       validators=[DataRequired()])
     
-    submit = SubmitField('Fertigstellen')
+    #submit = SubmitField('Fertigstellen')
+
+
+class AusführlicherCheck(FlaskForm):
+    subform1 = FormField(AusführlicherCheck1)
+    subform2 = FormField(AusführlicherCheck2)
+    subform3 = FormField(AusführlicherCheck3)
+    subform4 = FormField(AusführlicherCheck4)
+    subform5 = FormField(AusführlicherCheck5)
+    submit = SubmitField('Absenden')
+    

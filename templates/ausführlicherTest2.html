@@ -1,0 +1,50 @@
+    {% extends "base.html" %}
+{% import "bootstrap/form.html" as wtf %}
+
+{% block title %}Test{% endblock %}
+
+{% block content %}
+
+<h1><u><strong>Ausführlicher Test - Fragebogen</strong></u></h1>
+
+<!-- Fortschrittsanzeige -->
+<p>Schritt 2 von 5</p>
+
+<form method="POST" action="{{ url_for('ausführlicherTest', id=2) }}">
+    {{ form.hidden_tag() }}
+
+    <div class="p-4 bg-light border rounded">
+
+        <!-- Dynamische Felder
+        {% for field in form if field.name != "csrf_token" and field.name != "submit" %}
+            <div class="mb-3">
+                {{ field.label }}
+                {{ field(class_="form-control") }}
+            </div>
+        {% endfor %} -->
+
+        <div class="d-flex">
+            {% if not hide_login_register %}
+                <a href="{{url_for('login')}}" class="btn btn-primary me-2">Anmelden</a>
+                <a href="{{url_for('register')}}" class="btn btn-secondary">Registrieren</a>
+            {% endif %}
+            {% if not hide_mein_bereich %}
+                <a href="{{ url_for('meinBereich', name='deinWert') }}" class="btn btn-secondary">Mein Bereich</a>
+            {% endif %}
+        </div>
+
+
+        {{ form.subform2 }}
+  
+
+
+        <div>
+            <!-- <input type="submit" name="submit" value="Fertig"> -->
+            <input type="submit" name="submit-part" value="Weiter">
+
+            <!-- <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button> -->
+        </div>
+    </div>
+</form>
+
+{% endblock %}

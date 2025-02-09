@@ -13,7 +13,7 @@ from PdfGenerator import PdfGenerator
 import logging
 
 
-
+ 
 app = Flask(__name__) 
 bcrypt = Bcrypt(app)
 pdf_generator = PdfGenerator()
@@ -91,6 +91,7 @@ def logout():
 
 @app.route('/home')
 def home():
+   #session.pop('form_data', None)
     return redirect(url_for('index'))
 
 
@@ -152,117 +153,228 @@ def schnelltest():
     else:
         return render_template('schnelltest.html', form=form,hide_mein_bereich = True)
 
-@app.route('/ausführlicherTest', methods=['GET', 'POST'])
-@login_required
-def ausführlicherTest():
-    test_type = 'Ausführlich'
-    session['test_type'] = test_type
-    app.logger.debug(f'Session Data1: {session}')
 
-    if 'step' not in session:     #Step wird bei Index definiert, deswegen geht er hier eigtl nicht rein
-        session['step'] = 1
-        session['form_data'] = {}
-        app.logger.debug(f'Session Data3: {session['form_data']}')
 
-    form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
-                    AusführlicherCheck4, AusführlicherCheck5]
-    form1 = AusführlicherCheck1()
-    form2 = AusführlicherCheck2()
-    form3 = AusführlicherCheck3()
-    form4 = AusführlicherCheck4()
-    form5 = AusführlicherCheck5()
+@app.route('/step/<int:id>', methods=['GET', 'POST'])
+def ausführlicherTest(id):
+    forms = {  
+            1: AusführlicherCheck1(),
+            2: AusführlicherCheck2(),
+            3: AusführlicherCheck3(),
+            4: AusführlicherCheck4(),
+            5: AusführlicherCheck5()
+        }
 
-    if 1 <= session['step'] <= 5:
- 
-        form = form_classes[session['step'] - 1]()
+    form = forms.get(id, 1)
+
+    if request.method == 'POST':
         if form.validate_on_submit():
-
-            session['form_data'].update({field.name: field.data for field in form})
-                             
-            # damit die antworten in der html angezeigt werden
-            user_answers = {
-                    'Wie ist Ihr Gastronomiebetrieb strukturiert?': form1.betrieb.data,
-                    'Wie viele Standorte betreiben Sie?': form1.standort_zahl.data,
-                    'Anzahl der Mitarbeitenden in Ihrem Betrieb?': form1.mitarbeiter_zahl.data,
-                    'Wie hoch war Ihr Jahresumsatz im letzten Geschäftsjahr?': form1.jahresumsatz.data,
-                    'Wie hoch war Ihr Anteil an Barumsätzen im letzten Geschäftsjahr?': form1.trennung.data,
-                    'Nutzen Sie Kassensysteme mit digitaler Aufzeichnungspflicht?': form2.kassensystem.data,
-                    'Wann wurde Ihr Kassensystem zuletzt geprüft?': form2.kassensytem_prüfung.data,
-                    'Erfüllt Ihr Kassensystem die Anforderungen einer TSE?': form2.tse1.data,
-                    'Geben Sie für jede Transaktion einen Beleg aus?': form2.beleg.data,
-                    'Entsprechen die Belege allen gesetzlichen Anforderungen?': form2.belegs_anforderungen.data,
-                    'Wie oft sichern Sie Ihre Kassendaten?': form2.kassendaten.data,
-                    'Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt?': form3.trennung_essen_trinken.data,
-                    'Nutzen Sie ein digitales Buchhaltungssystem?': form3.buchhaltungssystem.data,
-                    'Erfassen Sie Einnahmen aus verschiedenen Quellen getrennt?': form3.einnahme_erfassung.data,
-                    'Wie hoch war Ihre durchschnittliche monatliche Umsatzsteuerzahlung?': form3.umsatzsteuer.data,
-                    'Haben Sie in den letzten 2 Jahren Umsatzsteuer-Nachforderungen erhalten?': form3.nachforderungen.data,
-                    'Reichen Sie Ihre Steuererklärungen immer fristgerecht ein?': form4.steuererklärungen.data,
-                    'Werden alle Einnahmen vollständig dokumentiert?': form4.einkommensdokumentation.data,
-                    'Nutzen Sie getrennte Umsatzsteuer-Sätze für Take-Away?': form4.getrennte_steuersätze.data,
-                    'Wurde Ihr Betrieb in den letzten 5 Jahren steuerlich geprüft?': form4.steuerprüfung.data,
-                    'Wie dokumentieren Sie Nachforderungen durch das Finanzamt?': form4.nachforderungsdokumentation.data,
-                    'Führen Sie regelmäßige interne Steuer-Audits durch?': form4.audits.data,
-                    'Werden Trinkgelder korrekt dokumentiert?': form5.trinkgelder_dokumentation.data,
-                    'Sind Trinkgelder über das Kassensystem korrekt lohnversteuert?': form5.trinkgelder_steuer.data,
-                    'Werden Mitarbeitende regelmäßig zu steuerlichen Vorgaben geschult?': form5.mitarbeiterschulungen.data,
-                }
-
-            eingaben = []
-
-            for frage, user_answer in user_answers.items():
-                eingaben.append({
-                    'question': frage,
-                    'user_answer': user_answer,
-                })
-        
-            session['form_eingaben'] = eingaben      
-
-            app.logger.debug(f'Form Data: {session['form_data']}')
-
-            if session['step'] == 5:
-                calculator = CalculateResult(test_type, session['form_data'])  
-                app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
-
-                ampelfarbe, punkte = calculator.calcResults() 
-                session['ampelfarbe'] = ampelfarbe
-                app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
-
-                filename = pdf_generator.generate_pdf(session['form_data'])
-
-                with open(filename, 'rb') as file:
-                            pdf_data = file.read()
-
-                            if current_user.is_authenticated:
-                                # Benutzer ist eingeloggt
-                                report = Report(parent_id=current_user.id, file=pdf_data)
-                                db.session.add(report)
-                                db.session.commit()
-                            else:
-                                # Fehlerbehandlung, falls der Benutzer nicht eingeloggt ist
-                                flash("Bitte melden Sie sich an.", "danger")
-                                return redirect(url_for('login'))  # Beispiel für Weiterleitung zur Login-Seite
-                            
-                            # report = Report(user_id = session['user_id'], file = pdf_data)
-                            # app.logger.debug(f'User Id: {session['user_id']} ----------------------------+++++++++++++++++++++++++++--------------')
-                            # db.session.add(report)
-                            # db.session.commit()
-
-                return redirect(url_for('result', filename = filename))
+            # Save form data to session
+            session['step{}'.format(id)] = form.data
+            if id < len(forms):
+                # Redirect to next step
+                return redirect(url_for('id', id=stidep+1))
             else:
-                session['step'] += 1
-                app.logger.debug(f'Session Step:------------------------------------------------------------------------ {session['step']}')
-                return redirect(url_for('ausführlicherTest'))
-    else:
-        filename = pdf_generator.generate_pdf(session['form_data'])
-        app.logger.debug(f'Filename-------------------------------------------------------------------------------------------------------:')
+                # Redirect to finish
+                return redirect(url_for('finish'))
 
-        return redirect(url_for('result', filename=filename))
+    # If form data for this step is already in the session, populate the form with it
+    if 'step{}'.format(id) in session:
+        form.process(data=session['step{}'.format(id)])
+
+    content = {
+        'progress': int(id / len(forms) * 100),  
+        'step': id, 
+        'form': form,
+    }
+    return render_template('step.html', **content)
+
+
+@app.route('/finish')
+def finish():
+    data = {}
+    for key in session.keys():
+        if key.startswith('step'):
+            data.update(session[key])
+    session.clear()
+    return render_template('finish.html', data=data)
+
+
+# @app.route('/ausführlicherTest/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# def ausführlicherTest(id):
+#     test_type = 'Ausführlich'
+#     session['test_type'] = test_type
+#     next_id = id+1
+#     full_data = {}  
+
+    
+#     form = AusführlicherCheck()
+#     if "submit" in request.form and form.validate():
+#         app.logger.debug(f'Retrieved Input: {full_data}')
+#         return redirect(url_for('index'))
+
+#     elif "submit-part" in request.form:
+
+#         if form.subform1.validate(form):
+#             full_data['subform1'] = form.subform1.data
+#             app.logger.debug(f'Retrieved Input (Subform1): {full_data["subform1"]}')
+#         elif form.subform2.validate(form):
+#             full_data['subform2'] = form.subform2.data
+#             app.logger.debug(f'Retrieved Input (Subform2): {full_data["subform2"]}')
+#         elif form.subform3.validate(form):
+#             full_data['subform3'] = form.subform3.data
+#             app.logger.debug(f'Retrieved Input (Subform3): {full_data["subform3"]}') 
+#         elif form.subform4.validate(form):
+#             full_data['subform4'] = form.subform4.data
+#             app.logger.debug(f'Retrieved Input (Subform4): {full_data["subform4"]}')
+#         elif form.subform5.validate(form):
+#             full_data['subform5'] = form.subform5.data
+#             app.logger.debug(f'Retrieved Input (Subform5): {full_data["subform5"]}')
+#         return redirect(url_for('ausführlicherTest', id=next_id))
+    
+
+#     if current_user.is_authenticated: 
+#         # return render_template('ausführlicherTest1.html', form=form, hide_login_register = True)
+#         if id == 1:
+#             return render_template('ausführlicherTest1.html', form=form, hide_login_register = True)
+#         elif id == 2:
+#             return render_template('ausführlicherTest2.html', form=form, hide_login_register = True)
+#         elif id == 3:
+#             return render_template('ausführlicherTest3.html', form=form, hide_login_register = True) 
+#         elif id == 4:
+#             return render_template('ausführlicherTest4.html', form=form, hide_login_register = True)
+#         elif id == 5:
+#             return render_template('ausführlicherTest5.html', form=form, hide_login_register = True)
+#         else: 
+#             return redirect('meinBereich')
+
+#     else:
+#         return render_template('ausführlicherTest1.html', form=form,hide_mein_bereich = True)
+    
+
+
+
+
+
+
+
+
+
+
+    #app.logger.debug(f'Session Data1: {session}')
+
+    # if 'step' not in session:     #Step wird bei Index definiert, deswegen geht er hier eigtl nicht rein
+    #     session['step'] = 1
+    #     app.logger.debug(f'Entered step if clause------------------------------------')
+    #     #session.pop('form_data', None)
+    #     session['form_data'] = {}
+    #     #app.logger.debug(f'Session Data3: {session['form_data']}')
+
+    # form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
+    #                 AusführlicherCheck4, AusführlicherCheck5]
+    # form1 = AusführlicherCheck1()
+    # form2 = AusführlicherCheck2()
+    # form3 = AusführlicherCheck3()
+    # form4 = AusführlicherCheck4()
+    # form5 = AusführlicherCheck5()
+
+    # if 1 <= session['step'] <= 5:
+ 
+    #     form = form_classes[session['step'] - 1]()
+    #     if form.validate_on_submit():
+            
+    #         new_data = {field.name: field.data for field in form}
+    #         session['form_data'].update(new_data)
+                             
+    #         # damit die antworten in der html angezeigt werden
+    #         user_answers = {
+    #                 'Wie ist Ihr Gastronomiebetrieb strukturiert?': form1.betrieb.data,
+    #                 'Wie viele Standorte betreiben Sie?': form1.standort_zahl.data,
+    #                 'Anzahl der Mitarbeitenden in Ihrem Betrieb?': form1.mitarbeiter_zahl.data,
+    #                 'Wie hoch war Ihr Jahresumsatz im letzten Geschäftsjahr?': form1.jahresumsatz.data,
+    #                 'Wie hoch war Ihr Anteil an Barumsätzen im letzten Geschäftsjahr?': form1.trennung.data,
+    #                 'Nutzen Sie Kassensysteme mit digitaler Aufzeichnungspflicht?': form2.kassensystem.data,
+    #                 'Wann wurde Ihr Kassensystem zuletzt geprüft?': form2.kassensytem_prüfung.data,
+    #                 'Erfüllt Ihr Kassensystem die Anforderungen einer TSE?': form2.tse1.data,
+    #                 'Geben Sie für jede Transaktion einen Beleg aus?': form2.beleg.data,
+    #                 'Entsprechen die Belege allen gesetzlichen Anforderungen?': form2.belegs_anforderungen.data,
+    #                 'Wie oft sichern Sie Ihre Kassendaten?': form2.kassendaten.data,
+    #                 'Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt?': form3.trennung_essen_trinken.data,
+    #                 'Nutzen Sie ein digitales Buchhaltungssystem?': form3.buchhaltungssystem.data,
+    #                 'Erfassen Sie Einnahmen aus verschiedenen Quellen getrennt?': form3.einnahme_erfassung.data,
+    #                 'Wie hoch war Ihre durchschnittliche monatliche Umsatzsteuerzahlung?': form3.umsatzsteuer.data,
+    #                 'Haben Sie in den letzten 2 Jahren Umsatzsteuer-Nachforderungen erhalten?': form3.nachforderungen.data,
+    #                 'Reichen Sie Ihre Steuererklärungen immer fristgerecht ein?': form4.steuererklärungen.data,
+    #                 'Werden alle Einnahmen vollständig dokumentiert?': form4.einkommensdokumentation.data,
+    #                 'Nutzen Sie getrennte Umsatzsteuer-Sätze für Take-Away?': form4.getrennte_steuersätze.data,
+    #                 'Wurde Ihr Betrieb in den letzten 5 Jahren steuerlich geprüft?': form4.steuerprüfung.data,
+    #                 'Wie dokumentieren Sie Nachforderungen durch das Finanzamt?': form4.nachforderungsdokumentation.data,
+    #                 'Führen Sie regelmäßige interne Steuer-Audits durch?': form4.audits.data,
+    #                 'Werden Trinkgelder korrekt dokumentiert?': form5.trinkgelder_dokumentation.data,
+    #                 'Sind Trinkgelder über das Kassensystem korrekt lohnversteuert?': form5.trinkgelder_steuer.data,
+    #                 'Werden Mitarbeitende regelmäßig zu steuerlichen Vorgaben geschult?': form5.mitarbeiterschulungen.data,
+    #             }
+
+    #         eingaben = []
+
+    #         for frage, user_answer in user_answers.items():
+    #             eingaben.append({
+    #                 'question': frage,
+    #                 'user_answer': user_answer,
+    #             })
         
-    if current_user.is_authenticated:
-        return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
-    else:
-        return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True)
+    #         session['form_eingaben'] = eingaben      
+
+    #       #  app.logger.debug(f'Form Data: {session['form_data']}')
+    #         app.logger.info(f'Step: {session['step']}, Sequential Form Data: {session['form_data']}')
+    #         form_data1 = []
+    #         form_data1.append(session['form_data'])
+    #         app.logger.info(f'Step: {session['step']}, Sequential Form Data saved as a list: {form_data1}')
+
+    #         if session['step'] == 5:
+    #             calculator = CalculateResult(test_type, session['form_data'])  
+    #           #  app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
+
+    #             ampelfarbe, punkte = calculator.calcResults() 
+    #             session['ampelfarbe'] = ampelfarbe
+    #             app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
+
+    #             filename = pdf_generator.generate_pdf(session['form_data'])
+
+    #             with open(filename, 'rb') as file:
+    #                         pdf_data = file.read()
+
+    #                         if current_user.is_authenticated:
+    #                             # Benutzer ist eingeloggt
+    #                             report = Report(parent_id=current_user.id, file=pdf_data)
+    #                             db.session.add(report)
+    #                             db.session.commit()
+    #                             session.pop('step')
+    #                         else:
+    #                             # Fehlerbehandlung, falls der Benutzer nicht eingeloggt ist
+    #                             flash("Bitte melden Sie sich an.", "danger")
+    #                             return redirect(url_for('login'))  # Beispiel für Weiterleitung zur Login-Seite
+                            
+    #             app.logger.debug(f'Final Form Data: {session['form_data']}')
+              
+
+
+    #             return redirect(url_for('result', filename = filename))
+    #         else:
+    #             session['step'] += 1
+    #             app.logger.debug(f'Session Step:------------------------------------------------------------------------ {session['step']}')
+    #             return redirect(url_for('ausführlicherTest')) 
+    # else:
+    #     filename = pdf_generator.generate_pdf(session['form_data'])
+    #     app.logger.debug(f'Filename-------------------------------------------------------------------------------------------------------:')
+
+    #     return redirect(url_for('result', filename=filename))
+        
+    # if current_user.is_authenticated:
+    #     return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
+    # else:
+    #     return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True)
 
 
 @app.route("/result")

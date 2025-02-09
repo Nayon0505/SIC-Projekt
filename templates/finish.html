@@ -1,0 +1,22 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h1>Finish</h1>
+      <p>Thank you for your submission!</p>
+      <table class="table">
+        {% for key, value in data.items() %}
+          {% if key not in ['csrf_token', 'submit', 'previous']%}
+            <tr>
+              <th>{{ key }}</th>
+              <td>{{ value }}</td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
