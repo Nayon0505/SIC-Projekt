@@ -54,6 +54,25 @@
 
               {% endif %}
     </div>
+    
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Frage</th>
+                <th>Deine Antwort</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eingabe in form_eingaben %}
+            <tr>
+                <td>{{ eingabe.question }}</td>
+                <td>{{ eingabe.user_answer }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
      
     {# <h3>Gastronomiebetrieb:</h3>
     <h2>{{ form_data['Betrieb'] }}</h2>

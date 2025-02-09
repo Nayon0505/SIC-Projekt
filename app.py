@@ -121,6 +121,30 @@ def schnelltest():
             db.session.add(report)
             db.session.commit()
 
+        # damit die antworten in der html angezeigt werden
+        user_answers = {
+            'Wie ist Ihr Gastronomiebetrieb strukturiert?': form.betrieb.data,
+            'Erfüllt Ihr Kassensystem die Anforderungen einer zertifizierten technischen Sicherheitseinrichtung (TSE)?': form.tse.data,
+            'Geben Sie für jede Transaktion einen Beleg aus?': form.beleg.data,
+            'Wurde Ihr Kassensystem innerhalb der letzten 12 Monate geprüft oder zertifiziert?': form.pruefung.data,
+            'Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt in Ihrer Buchhaltung?': form.trennung.data,
+            'Erfassen Sie alle Einnahmen aus Barzahlungen, Kartenzahlungen und Lieferdiensten vollständig?': form.einnahmen.data,
+            'Reichen Sie Ihre Steuererklärungen immer fristgerecht ein?': form.steuererklärungen.data,
+            'Haben Sie in den letzten 2 Jahren Umsatzsteuer-Nachforderungen erhalten?': form.nachforderungen.data,
+            'Dokumentieren Sie Trinkgelder gemäß den steuerlichen Vorgaben?': form.trinkgelder.data,
+            'Werden Ihre Mitarbeitenden regelmäßig zu steuerlichen Vorgaben geschult (z.B. Kassensicherungsverordnung, Trinkgeldregelung)?': form.schulung.data,
+        }
+
+        eingaben = []
+
+        for frage, user_answer in user_answers.items():
+            eingaben.append({
+                'question': frage,
+                'user_answer': user_answer,
+            })
+        
+        session['form_eingaben'] = eingaben
+
         return redirect(url_for('result', filename = filename))
 
     if current_user.is_authenticated:
@@ -142,13 +166,60 @@ def ausführlicherTest():
 
     form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
                     AusführlicherCheck4, AusführlicherCheck5]
+    form1 = AusführlicherCheck1()
+    form2 = AusführlicherCheck2()
+    form3 = AusführlicherCheck3()
+    form4 = AusführlicherCheck4()
+    form5 = AusführlicherCheck5()
 
     if 1 <= session['step'] <= 5:
  
         form = form_classes[session['step'] - 1]()
         if form.validate_on_submit():
+
             session['form_data'].update({field.name: field.data for field in form})
+                             
+            # damit die antworten in der html angezeigt werden
+            user_answers = {
+                    'Wie ist Ihr Gastronomiebetrieb strukturiert?': form1.betrieb.data,
+                    'Wie viele Standorte betreiben Sie?': form1.standort_zahl.data,
+                    'Anzahl der Mitarbeitenden in Ihrem Betrieb?': form1.mitarbeiter_zahl.data,
+                    'Wie hoch war Ihr Jahresumsatz im letzten Geschäftsjahr?': form1.jahresumsatz.data,
+                    'Wie hoch war Ihr Anteil an Barumsätzen im letzten Geschäftsjahr?': form1.trennung.data,
+                    'Nutzen Sie Kassensysteme mit digitaler Aufzeichnungspflicht?': form2.kassensystem.data,
+                    'Wann wurde Ihr Kassensystem zuletzt geprüft?': form2.kassensytem_prüfung.data,
+                    'Erfüllt Ihr Kassensystem die Anforderungen einer TSE?': form2.tse1.data,
+                    'Geben Sie für jede Transaktion einen Beleg aus?': form2.beleg.data,
+                    'Entsprechen die Belege allen gesetzlichen Anforderungen?': form2.belegs_anforderungen.data,
+                    'Wie oft sichern Sie Ihre Kassendaten?': form2.kassendaten.data,
+                    'Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt?': form3.trennung_essen_trinken.data,
+                    'Nutzen Sie ein digitales Buchhaltungssystem?': form3.buchhaltungssystem.data,
+                    'Erfassen Sie Einnahmen aus verschiedenen Quellen getrennt?': form3.einnahme_erfassung.data,
+                    'Wie hoch war Ihre durchschnittliche monatliche Umsatzsteuerzahlung?': form3.umsatzsteuer.data,
+                    'Haben Sie in den letzten 2 Jahren Umsatzsteuer-Nachforderungen erhalten?': form3.nachforderungen.data,
+                    'Reichen Sie Ihre Steuererklärungen immer fristgerecht ein?': form4.steuererklärungen.data,
+                    'Werden alle Einnahmen vollständig dokumentiert?': form4.einkommensdokumentation.data,
+                    'Nutzen Sie getrennte Umsatzsteuer-Sätze für Take-Away?': form4.getrennte_steuersätze.data,
+                    'Wurde Ihr Betrieb in den letzten 5 Jahren steuerlich geprüft?': form4.steuerprüfung.data,
+                    'Wie dokumentieren Sie Nachforderungen durch das Finanzamt?': form4.nachforderungsdokumentation.data,
+                    'Führen Sie regelmäßige interne Steuer-Audits durch?': form4.audits.data,
+                    'Werden Trinkgelder korrekt dokumentiert?': form5.trinkgelder_dokumentation.data,
+                    'Sind Trinkgelder über das Kassensystem korrekt lohnversteuert?': form5.trinkgelder_steuer.data,
+                    'Werden Mitarbeitende regelmäßig zu steuerlichen Vorgaben geschult?': form5.mitarbeiterschulungen.data,
+                }
+
+            eingaben = []
+
+            for frage, user_answer in user_answers.items():
+                eingaben.append({
+                    'question': frage,
+                    'user_answer': user_answer,
+                })
+        
+            session['form_eingaben'] = eingaben      
+
             app.logger.debug(f'Form Data: {session['form_data']}')
+
             if session['step'] == 5:
                 calculator = CalculateResult(test_type, session['form_data'])  
                 app.logger.debug(f'Calculator inputs, testtype: {test_type}, form data: {session['form_data']}------------------------------------')
@@ -188,7 +259,6 @@ def ausführlicherTest():
 
         return redirect(url_for('result', filename=filename))
         
-    return render_template('ausführlicherTest.html', form=form)
     if current_user.is_authenticated:
         return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
     else:
@@ -198,11 +268,15 @@ def ausführlicherTest():
 @app.route("/result")
 def result():
     filename = request.args.get('filename')
+    form_eingaben = session.get('form_eingaben')
 
+    if not form_eingaben:
+        return "Fehler: daten nicht gefunden."
+    
     if current_user.is_authenticated:
-        return render_template("result.html", filename=filename, ampelfarbe = session['ampelfarbe'], hide_login_register = True)
+        return render_template("result.html", filename=filename, form_eingaben = form_eingaben, ampelfarbe = session['ampelfarbe'], hide_login_register = True)
     else:
-        return render_template("result.html", filename=filename, ampelfarbe = session['ampelfarbe'],hide_mein_bereich = True)
+        return render_template("result.html", filename=filename, form_eingaben = form_eingaben, ampelfarbe = session['ampelfarbe'],hide_mein_bereich = True)
 
 @app.route("/download/<filename>")
 def download_pdf(filename):
