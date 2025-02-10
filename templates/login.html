@@ -3,29 +3,44 @@
 {% block title %}Anmeldung{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center">
-    <<form method="POST" action="">
 
-        <h3>Jetzt anmelden</h3>
-        {{ form.hidden_tag() }}
-        <label>Nutzername</label>
-        {{ form.username }}
-        <label>Passwort</label>
-        {{ form.password }}
-        {{ form.submit }}
+<div class="d-flex justify-content-center align-items-center">
+            
+    <form method="POST" action="{{url_for('login')}}" class="w-50 p-4 bg-light border rounded">
+        {{ form.hidden_tag() }} {#Schutz für crsv oderso#}
 
-        <a href="{{url_for('index')}}">Passwort vergessen?</a>
-        <a href="{{url_for('register')}}">Registrieren</a>
-        </form>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-      
-    {% endif %}
-  {% endwith %}
+        <h3 class="text-center">Jetzt Anmelden</h3> 
+
+            <div class="mb-3">
+                <p class="form-label">Nutzername</p>
+                {{ form.username(class="form-control") }}
+                    {% for error in form.username.errors %}
+                        <div class="alert alert-error">
+                            {{error}}
+                        </div>
+                    {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                <p class="form-label">Passwort</p>
+                {{ form.password(class="form-control") }}
+                  {% for error in form.password.errors %}
+                    <div class="alert alert-error">
+                      {{error}}
+                    </div>
+                  {% endfor %}
+            </div>
+
+            <div class="mb-3 d-flex justify-content-center">
+            {{ form.submit(class="btn btn-primary w-25") }}  
+            </div>
+            <p><a class="link-opacity-75-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+             href="{{ url_for('index') }}">Passwort vergessen?</a></p>
+            <p><a class="link-opacity-75-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+             href="{{ url_for('register') }}">Registrieren</a></p>
+    </form>
 </div>
+
+
 {% endblock %}
 

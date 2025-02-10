@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, url_for, request, sen
 from flask_bootstrap import Bootstrap5
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
+import werkzeug
 
 from CalculateResult import CalculateResult
 from SchnellCheckFormular import SchnellCheckFormular
@@ -50,28 +51,62 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user:
-            if bcrypt.check_password_hash(user.password, form.password.data):
-                login_user(user)
+                 try:
+                     user = form.validate_user(form.username.data)
+                     if user: 
+                         login_user(user)
+                     return redirect(url_for('meinBereich', name=user.username, id=user.id))
+                 except ValidationError as e:
+                    flash(str(e), 'error')  
+                    return redirect(url_for('login'))
+                     
+                #  if werkzeug.security.check_password_hash(user.password, form.password.data):
+                #     login_user(user)
+                 #return redirect(url_for('meinBereich', name=user.username, id = user.id))
+
+        # userRow =  db.session.execute(db.select(User).filter_by(username = form.username.data)).first()
+        # #user = User.query.filter_by(username=form.username.data).first()# alte Variante, man soll auf das obere übersteigen
+        # user = userRow[0] #bei session.execute wird die ganze sqlite Zeile (row object) wiedergegeben. Man kann auf den ersten Index zugreifen um das Objekt User zu bekommen
+        # app.logger.debug(f'User: {user}')
+        # if user: 
+        #     if werkzeug.security.check_password_hash(user.password, form.password.data):
+        #     #bcrypt.check_password_hash(user.password, form.password.data)
+        #         login_user(user)
                 
-                return redirect(url_for('meinBereich', name=user.username, id = user.id))
-            else: 
-                flash("Falsches Passwort")
-        else:
-            flash("Der Nutzer existiert nicht.")
+        #         return redirect(url_for('meinBereich', name=user.username, id = user.id))
+        #     else: 
+        #         flash("Falsches Passwort")
+        # else:
+        #     flash("Der Nutzer existiert nicht.")
 
     return render_template('login.html', form=form,hide_mein_bereich = True,hide_login_register = True)
 
 @app.route('/register', methods=['GET', 'POST'])
-def register():
+def register():          
+     print("Request-Methode:", request.method)  # Debugging
+
+ 
+     if request.method == 'POST':  # Prüfen, ob POST-Request ankommt
+        print("POST-Request erhalten!")
+
      form = RegisterForm()
-     if form.validate_on_submit():
-            hashed_password = bcrypt.generate_password_hash(form.password.data)
+     print("Fehler:", form.errors) 
+     if form.validate_on_submit():    
+        
+            app.logger.debug('Validating...')
+            #hashed_password = bcrypt.generate_password_hash(form.password.data)
+            hashed_password = werkzeug.security.generate_password_hash(form.password.data, method='scrypt', salt_length=16)
+            app.logger.debug(f'Hashed pw {hashed_password}') 
             new_user = User(username=form.username.data, password=hashed_password)
+            app.logger.debug(f'New User {new_user}')
             db.session.add(new_user)
+            app.logger.debug(f'Adding... {new_user}')
             db.session.commit()
-            return redirect(url_for('login'))  
+            app.logger.debug(f'Comitted.')
+            return redirect(url_for('login'))            
+     else:
+        print("❌ Formularvalidierung fehlgeschlagen!")
+        print("Fehler:" ) # Zeigt, welche Fehler es gibt)
      return render_template('register.html', form = form,hide_mein_bereich = True,hide_login_register = True)
 
 @app.route('/mein-bereich', methods=['GET', 'POST'])
@@ -100,7 +135,7 @@ def schnelltest():
     session['test_type'] = test_type
     
     form = SchnellCheckFormular() 
-    if form.validate_on_submit():
+    if form.validate_on_submit():                       
         
         
         session['form_data'] = {field.name: field.data for field in form}  
@@ -117,9 +152,9 @@ def schnelltest():
         filename = pdf_generator.generate_pdf(session['form_data'])
         with open(filename, 'rb') as file:
             pdf_data = file.read()
-            report = Report(file = pdf_data)
-            db.session.add(report)
-            db.session.commit()
+            report = Report(file = pdf_data)  
+            db.session.add(report)                        
+            db.session.commit()  
 
         # damit die antworten in der html angezeigt werden
         user_answers = {
@@ -144,7 +179,7 @@ def schnelltest():
             })
         
         session['form_eingaben'] = eingaben
-
+  
         return redirect(url_for('result', filename = filename))
 
     if current_user.is_authenticated:
@@ -154,7 +189,7 @@ def schnelltest():
 
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
 @login_required
-def ausführlicherTest():
+def ausführlicherTest():  
     test_type = 'Ausführlich'
     session['test_type'] = test_type
     app.logger.debug(f'Session Data1: {session}')
@@ -176,7 +211,7 @@ def ausführlicherTest():
  
         form = form_classes[session['step'] - 1]()
         if form.validate_on_submit():
-
+     
             session['form_data'].update({field.name: field.data for field in form})
                              
             # damit die antworten in der html angezeigt werden
@@ -263,10 +298,10 @@ def ausführlicherTest():
         return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
     else:
         return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True)
-
-
+ 
+ 
 @app.route("/result")
-def result():
+def result():  
     filename = request.args.get('filename')
     form_eingaben = session.get('form_eingaben')
 
@@ -278,7 +313,7 @@ def result():
     else:
         return render_template("result.html", filename=filename, form_eingaben = form_eingaben, ampelfarbe = session['ampelfarbe'],hide_mein_bereich = True)
 
-@app.route("/download/<filename>")
+@app.route("/download/<filename>")     
 def download_pdf(filename):
     return send_file(filename, as_attachment=True)
 
@@ -297,7 +332,7 @@ def download_pdf_meinBereich(report_id):
     pdf_stream.seek(0)
 
     return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
-
+ 
 if __name__ == "__main__":
-    app.run(debug=True) 
+    app.run(debug=True)    
 

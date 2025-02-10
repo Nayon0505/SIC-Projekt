@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SIC!{% endblock %}</title>
+    <title>
+    {% block title %}
+    SIC!             {#Weil <title> um den title block drum ist, kann man in jeder html title überschreiben und braucht keinen <title> mehr (Standardgemäß wird SIC! eingesetzt wenn der title Block fehlt) #}
+    {% endblock %}
+    </title>
+
     {{ bootstrap.load_css() }}
 </head>
 <body>
@@ -22,11 +27,14 @@
                 <a href="{{ url_for('meinBereich', name='deinWert') }}" class="btn btn-secondary">Mein Bereich</a>
             {% endif %}
         </div>
+        
     </div>
-</nav>
+    </nav>
 
     <main class="container mt-4">
         {% block content %}
+
+
        
         {% endblock %}
     </main>

@@ -4,7 +4,7 @@ nav_order: 3
 ---
 
 {: .label }
-[Nayon Lenz]
+Nayon Lenz
 
 {: .no_toc }
 # Design decisions
@@ -46,7 +46,7 @@ Wir betrachteten folgende Optionen:
 
 ---
 
-02: Das stylen unserer Website - Bootstrap oder standart CSS
+## 02: Das stylen unserer Website - Bootstrap oder standart CSS
 
 ### Meta
 
@@ -90,7 +90,7 @@ Wir zogen diese beiden Optionen in Betracht
 
 ---
 
-02: Das Nutzen einer Navbar - Ja oder Nein
+## 03: Das Nutzen einer Navbar - Ja oder Nein
 
 ### Meta
 
@@ -108,6 +108,42 @@ Sollten wir eine Nav-bar für schnelle Navigation zwischen unseren Seiten verwen
 Deshalb werden wir wahrschieinlich:
 
 + im Verlauf schauen ob es villeicht mehr Anwendungsmöglichkeiten gibt
+
+## 04: Nutzen von Werkzeug oder Bcrypt für Passwortencrypting
+
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 10-Feb-2025
+
+### Problem statement
+
+Nutzen wir weiterhin Bcrypt oder Werkzeug für Passwortencrypting? Wir nutzten bisher Bcrypt jedoch ist Bcrypt ein weiteres Package, was unsere App "schwerer" macht und deshalb werden wir womöglich auf das bereits installierte package Werkzeug zurückgreifen, denn es hat das gleiche feature.
+
+### Decision
+
+Wir wechseln auf Werkzeug encrypiting
+
+Wir haben nun Erfahrungen mit Werkzeug encrypting gemacht und gemerkt, dass es genau das gleiche macht wie Bcrypt. Zudem ist es bereits Teil unserer App, was bedeutet wir brauchen kein neues package zu installieren.
+*Entscheindung wurde getroffen von* github.com/nayon0505
+
+### Regarded options
+
+Wir zogen diese beiden Optionen in Betracht
+
++ Flask Bcrypt
++ Werkzeug security helpers
+
+| Kriterien | BCrypt | Werkzeug encrypting |
+| --- | --- | --- |
+| **Funktion** | ✔️  | ✔️ |
+| **Speicher** | ❌ Muss installiert werden | ✔️ Ist bereits in Nutzung, daher installiert |
+
+
+---
 
 <!--
 ### Decision steht aus

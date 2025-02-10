@@ -1,20 +1,53 @@
 {% extends "base.html" %}
 
-{% block title %}Hier registrieren{% endblock %}
+{% block title %}
+Hier registrieren
+{% endblock %}
 
 {% block content %}
-    <form method="POST" action="">
 
-        <h3>Jetzt registrieren</h3>
-        {{ form.hidden_tag() }}
-        <label>E-Mail</label>
-        {{ form.username }}
-        <label>Passwort</label>
-        {{ form.password }}
-        {{ form.submit }}
+<div class="d-flex justify-content-center align-items-center">
+            
+    <form method="POST" action="{{url_for('register')}}" class="w-50 p-4 bg-light border rounded">
+        {{ form.hidden_tag() }} {#Schutz für crsv oderso#}
 
-        <a href="{{url_for('login')}}">Sie haben ein Konto. Hier anmelden</a>
-       
+        <h3 class="text-center">Jetzt registrieren</h3> 
+
+
+            <div class="mb-3">
+                <p class="form-label">Nutzername</p>
+                {{ form.username(class="form-control") }}
+                    {% for error in form.username.errors %}
+                        <div class="alert alert-error">
+                            {{error}}
+                        </div>
+                    {% endfor %}
+            </div>
+
+            <div class="mb-3">
+                <p class="form-label">Passwort</p>
+                {{ form.password(class="form-control") }}
+            </div>
+
+            <div class="mb-3">
+                <p class="form-label">Passwort bestätigen</p>
+                {{ form.confirmPw(class="form-control") }}
+                   
+                    {% for error in form.confirmPw.errors %}
+                        <div class="alert alert-error">
+                            {{error}}
+                        </div>
+                    {% endfor %}
+                  
+            </div>
+
+            <div class="mb-3 d-flex justify-content-center">
+            {{ form.submit(class="btn btn-primary w-25") }}  
+            </div>
+            <p><a class="link-opacity-75-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+             href="{{ url_for('login') }}">Ich habe ein Konto. Zum Anmelden</a></p>
+
     </form>
+</div>
 {% endblock %}
 

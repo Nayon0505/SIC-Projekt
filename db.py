@@ -1,11 +1,12 @@
 import click
 from flask import json
 from flask_sqlalchemy import SQLAlchemy as sa
+import werkzeug
 from app import app
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import input_required, Length, ValidationError
+from wtforms.validators import input_required, Length, ValidationError, EqualTo
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -64,15 +65,20 @@ class RegisterForm(FlaskForm):
     username = StringField(validators=[input_required(),Length(
         min=3, max=15)], render_kw={"placeholder": "Nutzername"})
     password = PasswordField(validators=[input_required(),Length(
-        min=3, max=15)], render_kw={"placeholder": "Passwort"})    
+        min=3, max=15)], render_kw={"placeholder": "Passwort"})   
+    confirmPw = PasswordField(validators=[input_required(),Length(
+        min=3, max=15), EqualTo('password', message='Passwörter stimmen nicht überein')], render_kw={"placeholder": "Passwort bestätigen"})   
     submit = SubmitField("Registrieren")
 
     def validate_username(self, username):
-        existing_user_username = User.query.filter_by(
-            username=username.data).first()
+        userRow =  db.session.execute(db.select(User).filter_by(username = username.data)).first()
+        existing_user_username = userRow[0]
+        #existing_user_username = User.query.filter_by(
+        #   username=username.data).first()
         if existing_user_username:
             raise ValidationError(
                 'Der Name ist vergeben. Bitte nehme einen anderen.')
+    
         
 class LoginForm(FlaskForm):
     username = StringField(validators=[
@@ -81,8 +87,22 @@ class LoginForm(FlaskForm):
     password = PasswordField(validators=[
                             input_required(), Length(min=3, max=20)], render_kw={"placeholder": "Passwort"})
 
-    submit = SubmitField('Anmelden')
+    submit = SubmitField('Anmelden') 
 
-
+    def validate_user(self):
+        userRow =  db.session.execute(db.select(User).filter_by(username = self.username.data)).first()    
+        if not userRow:
+            raise ValidationError(
+                'Nutzer existiert nicht.')
+        
+        user = userRow[0] #bei session.execute wird die ganze sqlite Zeile (row object) wiedergegeben. Man kann auf den ersten Index zugreifen um das Objekt User zu bekommen
+        app.logger.debug(f'User: {user}')
+        if werkzeug.security.check_password_hash(user.password, self.password.data):
+                # login_user(user)
+                return user
+        else:
+            raise ValidationError(
+                    'Falsches Passwort.'
+                    )
 
 
