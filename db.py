@@ -89,20 +89,22 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField('Anmelden') 
 
-    def validate_user(self):
-        userRow =  db.session.execute(db.select(User).filter_by(username = self.username.data)).first()    
-        if not userRow:
-            raise ValidationError(
-                'Nutzer existiert nicht.')
+    def validate_username(self, username):
+        userRow = db.session.execute(
+            db.select(User).filter_by(username=username.data)
+        ).first()
         
-        user = userRow[0] #bei session.execute wird die ganze sqlite Zeile (row object) wiedergegeben. Man kann auf den ersten Index zugreifen um das Objekt User zu bekommen
-        app.logger.debug(f'User: {user}')
-        if werkzeug.security.check_password_hash(user.password, self.password.data):
-                # login_user(user)
-                return user
-        else:
-            raise ValidationError(
-                    'Falsches Passwort.'
-                    )
+        if not userRow:
+            raise ValidationError('Nutzer existiert nicht.')
+
+        self.user = userRow[0]  # Speichert das Benutzerobjekt im Formular für spätere Verwendung
+
+    # Prüft, ob das Passwort korrekt ist
+    def validate_password(self, password):
+        if not hasattr(self, 'user'):  
+            return  # Falls `validate_username` fehlschlägt, nicht weiter prüfen
+
+        if not werkzeug.security.check_password_hash(self.user.password, password.data):
+            raise ValidationError('Passwort ist falsch.')
 
 

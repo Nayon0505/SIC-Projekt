@@ -51,14 +51,10 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-                 try:
-                     user = form.validate_user(form.username.data)
-                     if user: 
-                         login_user(user)
-                     return redirect(url_for('meinBereich', name=user.username, id=user.id))
-                 except ValidationError as e:
-                    flash(str(e), 'error')  
-                    return redirect(url_for('login'))
+        login_user(form.user)  # Benutzer anmelden
+        return redirect(url_for('meinBereich', name=form.user.username, id=form.user.id))
+
+    return render_template('login.html', form=form)
                      
                 #  if werkzeug.security.check_password_hash(user.password, form.password.data):
                 #     login_user(user)
