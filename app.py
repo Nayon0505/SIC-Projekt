@@ -56,11 +56,11 @@ def login():
 
     return render_template('login.html', form=form, hide_mein_bereich=True, hide_logout = True, hide_login_register=True)
                      
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])       
 def register():          
      print("Request-Methode:", request.method)  # Debugging
 
- 
+   
      if request.method == 'POST':  # Prüfen, ob POST-Request ankommt
         print("POST-Request erhalten!")
 
@@ -85,20 +85,20 @@ def register():
      return render_template('register.html', form = form,hide_mein_bereich = True,hide_login_register = True, hide_logout = True)
 
 @app.route('/mein-bereich', methods=['GET', 'POST'])
-@login_required 
-def meinBereich(): 
+@login_required  
+def meinBereich():            
     user_name = current_user.username
     user_reports = Report.query.filter_by(parent_id=current_user.id).all()
     app.logger.debug(f'Past Checks:{user_reports}')
 
-    return render_template('meinBereich.html', name=user_name, reports = user_reports,hide_mein_bereich = True,hide_login_register = True)
+    return render_template('meinBereich.html', name=user_name, reports = user_reports,hide_login_register = True)
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
-def logout(): 
+def logout():    
     logout_user()
     return redirect(url_for('index'))
-
+ 
 @app.route('/home')
 def home():
     return redirect(url_for('index'))
@@ -146,14 +146,14 @@ def schnelltest():
             'Dokumentieren Sie Trinkgelder gemäß den steuerlichen Vorgaben?': form.trinkgelder.data,
             'Werden Ihre Mitarbeitenden regelmäßig zu steuerlichen Vorgaben geschult (z.B. Kassensicherungsverordnung, Trinkgeldregelung)?': form.schulung.data,
         }
-
-        eingaben = []
+    
+        eingaben = [] 
 
         for frage, user_answer in user_answers.items():
             eingaben.append({
                 'question': frage,
-                'user_answer': user_answer,
-            })
+                'user_answer': user_answer,       
+            }) 
         
         session['form_eingaben'] = eingaben
   

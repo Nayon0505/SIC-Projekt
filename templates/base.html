@@ -11,28 +11,49 @@
 
     {{ bootstrap.load_css() }}
 </head>
-<body>
+<body class="bg-body bg-gradient">
 
-    <nav class="navbar navbar-expand-lg bg-dark">
-    <div class="container">
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{{url_for('home')}}">SIC!- Der Sustainable Innovation Check!</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>   {# für Dynamik wenn der Bildschirm eines Feräts kleiner ist, kann er sinst die navbar nicht sehen #}
 
-        <a class="navbar-brand text-white py-3" href="{{url_for('home')}}">SIC!- Der Sustainable Innovation Check!</a>
-
-        <div class="d-flex">
-            {% if not hide_login_register %}
-                <a href="{{url_for('login')}}" class="btn btn-primary me-2">Anmelden</a>
-                <a href="{{url_for('register')}}" class="btn btn-secondary">Registrieren</a>
-            {% endif %}
-            {% if not hide_mein_bereich %}
-                <a href="{{ url_for('meinBereich', name='deinWert') }}" class="btn btn-secondary">Mein Bereich</a>
-            {% endif %}
-            {% if not hide_logout%}
-                <a href="{{url_for('logout')}}" class="btn btn-secondary">Abmelden</a>
-            {% endif%}
-        </div>
-        
+    <div class="collapse navbar-collapse" id="navbarColor02"> 
+      <ul class="navbar-nav ms-auto"> {# me-auto wenn text nach links soll#}
+        <li class="nav-item">
+          <a class="nav-link active" href="{{url_for('home')}}">Startseite</a>
+        </li>
+        {% if not hide_mein_bereich %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{{url_for('meinBereich', name='deinWert')}}">Mein Bereich</a>
+        </li>
+        {% endif %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tests</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item text-white" href="{{url_for('schnelltest')}}">Schnelltest</a>
+            <a class="dropdown-item text-white" href="{{url_for('ausführlicherTest')}}">Ausführlicher Test</a>
+          </div>
+        </li>
+        {% if not hide_logout%}
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ url_for('logout')}}">Abmelden</a>
+        </li>
+        {% endif %}
+        {% if not hide_login_register %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{{url_for('login')}}">Anmelden</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{{url_for('register')}}">Registrieren</a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
-    </nav>
+  </div>
+</nav>
 
     <main class="container mt-4">
         {% block content %}

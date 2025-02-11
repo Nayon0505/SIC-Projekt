@@ -25,14 +25,13 @@
     {% for report in reports %}
         <tr class="table-primary">
          <th scope="row">Bericht {{ loop.index }}</th>
-         <td><a href="{{ url_for('download_pdf_meinBereich', report_id=report.id) }}" download>PDF herunterladen  </a></td>
+         <td><a class="link-opacity-75-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for('download_pdf_meinBereich', report_id=report.id) }}" download>PDF herunterladen  </a></td>
          <td>{{ report.date.strftime('%d.%m.%Y') }}</td>
          <td>{{report.test_type}}</td>
         </tr>
     {% endfor %}
     </tbody> 
     </table>
-        
 {% endblock %}
 
 
