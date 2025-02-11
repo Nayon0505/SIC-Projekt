@@ -173,7 +173,7 @@ def ausführlicherTest():
 
     if 'step' not in session:     #Step wird bei Index definiert, deswegen geht er hier eigtl nicht rein
         session['step'] = 1
-        session['form_data'] = {}
+        session[f'form_data'] = {}
         app.logger.debug(f'Session Data3: {session['form_data']}')
 
     form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
@@ -300,18 +300,20 @@ import io
 @app.route('/download_pdf/<int:report_id>')
 @login_required
 def download_pdf_meinBereich(report_id):        
-   # report = Report.query.get(report_id)
-    reportRow =  db.session.execute(db.select(Report).filter_by(id = report_id))
-    if reportRow:
-        report = reportRow[0]
-        if not report or report.parent_id != current_user.id:
-            abort(403) 
-    
-            pdf_stream = io.BytesIO(report.file)       
-            pdf_stream.seek(0)
- 
-    return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf", report = report)
-  
+    reportRow = db.session.execute(db.select(Report).filter_by(id=report_id))
+    report = reportRow.scalar_one_or_none()
+
+    if not report or report.parent_id != current_user.id:
+        abort(403)  
+
+    if report.file:  
+        pdf_stream = io.BytesIO(report.file) 
+        pdf_stream.seek(0)  
+
+        return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
+    else:
+        abort(404) 
+
 if __name__ == "__main__":
     app.run(debug=True)    
 
