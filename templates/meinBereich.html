@@ -3,30 +3,36 @@
 {% block title %}Mein Bereich{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center">
+    <div class="jumbotron text-center">
         <h1>Mein Bereich</h1>
-    <h1>Hallo, {{name}}</h1>
-
-    <div class="reportContainer">
-        <a href="{{url_for('schnelltest')}}"><button>Neuer Schnelltest</button> </a>
-        <a href="{{url_for('ausführlicherTest')}}"> <button>Neuer ausführlicher Test</button></a>
-        
-        <list class="reportListe">
-            <ul>
-                {% for report in reports %}
-                    <li>
-                        Bericht {{ loop.index }} - 
-                        <a href="{{ url_for('download_pdf_meinBereich', report_id=report.id) }}" download>
-                            PDF herunterladen
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </list>
+        <h1>Hallo, {{name}}</h1>
     </div>
-
-    <a href="{{url_for('logout')}}">Hier abmelden</a>
-</div>
+    <p class="text-end">
+        <a href="{{url_for('schnelltest')}}"><button class="btn btn-primary">Neuer Schnelltest</button> </a>
+        <a href="{{url_for('ausführlicherTest')}}"> <button class="btn btn-primary">Neuer ausführlicher Test</button></a>
+    </p> 
+    <table class="table table-hover">
+    <thead>
+        <tr class="table-dark">
+         <th scope="col">Berichtnummer</th>
+         <th scope="col">PDF</th>
+         <th scope="col">Datum</th>
+         <th scope="col">Testart</th>
+        </tr> 
+     </thead>
+    <tbody>
+    
+    {% for report in reports %}
+        <tr class="table-primary">
+         <th scope="row">Bericht {{ loop.index }}</th>
+         <td><a href="{{ url_for('download_pdf_meinBereich', report_id=report.id) }}" download>PDF herunterladen  </a></td>
+         <td>{{ report.date.strftime('%d.%m.%Y') }}</td>
+         <td>{{report.test_type}}</td>
+        </tr>
+    {% endfor %}
+    </tbody> 
+    </table>
+        
 {% endblock %}
 
 

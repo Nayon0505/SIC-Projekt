@@ -1,3 +1,4 @@
+from datetime import datetime
 import click
 from flask import json
 from flask_sqlalchemy import SQLAlchemy as sa
@@ -27,6 +28,8 @@ app.cli.add_command(init)
 
 class Report(db.Model):
     id = db.Column("ID", db.Integer, primary_key = True, autoincrement=True)
+    date = db.Column("Date", db.DateTime, nullable = False, default = datetime.now)
+    test_type = db.Column("Test Type", db.String)
     file = db.Column("Reportfile",db.LargeBinary, nullable=False)
     parent_id = db.mapped_column(db.ForeignKey("user.id"))
     parent = db.relationship("User", back_populates="children")
@@ -72,12 +75,14 @@ class RegisterForm(FlaskForm):
 
     def validate_username(self, username):
         userRow =  db.session.execute(db.select(User).filter_by(username = username.data)).first()
-        existing_user_username = userRow[0]
+        if userRow:
+            existing_user_username = userRow[0]
         #existing_user_username = User.query.filter_by(
         #   username=username.data).first()
-        if existing_user_username:
-            raise ValidationError(
-                'Der Name ist vergeben. Bitte nehme einen anderen.')
+            if existing_user_username:
+                raise ValidationError(
+                    'Der Name ist vergeben. Bitte nehme einen anderen.')
+       
     
         
 class LoginForm(FlaskForm):
@@ -97,13 +102,11 @@ class LoginForm(FlaskForm):
         if not userRow:
             raise ValidationError('Nutzer existiert nicht.')
 
-        self.user = userRow[0]  # Speichert das Benutzerobjekt im Formular für spätere Verwendung
+        self.user = userRow[0]  
 
-    # Prüft, ob das Passwort korrekt ist
     def validate_password(self, password):
         if not hasattr(self, 'user'):  
-            return  # Falls `validate_username` fehlschlägt, nicht weiter prüfen
-
+            return  
         if not werkzeug.security.check_password_hash(self.user.password, password.data):
             raise ValidationError('Passwort ist falsch.')
 

@@ -41,7 +41,7 @@ def index():
     if current_user.is_authenticated:
         return render_template('index.html',hide_login_register = True)
     else:
-        return render_template('index.html',hide_mein_bereich = True)
+        return render_template('index.html',hide_mein_bereich = True, hide_logout = True)
     
 
 #flask run in terminal um die seite aufzurufen, flask run --reload damit man nicht immer neustarten muss
@@ -54,29 +54,8 @@ def login():
         login_user(form.user)  # Benutzer anmelden
         return redirect(url_for('meinBereich', name=form.user.username, id=form.user.id))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, hide_mein_bereich=True, hide_logout = True, hide_login_register=True)
                      
-                #  if werkzeug.security.check_password_hash(user.password, form.password.data):
-                #     login_user(user)
-                 #return redirect(url_for('meinBereich', name=user.username, id = user.id))
-
-        # userRow =  db.session.execute(db.select(User).filter_by(username = form.username.data)).first()
-        # #user = User.query.filter_by(username=form.username.data).first()# alte Variante, man soll auf das obere übersteigen
-        # user = userRow[0] #bei session.execute wird die ganze sqlite Zeile (row object) wiedergegeben. Man kann auf den ersten Index zugreifen um das Objekt User zu bekommen
-        # app.logger.debug(f'User: {user}')
-        # if user: 
-        #     if werkzeug.security.check_password_hash(user.password, form.password.data):
-        #     #bcrypt.check_password_hash(user.password, form.password.data)
-        #         login_user(user)
-                
-        #         return redirect(url_for('meinBereich', name=user.username, id = user.id))
-        #     else: 
-        #         flash("Falsches Passwort")
-        # else:
-        #     flash("Der Nutzer existiert nicht.")
-
-    return render_template('login.html', form=form,hide_mein_bereich = True,hide_login_register = True)
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():          
      print("Request-Methode:", request.method)  # Debugging
@@ -99,15 +78,15 @@ def register():
             app.logger.debug(f'Adding... {new_user}')
             db.session.commit()
             app.logger.debug(f'Comitted.')
-            return redirect(url_for('login'))            
+            return redirect(url_for('meinBereich'))            
      else:
         print("❌ Formularvalidierung fehlgeschlagen!")
         print("Fehler:" ) # Zeigt, welche Fehler es gibt)
-     return render_template('register.html', form = form,hide_mein_bereich = True,hide_login_register = True)
+     return render_template('register.html', form = form,hide_mein_bereich = True,hide_login_register = True, hide_logout = True)
 
 @app.route('/mein-bereich', methods=['GET', 'POST'])
-@login_required
-def meinBereich():
+@login_required 
+def meinBereich(): 
     user_name = current_user.username
     user_reports = Report.query.filter_by(parent_id=current_user.id).all()
     app.logger.debug(f'Past Checks:{user_reports}')
@@ -145,12 +124,14 @@ def schnelltest():
         session['ampelfarbe'] = ampelfarbe
         app.logger.debug(f'Ampelfarbe result: {ampelfarbe}, session ampelfarbe: {session['ampelfarbe']},  Punkte: {punkte} ------------------------------------------')
 
-        filename = pdf_generator.generate_pdf(session['form_data'])
+        filename = pdf_generator.generate_pdf(session['form_data'])  
+                                    
         with open(filename, 'rb') as file:
-            pdf_data = file.read()
-            report = Report(file = pdf_data)  
-            db.session.add(report)                        
-            db.session.commit()  
+            pdf_data = file.read() 
+            if current_user.is_authenticated:
+                report = Report(parent_id=current_user.id, file=pdf_data, test_type = test_type)
+                db.session.add(report)
+                db.session.commit() 
 
         # damit die antworten in der html angezeigt werden
         user_answers = {
@@ -181,7 +162,7 @@ def schnelltest():
     if current_user.is_authenticated:
         return render_template('schnelltest.html', form=form, hide_login_register = True)
     else:
-        return render_template('schnelltest.html', form=form,hide_mein_bereich = True)
+        return render_template('schnelltest.html', form=form,hide_mein_bereich = True, hide_logout = True)
 
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
 @login_required
@@ -266,7 +247,7 @@ def ausführlicherTest():
 
                             if current_user.is_authenticated:
                                 # Benutzer ist eingeloggt
-                                report = Report(parent_id=current_user.id, file=pdf_data)
+                                report = Report(parent_id=current_user.id, file=pdf_data, test_type = test_type)
                                 db.session.add(report)
                                 db.session.commit()
                             else:
@@ -293,7 +274,7 @@ def ausführlicherTest():
     if current_user.is_authenticated:
         return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
     else:
-        return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True)
+        return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True, hide_logout = True)
  
  
 @app.route("/result")
@@ -307,7 +288,7 @@ def result():
     if current_user.is_authenticated:
         return render_template("result.html", filename=filename, form_eingaben = form_eingaben, ampelfarbe = session['ampelfarbe'], hide_login_register = True)
     else:
-        return render_template("result.html", filename=filename, form_eingaben = form_eingaben, ampelfarbe = session['ampelfarbe'],hide_mein_bereich = True)
+        return render_template("result.html", filename=filename, form_eingaben = form_eingaben, ampelfarbe = session['ampelfarbe'],hide_mein_bereich = True, hide_logout = True)
 
 @app.route("/download/<filename>")     
 def download_pdf(filename):
@@ -318,17 +299,19 @@ import io
 
 @app.route('/download_pdf/<int:report_id>')
 @login_required
-def download_pdf_meinBereich(report_id):
-    report = Report.query.get(report_id)
+def download_pdf_meinBereich(report_id):        
+   # report = Report.query.get(report_id)
+    reportRow =  db.session.execute(db.select(Report).filter_by(id = report_id))
+    if reportRow:
+        report = reportRow[0]
+        if not report or report.parent_id != current_user.id:
+            abort(403) 
     
-    if not report or report.parent_id != current_user.id:
-        abort(403) 
-    
-    pdf_stream = io.BytesIO(report.file)   
-    pdf_stream.seek(0)
-
-    return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
+            pdf_stream = io.BytesIO(report.file)       
+            pdf_stream.seek(0)
  
+    return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf", report = report)
+  
 if __name__ == "__main__":
     app.run(debug=True)    
 

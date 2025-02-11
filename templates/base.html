@@ -26,6 +26,9 @@
             {% if not hide_mein_bereich %}
                 <a href="{{ url_for('meinBereich', name='deinWert') }}" class="btn btn-secondary">Mein Bereich</a>
             {% endif %}
+            {% if not hide_logout%}
+                <a href="{{url_for('logout')}}" class="btn btn-secondary">Abmelden</a>
+            {% endif%}
         </div>
         
     </div>
