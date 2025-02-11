@@ -151,7 +151,7 @@ def schnelltest():
 
         for frage, user_answer in user_answers.items():
             eingaben.append({
-                'question': frage,
+                'question': frage, 
                 'user_answer': user_answer,       
             }) 
         
