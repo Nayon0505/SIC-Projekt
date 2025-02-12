@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, url_for, request, sen
 from flask_bootstrap import Bootstrap5
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
+from sqlalchemy import func
 import werkzeug
 
 from CalculateResult import CalculateResult
@@ -14,22 +15,22 @@ from PdfGenerator import PdfGenerator
 import logging
 
 
-
 app = Flask(__name__) 
 bcrypt = Bcrypt(app)
 pdf_generator = PdfGenerator()
-
 app.logger.setLevel(logging.DEBUG)  
-
 
 app.config.from_mapping(
     SECRET_KEY = 'secret_key_just_for_dev_environment',
     BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
 )
 
+from db import *
+
+
 bootstrap = Bootstrap5(app)
 
-from db import *
+MAX_REPORTS_PER_USER = 7
 
 
 @app.route('/', methods=['GET', 'POST'])   #Homepage
@@ -104,6 +105,7 @@ def home():
     return redirect(url_for('index'))
 
 
+
 @app.route('/schnelltest', methods=['GET', 'POST'])
 def schnelltest(): 
     test_type = 'Schnell'
@@ -129,6 +131,7 @@ def schnelltest():
         with open(filename, 'rb') as file:
             pdf_data = file.read() 
             if current_user.is_authenticated:
+            
                 report = Report(parent_id=current_user.id, file=pdf_data, test_type = test_type)
                 db.session.add(report)
                 db.session.commit() 
@@ -160,7 +163,12 @@ def schnelltest():
         return redirect(url_for('result', filename = filename))
 
     if current_user.is_authenticated:
+        user_report_count = db.session.query(func.count(Report.id)).filter_by(parent_id=current_user.id).scalar() + 1
+        if user_report_count >= MAX_REPORTS_PER_USER:
+            flash("Sie haben das Limit an gespeicherten Berichten erreicht.", "danger")
+            return redirect(url_for('meinBereich'))
         return render_template('schnelltest.html', form=form, hide_login_register = True)
+    
     else:
         return render_template('schnelltest.html', form=form,hide_mein_bereich = True, hide_logout = True)
 
@@ -181,15 +189,15 @@ def ausführlicherTest():
     form1 = AusführlicherCheck1()
     form2 = AusführlicherCheck2()
     form3 = AusführlicherCheck3()
-    form4 = AusführlicherCheck4()
-    form5 = AusführlicherCheck5()
+    form4 = AusführlicherCheck4()  
+    form5 = AusführlicherCheck5()   
 
-    if 1 <= session['step'] <= 5:
+    if 1 <= session['step'] <= 5:         
  
         form = form_classes[session['step'] - 1]()
         if form.validate_on_submit():
      
-            session['form_data'].update({field.name: field.data for field in form})
+            session['form_data'].update({field.name: field.data for field in form}) 
                              
             # damit die antworten in der html angezeigt werden
             user_answers = {
@@ -272,8 +280,14 @@ def ausführlicherTest():
         return redirect(url_for('result', filename=filename))
         
     if current_user.is_authenticated:
+        user_report_count = db.session.query(func.count(Report.id)).filter_by(parent_id=current_user.id).scalar() + 1
+        app.logger.debug(f'Reportscount: {user_report_count}')
+        if user_report_count >= MAX_REPORTS_PER_USER:
+            app.logger.debug(f'Entereded If clause: {user_report_count}')
+            flash("Sie haben das Limit an gespeicherten Berichten erreicht.", "danger")
+            return redirect(url_for('meinBereich')) 
         return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
-    else:
+    else: 
         return render_template('ausführlicherTest.html', form=form,hide_mein_bereich = True, hide_logout = True)
  
  
@@ -304,15 +318,39 @@ def download_pdf_meinBereich(report_id):
     report = reportRow.scalar_one_or_none()
 
     if not report or report.parent_id != current_user.id:
-        abort(403)  
-
-    if report.file:  
+        abort(403)   
+             
+    if report.file:        
         pdf_stream = io.BytesIO(report.file) 
         pdf_stream.seek(0)  
-
+  
         return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
     else:
         abort(404) 
+
+@app.route('/deleteReport', methods=['POST'])
+@login_required
+def delReport():
+         report_id = request.form.get('report_id')  
+         if not report_id:
+            flash("Ungültige Anfrage: Keine Report-ID angegeben", "danger")
+            return redirect(url_for('meinBereich')) 
+
+         reportRow = db.session.execute(db.select(Report).filter_by(id=report_id))
+         report = reportRow.scalar_one_or_none()
+
+         if not report or report.parent_id != current_user.id:
+                flash("Fehler: Zugriff verweigert oder Bericht nicht gefunden.", "danger")
+                return redirect(url_for('meinBereich'))
+
+         db.session.delete(report)
+         db.session.commit()
+         flash(f"Bericht {report_id} wurde erfolgreich gelöscht.", "success")
+
+         return redirect(url_for('meinBereich'))
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)    

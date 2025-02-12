@@ -7,10 +7,32 @@
         <h1>Mein Bereich</h1>
         <h1>Hallo, {{name}}</h1>
     </div>
+
+{#Container für die Alerts#}
+<div class="container mt-3">
+    <div class="alert-container" style="min-height: 60px;">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+         
+        {% endif %}
+        {% endwith %}
+    </div>
+</div>
+{#Unsere Buttons#}
+
     <p class="text-end">
         <a href="{{url_for('schnelltest')}}"><button class="btn btn-primary">Neuer Schnelltest</button> </a>
         <a href="{{url_for('ausführlicherTest')}}"> <button class="btn btn-primary">Neuer ausführlicher Test</button></a>
     </p> 
+
+{#Hier beginnt die Tabelle#}
+
     <table class="table table-hover">
     <thead>
         <tr class="table-dark">
@@ -18,16 +40,24 @@
          <th scope="col">PDF</th>
          <th scope="col">Datum</th>
          <th scope="col">Testart</th>
+         <th scope="col">   </th>
         </tr> 
      </thead>
     <tbody>
-    
+
+{# Hier wird durch die von der Route übergebenen reports geiterated und eingefügt#}
+
     {% for report in reports %}
         <tr class="table-primary">
          <th scope="row">Bericht {{ loop.index }}</th>
          <td><a class="link-opacity-75-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ url_for('download_pdf_meinBereich', report_id=report.id) }}" download>PDF herunterladen  </a></td>
          <td>{{ report.date.strftime('%d.%m.%Y') }}</td>
          <td>{{report.test_type}}</td>
+         <td>
+         <form action="/deleteReport" method="POST">
+         <input type="hidden" name="report_id" value="{{ report.id }}">
+         <button type="submit" name="delete_button" onclick="return confirm('Möchten Sie diesen Bericht wirklich löschen?')">X</button></td>
+         </form>
         </tr>
     {% endfor %}
     </tbody> 
