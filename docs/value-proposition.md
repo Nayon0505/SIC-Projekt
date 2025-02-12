@@ -36,4 +36,5 @@ nav_order: 1
 2. Der Schnellcheck bringt den Nutzer direkt zu einem komprimierten Formular, um die wichtigsten Mängel herauszufinden.
 3. Der ausführliche Check erfordert die Anmeldung vom Nutzer, nach welcher er in einen Privaten Bereich kommt mit vergangenen Checks. Hier sind ihm die Möglichkeiten geboten einen neuen Check zu machen oder einen alten einzusehen.
 4. Nach Abschluss jenes Checks, folgt die Auswertung und die Möglichkeit die Ergebnisse herunterzuladen.]
-![CustomerJourney](docs\assets\images\CustomerJourney.png)
+
+![get_list_todos_sample](assets/images/CustomerJourney.png)
