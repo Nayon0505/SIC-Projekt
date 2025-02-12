@@ -5,13 +5,13 @@
 {% block content %}
 <div class="jumbotron text-center">
 
-    <div class="container py-5">
+    <div class="container py-5 mt-5">
     <div class="row">
         
         <div class="col-md-6">
-            <div class="p-4 bg-light border rounded">
-                <h3>Das Problem:</h3>
-                <p class="mb-4 pb-2 border-bottom text-muted">
+            <div class="p-4 bg-light border rounded shadow-lg h-100">
+                <h3 class="text-dark fw-bold fs-4">Das Problem:</h3>
+                <p class="mb-4 pb-2 border-bottom text-muted fs-5">
                 Ein Imbiss besitzer, der ich nicht mit den Steuergesetzen, möglicher Weise noch aus dem Ausland kommt und 
                 kaum die Steuergesetze Deutschlands versteht, möchte sein Betrieb Steuertranzparenter machen um Nachhaltiger zu wirtschaften. Da Gastrobetriebe öfters um das 
                 wirtschaftliche überleben kämpfen müssen, steht ein Steuerberater außer Frage.</p>
@@ -19,9 +19,9 @@
         </div>
       
         <div class="col-md-6">
-            <div class="p-4 bg-light border rounded">
-                <h3>Die Lösung:</h3>
-                <p>
+            <div class="p-4 bg-light border rounded shadow-lg h-100">
+                <h3 class="text-dark fw-bold fs-4">Die Lösung:</h3>
+                <p class="mb-4 pb-2 border-bottom text-muted fs-5">
                 Der Sustainable Innovation Check soll klein bis mittleren Unternehmern die Chance geben sich kostengünstig, simpel und schnell Nachhaltig zu verhalten. 
                 In einem Online Check kann der Nutzer seine Situation beschreiben indem unser Team die relevante, rechtliche Lage verständnisvoll darlegt. 
                 Nach dem Check bekommt der Nutzer einen Nachhaltigkeitsbericht(Einschätzung), welche Ihm Probleme, mögliche Probleme und Verbesserung vorschlägt.</p>
@@ -35,30 +35,79 @@
         <a href="{{url_for('ausführlicherTest')}}"><button type="button" class="btn btn-primary btn-lg">Zum auführlichen Test</button></a>
 
 </div>
-<div class="d-flex flex-row bd-highlight m-3 p-3">
+
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h3 class="fw-bold display-">Mögliche Anlaufstelle bei Schwierigkeiten</h3>
+        <p class="lead text-muted fs-7">
+            Die <strong>Deutsche Hotel- und Gaststättenverband (DEHOGA)</strong> setzt sich aktiv für die Interessen der Gastronomiebranche ein.
+            Steuertransparenz ist nicht nur eine gesetzliche Notwendigkeit, sondern auch ein Schlüssel zu langfristigem geschäftlichem Erfolg.
+            Erfahre hier, warum Steuertransparenz wichtig ist, welche Vorgaben du beachten solltest und wie die DEHOGA dich dabei unterstützt.
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="d-flex flex-column justify-content-between p-5 bg-light border rounded shadow-lg h-100">
+                <h5 class="text-dark fw-bold fs-4">Warum ist Steuertransparenz wichtig?</h5>
+                <p class="text-muted fs-5">
+                    Steuertransparenz ist entscheidend, um rechtliche Risiken zu minimieren und Vertrauen bei Kunden sowie Behörden aufzubauen.
+                    Eine klare und nachvollziehbare Buchführung sorgt für Sicherheit und hilft, unangenehme Prüfungen und Strafen zu vermeiden.
+                </p>
+                <a href="https://www.dehoga.de" class="btn btn-primary btn-lg mt-3">Mehr erfahren</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="d-flex flex-column justify-content-between p-5 bg-light border rounded shadow-lg h-100">
+                <h5 class="text-dark fw-bold fs-4">Wichtige Richtlinien</h5>
+                <p class="text-muted fs-5">
+                    Die Einhaltung steuerlicher Vorschriften ist für jedes Gastronomieunternehmen essenziell. Erfahre mehr über 
+                    Buchführungspflichten, digitale Kassenführung und gesetzliche Vorgaben, um dein Geschäft abzusichern.
+                </p>
+                <a href="https://www.dehoga.de" class="btn btn-primary btn-lg mt-3">Mehr erfahren</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="d-flex flex-column justify-content-between p-5 bg-light border rounded shadow-lg h-100">
+                <h4 class="text-dark fw-bold fs-4">Wie hilft die DEHOGA?</h4>
+                <p class="text-muted fs-5">
+                    Die DEHOGA unterstützt Gastronomieunternehmen mit umfassender Beratung, praxisnahen Musterlösungen und gezielten Schulungen 
+                    zur steuerlichen Transparenz. Profitiere von Expertenwissen und reduziere dein unternehmerisches Risiko.
+                </p>
+                <a href="https://www.dehoga.de" class="btn btn-primary btn-lg mt-3">Mehr erfahren</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{# Disclaimer #}
+<div class="d-flex flex-row bd-highlight m-3 p-3 shadow-lg">
     <div class="p-2 bd-highlight card border-primary m-3" style="max-width: 20rem;">
         <div class="card-header">Disclaimer</div>
         <div class="card-body">
-            <h4 class="card-title">Keine rechtliche oder steuerliche Beratung</h4>
-            <p class="card-text">Der Sustainable Innovation Check (SIC) dient ausschließlich dazu, Ihnen eine Orientierung und erste Hinweise zur Steuertransparenz Ihres Unternehmens zu bieten. Die bereitgestellten Informationen und Ergebnisse stellen keine rechtliche oder steuerliche Beratung dar.</p>
+            <h4 class="card-title fw-bold fs-4">Keine rechtliche oder steuerliche Beratung</h4>
+            <p class="card-text fs-5">Der Sustainable Innovation Check (SIC) dient ausschließlich dazu, Ihnen eine Orientierung und erste Hinweise zur Steuertransparenz Ihres Unternehmens zu bieten. Die bereitgestellten Informationen und Ergebnisse stellen keine rechtliche oder steuerliche Beratung dar.</p>
         </div>
     </div>
     <div class="p-2 bd-highlight card border-info m-3" style="max-width: 20rem;">
         <div class="card-header">Disclaimer</div>
         <div class="card-body">
-            <h4 class="card-title">Hinweis zur Datensicherheit</h4>
-            <p class="card-text">Die im Rahmen des Checks erhobenen Daten werden ausschließlich zur Berechnung der Ergebnisse verwendet und nicht an Dritte weitergegeben. Bitte geben Sie keine sensiblen oder vertraulichen Informationen ein, die für die Analyse nicht erforderlich sind. Mit der Nutzung des Tools bestätigen Sie, dass Sie diese Hinweise gelesen und verstanden haben.</p>
+            <h4 class="card-title fw-bold fs-4">Hinweis zur Datensicherheit</h4>
+            <p class="card-text fs-5">Die im Rahmen des Checks erhobenen Daten werden ausschließlich zur Berechnung der Ergebnisse verwendet und nicht an Dritte weitergegeben. Bitte geben Sie keine sensiblen oder vertraulichen Informationen ein, die für die Analyse nicht erforderlich sind. Mit der Nutzung des Tools bestätigen Sie, dass Sie diese Hinweise gelesen und verstanden haben.</p>
         </div>
     </div>
     <div class="p-2 bd-highlight card border-warning m-3" style="max-width: 20rem;">
         <div class="card-header">Disclaimer</div>
         <div class="card-body">
-            <h4 class="card-title">Haftungsausschluss</h4>
-            <p class="card-text">Die Nutzung dieses Tools erfolgt auf eigene Verantwortung. Für die Richtigkeit, Vollständigkeit oder Aktualität der bereitgestellten Informationen und Berechnungen wird keine Haftung übernommen. Die Ergebnisse sind nicht bindend und ersetzen keine professionelle Beratung durch Steuerexperten oder Rechtsanwälte.</p>
+            <h4 class="card-title fw-bold fs-4">Haftungsausschluss</h4>
+            <p class="card-text fs-5">Die Nutzung dieses Tools erfolgt auf eigene Verantwortung. Für die Richtigkeit, Vollständigkeit oder Aktualität der bereitgestellten Informationen und Berechnungen wird keine Haftung übernommen. Die Ergebnisse sind nicht bindend und ersetzen keine professionelle Beratung durch Steuerexperten oder Rechtsanwälte.</p>
         </div>
     </div>
 </div>
-
 
 {% endblock %}
 

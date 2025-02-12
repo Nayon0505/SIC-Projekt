@@ -3,67 +3,65 @@
 {% block title %}Startseite{% endblock %}
 {%block content %}
     
-    
-        <h1><u><strong>Schnellcheck - Fragebogen</strong></u></h1>
-    
-     <form method="POST" action="/schnelltest">
+<h1 class="text-center my-4"><u><strong>Schnelltest - Fragebogen</strong></u></h1>
+
+<form method="POST" action="/schnelltest" class="p-4 bg-light border rounded shadow">
     {{ form.hidden_tag() }}
 
-<div class="p-4 bg-light border rounded">
-    <div>
-        {{ form.betrieb.label }}
-        {{ form.betrieb }}
-    </div>
-    
-    <div>
-        {{ form.tse.label }}
-        {{ form.tse }}
-    </div>
-    
-    <div>
-        {{ form.beleg.label }}
-        {{ form.beleg }}
-    </div>
-    
-    <div>
-        {{ form.pruefung.label }}
-        {{ form.pruefung }}
-    </div>
-    
-    <div>
-        {{ form.trennung.label }}
-        {{ form.trennung }}
-    </div>
-    
-    <div>
-        {{ form.einnahmen.label }}
-        {{ form.einnahmen }}
-    </div>
-    
-    <div>
-        {{ form.steuererklärungen.label }}
-        {{ form.steuererklärungen }}
-    </div>
-    
-    <div>
-        {{ form.nachforderungen.label }}
-        {{ form.nachforderungen }}
-    </div>
-    
-    <div>
-        {{ form.trinkgelder.label }}
-        {{ form.trinkgelder }}
-    </div>
-    
-    <div>
-        {{ form.schulung.label }}
-        {{ form.schulung }}
+    <div class="mb-3">
+        {{ form.betrieb.label(class="form-label fw-bold") }}
+        {{ form.betrieb(class="form-control list-unstyled") }}
     </div>
 
-    <div>
-        <button type="submit">{{ form.submit.label }}</button>
+    <div class="mb-3">
+        {{ form.tse.label(class="form-label fw-bold") }}
+        {{ form.tse(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.beleg.label(class="form-label fw-bold") }}
+        {{ form.beleg(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.pruefung.label(class="form-label fw-bold") }}
+        {{ form.pruefung(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.trennung.label(class="form-label fw-bold") }}
+        {{ form.trennung(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.einnahmen.label(class="form-label fw-bold") }}
+        {{ form.einnahmen(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.steuererklärungen.label(class="form-label fw-bold") }}
+        {{ form.steuererklärungen(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.nachforderungen.label(class="form-label fw-bold") }}
+        {{ form.nachforderungen(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.trinkgelder.label(class="form-label fw-bold") }}
+        {{ form.trinkgelder(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.schulung.label(class="form-label fw-bold") }}
+        {{ form.schulung(class="form-control list-unstyled") }}
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Zurück zur Startseite</a>
     </div>
 </form>
-    <a href="{{url_for('index')}}"><button>Zurück zur Startseite </button></a>
-</div>
+
   {% endblock %}

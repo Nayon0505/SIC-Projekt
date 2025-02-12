@@ -295,8 +295,8 @@ def ausführlicherTest():
 def result():  
     filename = request.args.get('filename')
     form_eingaben = session.get('form_eingaben')
-
-    if not form_eingaben:
+ 
+    if not form_eingaben: 
         return "Fehler: daten nicht gefunden."
     
     if current_user.is_authenticated:
@@ -318,15 +318,15 @@ def download_pdf_meinBereich(report_id):
     report = reportRow.scalar_one_or_none()
 
     if not report or report.parent_id != current_user.id:
-        abort(403)   
+        abort(403)     
              
-    if report.file:        
-        pdf_stream = io.BytesIO(report.file) 
-        pdf_stream.seek(0)  
+    if report.file:                   
+        pdf_stream = io.BytesIO(report.file)    
+        pdf_stream.seek(0)   
   
         return send_file(pdf_stream, download_name=f"report_{report_id}.pdf", as_attachment=True, mimetype="application/pdf")
-    else:
-        abort(404) 
+    else:       
+        abort(404)       
 
 @app.route('/deleteReport', methods=['POST'])
 @login_required
@@ -344,14 +344,14 @@ def delReport():
                 return redirect(url_for('meinBereich'))
 
          db.session.delete(report)
-         db.session.commit()
+         db.session.commit() 
          flash(f"Bericht {report_id} wurde erfolgreich gelöscht.", "success")
 
          return redirect(url_for('meinBereich'))
+        
+ 
 
-
-
-
+   
 if __name__ == "__main__":
     app.run(debug=True)    
 
