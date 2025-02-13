@@ -7,8 +7,8 @@ from sqlalchemy import func
 import werkzeug
 
 from CalculateResult import CalculateResult
-from SchnellCheckFormular import SchnellCheckFormular
-from AusführlicherCheckFormular import *
+from SchnellCheckFormFormular import SchnellCheckForm
+from AusführlicherCheckFormFormular import *
 
 from PdfGenerator import PdfGenerator
 
@@ -30,7 +30,7 @@ from db import *
 
 bootstrap = Bootstrap5(app)
 
-MAX_REPORTS_PER_USER = 7
+MAX_REPORTS_PER_USER = 3
 
 
 @app.route('/', methods=['GET', 'POST'])   #Homepage
@@ -111,7 +111,7 @@ def schnelltest():
     test_type = 'Schnell'
     session['test_type'] = test_type
     
-    form = SchnellCheckFormular() 
+    form = SchnellCheckForm() 
     if form.validate_on_submit():                       
         
         
@@ -165,7 +165,7 @@ def schnelltest():
     if current_user.is_authenticated:
         user_report_count = db.session.query(func.count(Report.id)).filter_by(parent_id=current_user.id).scalar() + 1
         if user_report_count >= MAX_REPORTS_PER_USER:
-            flash("Sie haben das Limit an gespeicherten Berichten erreicht.", "danger")
+            flash("Sie haben das Limit an gespeicherten Berichten erreicht. Löschen sie einen um einen neuen zu starten.", "danger")
             return redirect(url_for('meinBereich'))
         return render_template('schnelltest.html', form=form, hide_login_register = True)
     
@@ -173,8 +173,8 @@ def schnelltest():
         return render_template('schnelltest.html', form=form,hide_mein_bereich = True, hide_logout = True)
 
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
-@login_required
-def ausführlicherTest():  
+@login_required 
+def ausführlicherTest():   
     test_type = 'Ausführlich'
     session['test_type'] = test_type
     app.logger.debug(f'Session Data1: {session}')
@@ -184,13 +184,13 @@ def ausführlicherTest():
         session[f'form_data'] = {}
         app.logger.debug(f'Session Data3: {session['form_data']}')
 
-    form_classes = [AusführlicherCheck1, AusführlicherCheck2, AusführlicherCheck3, 
-                    AusführlicherCheck4, AusführlicherCheck5]
-    form1 = AusführlicherCheck1()
-    form2 = AusführlicherCheck2()
-    form3 = AusführlicherCheck3()
-    form4 = AusführlicherCheck4()  
-    form5 = AusführlicherCheck5()   
+    form_classes = [AusführlicherCheckForm1, AusführlicherCheckForm2, AusführlicherCheckForm3, 
+                    AusführlicherCheckForm4, AusführlicherCheckForm5]
+    form1 = AusführlicherCheckForm1()
+    form2 = AusführlicherCheckForm2()
+    form3 = AusführlicherCheckForm3()
+    form4 = AusführlicherCheckForm4()  
+    form5 = AusführlicherCheckForm5()   
 
     if 1 <= session['step'] <= 5:         
  

@@ -53,8 +53,11 @@ pip install -r requirements.txt
 
 # Flask run
 
+Wir öffnen das Terminal und verwenden den Befehl:
+flask run
 
-
+Nun können wir in einem beliegen Browser unter der Webadresse: http://127.0.0.1:5000/
+unsere App verwenden
 
 
 Quellen:

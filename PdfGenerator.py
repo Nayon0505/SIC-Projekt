@@ -80,7 +80,7 @@ class PdfGenerator():
 
         story = []
 
-        story.append(Paragraph("<b>SchnellCheck Report</b>", h1_style))
+        story.append(Paragraph("<b>SchnellCheckForm Report</b>", h1_style))
 
         story.append(Paragraph("", abstand_style))
 

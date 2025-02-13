@@ -14,10 +14,10 @@ Der Sustainable Innovation Check ermöglicht es KMUs kostengünstig ihr Unterneh
 ### Anil Öker
 
 About
-: Wirtschaftsinformatik Student
+: Wirtschaftsinformatik Student 
 
 Matr.-Nr.
-: 1234567
+: 77211985276
 
 ### Nayon Lenz
 

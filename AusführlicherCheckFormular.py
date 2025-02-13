@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, RadioField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
-class AusführlicherCheck1(FlaskForm): 
+class AusführlicherCheckForm1(FlaskForm): 
 
      #Frage 1
      betrieb = RadioField('Wie ist Ihr Gastronomiebetrieb strukturiert?',
@@ -34,7 +34,7 @@ class AusführlicherCheck1(FlaskForm):
      submit = SubmitField('Weiter')
 
 
-class AusführlicherCheck2(FlaskForm): 
+class AusführlicherCheckForm2(FlaskForm): 
 
      #Frage 1
      kassensystem = RadioField('Nutzen Sie für den Verkauf Kassensysteme mit digitaler Aufzeichnungspicht (nach Kassensicherungsverordnung)?',
@@ -69,7 +69,7 @@ class AusführlicherCheck2(FlaskForm):
      submit = SubmitField('Weiter')
 
 
-class AusführlicherCheck3(FlaskForm): 
+class AusführlicherCheckForm3(FlaskForm): 
     # Frage 1
     trennung_essen_trinken = RadioField('Trennen Sie Speisen (7% MwSt.) und Getränke (19% MwSt.) korrekt in Ihrer Buchhaltung?',
                                             choices=[('Ja'), 
@@ -103,7 +103,7 @@ class AusführlicherCheck3(FlaskForm):
     
     submit = SubmitField('Weiter')
 
-class AusführlicherCheck4(FlaskForm): 
+class AusführlicherCheckForm4(FlaskForm): 
     # Frage 1
     steuererklärungen = RadioField('Reichen Sie Ihre Steuererklärungen immer fristgerecht ein?',
                                    choices=[('Ja, immer'), 
@@ -149,7 +149,7 @@ class AusführlicherCheck4(FlaskForm):
     submit = SubmitField('Weiter')
 
 
-class AusführlicherCheck5(FlaskForm): 
+class AusführlicherCheckForm5(FlaskForm): 
     # Frage 1
     trinkgelder_dokumentation = RadioField('Werden Trinkgelder korrekt dokumentiert?',
                                            choices=[('Ja, vollständig'), 

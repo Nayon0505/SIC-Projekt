@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import RadioField, SubmitField
 from wtforms.validators import DataRequired
 
-class SchnellCheckFormular(FlaskForm): 
+class SchnellCheckForm(FlaskForm): 
      #Frage 1
      betrieb = RadioField('Wie ist Ihr Gastronomiebetrieb strukturiert?',
                          choices=[('restaurant', 'Restaurant'),
