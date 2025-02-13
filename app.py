@@ -7,8 +7,8 @@ from sqlalchemy import func
 import werkzeug
 
 from CalculateResult import CalculateResult
-from SchnellCheckFormFormular import SchnellCheckForm
-from AusführlicherCheckFormFormular import *
+from SchnellCheckForm import SchnellCheckForm
+from AusführlicherCheckForm import *
 
 from PdfGenerator import PdfGenerator
 
