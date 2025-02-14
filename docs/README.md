@@ -72,3 +72,5 @@ https://stackoverflow.com/questions/6463035/wtforms-getting-the-errors/20644520#
 https://werkzeug.palletsprojects.com/en/stable/utils/#werkzeug.security.generate_password_hash passwort encrypting
 Bootswatch:
 https://bootswatch.com/pulse/
+Mermaid Diagramme für die Dokumentation:
+https://mermaid.js.org/syntax/classDiagram.html

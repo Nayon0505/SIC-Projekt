@@ -35,23 +35,72 @@ Nayon Lenz
 
 Unsere App ermöglicht es dem Nutzer zwei Checks für deren Steuersituation auszuführen. Wir haben einen SchnellCheckForm, welcher ohne Anmeldung zugänglich ist und einen Ausführlichen Check, welcher eine Anmeldung benötigt. Sobald der Nutzer angemeldet ist, werden seine Checks in einer Datenbank gespeichert. Die Checks werden mit einem Punktesystem ausgewertet und mit einer Ampel bewertet (Rot, Schlecht; Gelb, Okay; Grün, Gut). Der Nutzer bekommt sein Ergebnis und hat die Möglichkeit sein Ergebnis als PDF herunterzuladen. Die PDF wird mithilfe der Nutzereingaben individuell erstellt. Ergebnisse (Nachhaltigkeitsberichte) werden in der Datenbank gespeichert und der Nutzer bekommt in einem Privaten Bereich die Möglichkeit frühere Checks einzusehen, herunterzuladen und zu löschen.
 
-<!-- Die User Journey sieht wie folgt aus:
-
+Man orientiere sich an den folgendem Diagramm:
 ```mermaid
-journey
-    title SchnellCheckForm
-    section Nicht angemeldet
-      Check wählen: 6
-      Check ausfüllen: 4
-      Ergebnisse einholen: 3
-    section Angemeldet
-      Checks einsehen: 2
-      Checks bearbeiten: 5
-``` -->
+---
+title: Der SIC
+---
+classDiagram
+
+        class SQLAlchemy {
+        Database
+    }
+    class User {
+        - username
+        - password
+        - email
+    }
+    class Report {
+        - title
+        - content
+        - date
+    }
+    class LoginForm {
+        - username
+        - password
+        - validateUser()
+    }
+    class RegisterForm {
+        - username
+        - email
+        - password
+        - validate_user()
+    }
+    class SchnellCheckForm {
+        - FlaskWTform
+
+    }
+    class AusführlicherCheckForm {
+        - FlaskWTform
+        - FlaskWTform
+        - ...
+    }
+    class CalculateResult {
+        + preprocess()
+        + 
+        + calculate_ausführlicher_check()
+    }
+    class PdfGenerator {
+        + generate_pdf()
+        + save_pdf()
+    }
 
 
 
-<!-- [Give a high-level overview of what your app does and how it achieves it: similar to the value proposition, but targeted at a fellow developer who wishes to contribute.] -->
+    SchnellCheckForm --> CalculateResult : input für
+    AusführlicherCheckForm --> CalculateResult : input für
+    CalculateResult --> Report : generiert
+    Report --> PdfGenerator : verwendet
+    LoginForm --> LoginForm : validiert
+    RegisterForm --> RegisterForm : validiert
+    SQLAlchemy --> User : speichert
+    SQLAlchemy --> Report : speichert
+    SQLAlchemy --> LoginForm : teilt Daten
+    SQLAlchemy --> RegisterForm : teilt Daten
+
+```
+
+
 
 ## Codemap
 
@@ -105,6 +154,10 @@ Das Test Limit kann in app.py bestimt werden in der Variable "MAX_REPORTS_PER_US
 - `app.py`, app.route('schnelltest')
 - `app.py`, app.route('ausführlicherTest')
 
+### Frontend `/templates`
+- Inline styling mit Bootstap und Funtion mit Jinja
+
+
 ## Architecture Invariants
 
 ### 1. Trennung von Verantwortlichkeiten
@@ -121,28 +174,19 @@ Das Test Limit kann in app.py bestimt werden in der Variable "MAX_REPORTS_PER_US
 - **PDF-Fehler:** Falls bei der Generierung ein Fehler auftritt, wird dies dem Nutzer mit einer klaren Fehlermeldung angezeigt.
 
 
-<!-- Unsere App läuft wie folgt ab:
-### 1. Homepage
- Auf der Index Route (Die Startseite) bekommt der Nutzer einige Informationen und die Möglichkeit sich anzumelden, zu registrieren, den Schnelltest zu starten und unter der Bedingung, das er angemeldet ist den ausführlichen Test zu starten (Wenn nicht angemeldet wird er zum login weitergeleitet). Falls der Nutzer bereits angemeldet ist, kann er ebenfalls in der navbar zu "Mein Bereich" navigieren oder sich abmelden. 
-
-### 2. Schnelltest
-Der Nutzer wird sobald er den Schnelltest button drückt mit der Schnelltest Route, zum weitergeleitet. Falls der Nutzer angemeldet ist, wird gecheckt ob er das Limit an Tests pro Nutzer überschitten hat. Falls dies der Fall ist, wird eine Fehlermeldung geflashed und er wird zu "Mein Bereich" weitergeleitet um Tests zu löschen. Falls nicht, kommt er zum Test. Dort kann er den Schnelltest in form eines WTForms ausfüllen. Nachdem alles ausgefüllt ist und der Nutzer auf "Fertig" drückt, berechnet die Schnelltest Route das Ergebnis mit einem Punktesystem und gibt eine Ampelfarbe aus. Zudem werden die Testart (Ausfürhlich/Schnell), die Formulardaten, die Ampelfarbe in einer Session gespeichert. Eine PDF wird generiert mit der generate_pdf Methode aus der PDFGenerator Klasse. Das alles wird an die Route "Result" übergeben.
-Falls der nutzer angemeldet ist, wird die Testart, die PDF und das Datum in die "db.sqlite" Datenbank eingefügt mit der Parent Id vom derzeitigen Nutzer (Die PDFs werden dem Nutzer zugeschrieben). Dann wird der Nutzer ebenfalls zu "Result" weitergeleitet.
-
-### 3. Login und Registrierung
-Das Login/Register System ist sehr simpel gehalten. Mit den Routes "login" und "register" kommt man zu einer Seite mit jeweils einem WTForm und die Logik der Forms ist in db.py definiert. Wir verwenden Flasks "LoginManager" um alles zu handhaben
-**Registrieren**: Der Nutzer muss Nutzernamen, Passwort und Passwort bestätigen als input eingeben. Das ist selbsterklärend. Der Nutzername darf nicht vergeben sein, die Passwörter müssen übereinstimmen und beides muss eine bestimmte Buchstabenlänge haben. Die Logik ist in der "validate..." Methode der db.RegisterForm Klasse definiert. Wenn alles stimmt, wird der Nutzer in die Datenbank eingetragen.
-**Login**:
-
-### Ausführlicher Test
-
-### Mein Bereich -->
-
-[Describe how your app is structured. Don't aim for completeness, rather describe *just* the most important parts.]
-
 ## Cross-cutting concerns
 
+### Nutzervewaltung
+Für die Nutzerverwaltung nutzen wir ``flask_login_manager`` und validieren den Nutzer aus unserer Datenbank.
+
+### Logik des Ausführlichen Tests
 Die Tests sind in zwei aufgeiteilt (Schnell/Ausführlich) und während der Schnelle aus einem Formular besteht, ist der zweite aus mehreren Formularen. Die Daten werden zwischen gespeichert mit `flask_session`. Wir verwenden Schritte in ``app.py`` um darzustellen bei welchem Formular wir uns derzeit befinden.
 
+### Error handling
+Wir nutzen ``flask_flash`` sowie das integrierte Error handling von ``Flask WTF``.
 
-[Describe anything that is important for a solid understanding of your codebase. Most likely, you want to explain the behavior of (parts of) your application. In this section, you may also link to important [design decisions](../design-decisions.md).]
+### SQLAlchemy
+
+Wir nutzen SQLAlchemies ORM für unsere App. Siehe [[Standard sql vs SQLAlchemy](docs\design-decisions.md)]. Zudem verwenden wir die seit ``SQLALchemy 2.0`` eingeführte ``execite API`` anstelle der bekannten ``query API`` für ``READ`` Operationen.
+
+

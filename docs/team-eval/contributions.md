@@ -5,7 +5,7 @@ nav_order: 4
 ---
 
 {: .label }
-[Jane Dane]
+Anil Öker, Nayon Lenz
 
 {: .no_toc }
 # Summary of individual contributions
@@ -24,9 +24,10 @@ Contributions
 : Consetetur sadipscing elitr
 : ...
 
-## [Joe Doe]
+## Nayon Lenz
 
 Contributions
-: Diam nonumy eirmod
-: Tempor invidunt ut labore
-: ...
+: Datenmodel und SQLAlchemy integration in der gesamten Anwendung
+: Ausführlicher Test und Schnelltest
+: Bootstrap designing
+: 

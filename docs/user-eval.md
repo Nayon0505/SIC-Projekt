@@ -16,30 +16,34 @@ nav_order: 4
 {: toc }
 </details>
 
-## 01: [Title]
+## 01: Benutzerregistrierung und Testauswertung
 
 ### Meta
 
 Status
-: **Work in progress** - Done - Obsolete
+: Work in progress - **Done** - Obsolete
 
 Updated
-: DD-MMM-YYYY
+: 14.02.2025
 
 ### Goal
 
-[Describe the goal of this evaluation, for example as a research question like: "How long does it take to register a new account and what is the drop-out rate?"]
+Wie lange braucht der Nutzer um einen Account zu erstellen und einen Test abzuschließen. Wir wollen unsere App für den einfachen Unternehmer anbiten, was bedeutet dass er nicht viel Zeit und Ressourcen für solche Dinge hat.
 
 ### Method
 
-[Describe how you proceed to achieve your evaluation goal. Be as specific as possible: others should be able to replicate your evaluation by following the description on this section.]
+1. **Benutzerregistrierung:** Benutzer sollen den Anmeldeprozess auf der Webseite durchlaufen.
+   - Zeitstempel für den Beginn und das Ende der Registrierung werden protokolliert.
+   - Gründe für Fehler und Verzögerungen werden miteinbezogen.
+2. **Durchführung von Tests:** Nachdem ein Benutzer registriert ist, soll dieser entweder einen Schnelltest oder einen Ausführlichen Check durchführen.
+   - Protokollierung der Zeit, die für jeden Test benötigt wird.
+
 
 ### Results
-
-[Present the main results of your evaluation, for example: "On average, users need 3 min to register. The drop-out rate was 70%. Users that didn't complete provided the following reasons: ..."]
+Von der Registrierung bis zum Ergebnis vom Schnelltest, braucht man ca. 1 min 30 (Selbst gemessen), wenn man seine Daten kennt. Beim Ausführlichen Test kann es variieren, da man erheblich mehr und genauere Daten seines Unternehmens kennen muss.
 
 ### Implications
 
-[What did you learn from this evaluation and what will you change to improve? Example: "We aim to decrease the drop-out rate by not asking for a birth date. We will re-run this evaluation to measure the impact."]
+Wir sind mit dem Schnelltest zufrieden. Um das Zeitmanagment des Nutzers zu erleichtern, würden wir in Erwägung ziehen, Speicherschritte  zwischen den Formularen einzuführen und oder, mehr Nutzerdaten zu speichern.
 
 ---
