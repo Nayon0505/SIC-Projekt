@@ -10,8 +10,7 @@ Nayon Lenz
 {: .no_toc }
 # Data model
 
-![Datenmodel](/docs/assets/images/sic-datamodel.png)
-
+![Datenmodel](../assets/images/sic-datamodel.png)
 
 
 <details open markdown="block">
