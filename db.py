@@ -8,7 +8,7 @@ from app import app
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import input_required, Length, ValidationError, EqualTo
+from wtforms.validators import input_required, Length, ValidationError, EqualTo, Regexp, InputRequired
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -70,11 +70,11 @@ class User(db.Model, UserMixin):
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[input_required(),Length(
-        min=3, max=15)], render_kw={"placeholder": "Nutzername"})
+        min=4, max=15)], render_kw={"placeholder": "Nutzername"})
     password = PasswordField(validators=[input_required(),Length(
-        min=3, max=15)], render_kw={"placeholder": "Passwort"})   
+        min=6, max=15)], render_kw={"placeholder": "Passwort"}) 
     confirmPw = PasswordField(validators=[input_required(),Length(
-        min=3, max=15), EqualTo('password', message='Passwörter stimmen nicht überein')], render_kw={"placeholder": "Passwort bestätigen"})   
+        min=6, max=15), EqualTo('password', message='Passwörter stimmen nicht überein')], render_kw={"placeholder": "Passwort bestätigen"})   
     submit = SubmitField("Registrieren")
 
     def validate_username(self, username):
@@ -93,7 +93,7 @@ class LoginForm(FlaskForm):
                            input_required(), Length(min=4, max=20)], render_kw={"placeholder": "Nutzername"})
 
     password = PasswordField(validators=[
-                            input_required(), Length(min=3, max=20)], render_kw={"placeholder": "Passwort"})
+                            input_required(), Length(min=6, max=20)], render_kw={"placeholder": "Passwort"})
 
     submit = SubmitField('Anmelden') 
 

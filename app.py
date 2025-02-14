@@ -74,6 +74,7 @@ def register():
             app.logger.debug(f'Adding... {new_user}')
             db.session.commit()
             app.logger.debug(f'Comitted.')
+            login_user(new_user)
             return redirect(url_for('meinBereich'))            
      else:
         print("Formularvalidierung fehlgeschlagen!")
@@ -159,16 +160,14 @@ def schnelltest():
 
     if current_user.is_authenticated:
         user_report_count = db.session.execute(
-            db.select(func.count(Report.id)).filter_by(parent_id=current_user.id)).scalar() + 1
-        
+            db.select(func.count(Report.id)).filter_by(parent_id=current_user.id)).scalar() + 1    
         if user_report_count >= MAX_REPORTS_PER_USER:
             flash("Sie haben das Limit an gespeicherten Berichten erreicht. Löschen sie einen um einen neuen zu starten.", "danger")
             return redirect(url_for('meinBereich'))
         return render_template('schnelltest.html', form=form, hide_login_register = True)
-    
     else:
-    
         return render_template('schnelltest.html', form=form,hide_mein_bereich = True, hide_logout = True)
+    
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
 def ausführlicherTest():
     session.setdefault('form_data_ausführlich', {})
@@ -289,9 +288,9 @@ def ausführlicherTest():
             app.logger.debug(f'Entereded If clause: {user_report_count}')
             flash("Sie haben das Limit an gespeicherten Berichten erreicht.", "danger")
             return redirect(url_for('meinBereich')) 
-        return render_template('ausführlicherTest.html', form=form, hide_login_register = True)
+        return render_template('ausführlicherTest.html', form=form, current_step=current_step, total_steps=5, hide_login_register = True)
     else: 
-        return render_template('ausführlicherTest.html', form=form, current_step=current_step, total_steps=5)
+        return render_template('ausführlicherTest.html', form=form, current_step=current_step, total_steps=5, hide_mein_bereich = True, hide_logout = True)
 
  
 @app.route("/result")
