@@ -4,7 +4,7 @@ nav_order: 1
 ---
 
 {: .label }
-[Nayon Lenz]
+Nayon Lenz
 
 {: .no_toc }
 # Value proposition

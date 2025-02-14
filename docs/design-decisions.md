@@ -4,7 +4,7 @@ nav_order: 3
 ---
 
 {: .label }
-Nayon Lenz
+Anil Öker, Nayon Lenz
 
 {: .no_toc }
 # Design decisions
@@ -144,6 +144,7 @@ Wir zogen diese beiden Optionen in Betracht
 
 
 ---
+## 05: SQLALchemy ``session.query API`` vs ``session.execute API``
 
 ### Meta
 
@@ -177,6 +178,162 @@ Wir zogen diese beiden Optionen in Betracht
 
 
 ---
+
+## 06: Ausführlicher Check, wie wir das 5 Stufige Formular erstellen möchten - Eine Dynamische html,mit Steps oder mehrere html, eine pro Formular Abschnitt
+
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 13-Feb-2025
+
+### Problem statement
+
+Bei der Entwicklung des Ausführlichen Checks musste eine entscheidung bezüglich der Architektur für die Umsetzung der 5 Formularsektionen getroffen werden. 
+Die Hauptaufgabe die wir hier gesehen haben, besteht darin, die sektionen Nutzerfreundlich und gleichzeitig Technisch effizient abzubilden, ohne die Wartbarkeit und User Experience zu beeinträchtigen.
+Zusammengefasst bestand die Herausforderung darin, zwischen einem *Multi-HTML-Page-Ansatz*(eine Seite pro Sektion) und einem *Single-Page-Ansatz mit Dynamischen Steps*(alle Sektionen auf einer Seite) zu wählen.
+
+### Regarded options
+
+#### 1. **Multi-HTML-Page-Ansatz**
+*Beschreibung:*
+Jede der 5 Sektionen soll als seperate HTML-Seite implementiert werden.
+Der User soll vor und zurück navigieren können.
+
+*Vorteile:*
+- Einfache Umsetzung, da jede Sektion seperat betrachtet werden kann
+- Kein State-Management zwischen den Seiten erforderlich
+
+*Nachteile:*
+- Häufige Page-Reloads könnten die User Experience beeinträchtigen
+- Komplexeres Session bzw. Datenmanagement über mehrere Seiten hinweg
+
+#### 2. **Single-Page-Ansatz mit Dynamischen Steps**
+*Beschreibung:*
+Alle 5 Sektionen werden auf einer einzigen HTML-Seite geladen, hierbei sollen die Sektionen durch Bedingungen dynamisch ein- und ausgeblendet werden. 
+Der User soll vor und zurück navigieren können.
+
+*Vorteile:*
+- Flüssigere Nutzerführung ohne Page-Reloads
+- Einfacherre Validierung und Speicherung von Daten
+- Zentrales State-Management
+
+*Nachteile:*
+- Höhere komplexität
+- Möglicherweise längere Ladezeiten der initialen Seite
+---
+
+### Decision
+
+Wir haben uns für den *Single-Page-Ansatz mit Dynamischen Steps* entschieden.
+
+Die Entscheidung beruht darauf, dass wir die anfängliche Komplexität bewusst in kaufnehmen, um eine langfristige Wartbarkeit und nutzerzufriedenheit zu sichern, 
+darüberhinaus ist es kurz gesagt skalierbarer, Neue Sektionen oder Änderungen lassen sich ohne problem Zentral ergänzen. 
+Außerdem fand ich den grundgedanken für "einen Check" mehrere HTML-Seiten zu verwenden unschön.
+*Entscheindung wurde getroffen von* github.com/Emircan1122
+
+## 07: Erstellung der Formulare und deren Validierung
+
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 01-Jan-2025
+
+### Problem statement
+
+Um die Steuertransparenz zu prüfen, müssen wir eine Lösung zur Formularerstellung und Validierung implementieren.
+Unsere Anforderungen hierbei sind die Wartbarkeit, Nutzerfreudnlichkeit und Datenintegrität.
+Die Hauptfrage die wir uns gestellt haben lautet, wie können wir Formulare effizient, siccher und nutzerorientiert validieren, ohne das wir die Codebasis unnötig verkomplizieren.
+
+### Regarded options
+
+#### 1. **Manuelle Formulare mit Custom Validation**
+*Beschreibung:*
+Hierbei würden wir unsere Formulare direkt in HTML schreiben, die Validierung würde folgend über zugehörigen Python code erfolgen.
+
+*Vorteile:*
+- Volle Kontrolle über HTML-Struktur und Validierungslogik
+- Keine externen Abhängigkeiten
+
+*Nachteile:*
+- Hoher Aufwand und warscheinlich sehr repetetiver Code für jedes Formular
+- schwer skalierbar
+- vermutlich ziemlich Fehleranfällig
+
+#### 2. **WTForms/Flask-WTF**
+*Beschreibung:*
+ Nutzung der Bibliothek WTForms (mit Flask-Integration via Flask-WTF) zur Formularerstellung.
+
+*Vorteile:*
+- wiederverwendbare Field-Komponenten 
+- Einfache Fehlerrückmeldung in Templates.
+- Im Unterricht behandelt
+
+*Nachteile:*
+- Datenzwischenspeicherung bei Multi-Page-Forms können sich schwer gestalten.
+- Bootstrap Styling schwerer anzuwenden
+---
+
+### Decision
+
+Wir haben uns für den *WTForms/Flask-WTF* entschieden.
+
+Die simple Einbindung in Jinja2-Templates z.B. {{ form.hidden_tag() }}, {{ form.field.label }} und wiederverwendbarkeit der Formularklassen und die Custom-Validatoren ermöglichen uns alles was wir im Rahmen unseres Projektes benötigen.
+*Entscheindung wurde getroffen von* github.com/Emircan1122
+
+## 08: Wählen des PDF-Generierungs Tools
+
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 01-Jan-2025
+
+### Problem statement
+
+Da wir uns als Aufgabe gesetzt haben die personalisierten Lösungen mit Hinweisen in From einer PDF auszugeben, beruhend auf den Eingaben des Users, müssen wir ein Tool wählen zum dynamischen ,generieren der jeweiligen PDF.
+Die Frage die wir uns hier Gestellt haben lautet, Welche Bibliothek bietet für uns die beste Balance zwischen Felxibilität, Performance und Integration in Flask?
+
+### Regarded options
+
+#### 1. **ReportLab**
+*Beschreibung:*
+Ist eine Python Bibliothek zur erstellung von PDF's.
+
+*Vorteile:*
+- Volle Kontrolle über jedes Element (Position, Schriftart, Farben, usw.)
+- Server-seitige Generierung ohne externe Abhängigkeiten (nur Python)
+
+*Nachteile:*
+- Layout erstellung etwas kompliziert
+
+#### 2. ** WeasyPrint**
+*Beschreibung:*
+Konvertiert HTML/CSS in PDF.
+
+*Vorteile:*
+- Einfache Integration mit Flask-Templates (Jinja2 → HTML → PDF)
+- Relativ Vertraute Syntax
+
+*Nachteile:*
+- Begrenzte Kontrolle über Seitenumbrüche oder Header/Footer
+---
+
+### Decision
+
+Wir haben uns für den *ReportLab* entschieden.
+
+Beim Ausprobieren, gab es Schwierigkeiten mit WeasyPrint, weshalb schnell klar wurde, das es nicht zu uns passt. ReportLab hingegen konnte einfach fast schon ideal in Flask Routen eingebaut werden, 
+das aussehen der PDF kann einfach nach unserem bedarf Strukturiert oder Umstrukturiert werden, Formulardaten aus WTForms können nahtlos in die PDF eingebunden werden und zuletzt ist es einfach überschaubar wie wir finden.
+
+*Entscheindung wurde getroffen von* github.com/Emircan1122
 
 <!--
 ### Decision steht aus

@@ -21,7 +21,7 @@ class SchnellCheckForm(FlaskForm):
      
      #Frage 3
      beleg = RadioField('Geben Sie für jede Transaktion einen Beleg aus?',
-                       choices=[('ja', 'Ja'), ('teilweise', 'Teilweise')],
+                       choices=[('ja', 'Ja'), ('teilweise', 'Teilweise'), ('nein', 'Nein')],
                        validators=[DataRequired()])
      #Frage 4
      pruefung = RadioField('Wurde Ihr Kassensystem innerhalb der letzten 12 Monate geprüft oder zertifiziert?',

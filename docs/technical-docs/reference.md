@@ -5,17 +5,10 @@ nav_order: 3
 ---
 
 {: .label }
-[Jane Dane]
+Anil Öker
 
 {: .no_toc }
 # Reference documentation
-
-{: .attention }
-> This page collects internal functions, routes with their functions, and APIs (if any).
-> 
-> See [Uber](https://developer.uber.com/docs/drivers/references/api) or [PayPal](https://developer.paypal.com/api/rest/) for exemplary high-quality API reference documentation.
->
-> You may delete this `attention` box.
 
 <details open markdown="block">
 {: .text-delta }
@@ -24,62 +17,186 @@ nav_order: 3
 {: toc }
 </details>
 
-## [Section / module]
+## Benutzerauthentifizierung
 
-### `function_definition()`
+### `index()`
 
-**Route:** `/route/`
-
-**Methods:** `POST` `GET` `PATCH` `PUT` `DELETE`
-
-**Purpose:** [Short explanation of what the function does and why]
-
-**Sample output:**
-
-[Show an image, string output, or similar illustration -- or write NONE if function generates no output]
-
----
-
-## [Example, delete this section] Show to-do lists
-
-### `get_lists()`
-
-**Route:** `/lists/`
+**Route:** `/`
 
 **Methods:** `GET`
 
-**Purpose:** Show all to-do lists.
+**Purpose:** Zeigt die Homepage an und verwaltet Session-Status.
 
-**Sample output:**
-
-![get_lists() sample](../assets/images/fswd-intro_00.png)
-
----
-
-### `get_list_todos(list_id)`
-
-**Route:** `/lists/<int:list_id>`
-
-**Methods:** `GET`
-
-**Purpose:** Retrieve all to-do items of to-do list with ID `list_id` from database and present to user.
-
-**Sample output:**
-
-![get_list_todos() sample](../assets/images/fswd-intro_02.png)
+**Sample output:**  
+NONE (Rendert index.html Template)
 
 ---
 
-## [Example, delete this section] Insert sample data
+### `login()`
 
-### `run_insert_sample()`
+**Route:** `/login`
 
-**Route:** `/insert/sample`
+**Methods:** `GET` `POST`
+
+**Purpose:** Verarbeitet Benutzeranmeldung mit Flask-Login.
+
+**Sample output:**  
+Redirect zu `/mein-bereich` bei Erfolg
+
+---
+
+### `register()`
+
+**Route:** `/register`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Registriert neue Benutzer mit Passwort-Hashing.
+
+**Sample output:**  
+Redirect zu `/mein-bereich` nach erfolgreicher Registrierung
+
+---
+
+### `logout()`
+
+**Route:** `/logout`
 
 **Methods:** `GET`
 
-**Purpose:** Flush the database and insert sample data set
+**Purpose:** Meldet Benutzer ab und leitet zur Homepage weiter.
 
-**Sample output:**
+**Sample output:**  
+Redirect zu `/`
 
-Browser shows: `Database flushed and populated with some sample data.`
+---
+
+## Persönlicher Bereich
+
+### `meinBereich()`
+
+**Route:** `/mein-bereich`
+
+**Methods:** `GET`
+
+**Purpose:** Zeigt Benutzerprofil und gespeicherte Berichte an.
+
+**Sample output:**  
+Rendert `meinBereich.html` mit Benutzername und Report-Liste
+
+---
+
+## Check-Funktionen
+
+### `schnelltest()`
+
+**Route:** `/schnelltest`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Verarbeitet Schnellcheck-Formular und generiert PDF-Report.
+
+**Sample output:**  
+Redirect zu `/result` mit generiertem PDF
+
+---
+
+### `ausführlicherTest()`
+
+**Route:** `/ausführlicherTest`
+
+**Methods:** `GET` `POST`
+
+**Purpose:** Mehrstufiges Formular für detaillierte Steuerprüfung.
+
+**Sample output:**  
+Rendert Template mit Schritt-für-Schritt Formularen
+
+---
+
+## Ergebnisverarbeitung
+
+### `result()`
+
+**Route:** `/result`
+
+**Methods:** `GET`
+
+**Purpose:** Zeigt Prüfergebnis und Benutzereingaben an.
+
+**Sample output:**  
+Rendert `result.html` mit Ampelfarbe und Antworten
+
+---
+
+## Dateioperationen
+
+### `download_pdf()`
+
+**Route:** `/download/<filename>`
+
+**Methods:** `GET`
+
+**Purpose:** Ermöglicht PDF-Download des Berichts.
+
+**Sample output:**  
+Sendet PDF als Dateianhang
+
+---
+
+### `download_pdf_meinBereich()`
+
+**Route:** `/download_pdf/<int:report_id>`
+
+**Methods:** `GET`
+
+**Purpose:** Lädt gespeicherte PDF-Reports aus der Datenbank.
+
+**Sample output:**  
+PDF-File-Stream mit Report-Inhalten
+
+---
+
+## Datenbankverwaltung
+
+### `init()`
+
+**Route:** CLI Command `init-db`
+
+**Methods:** CLI
+
+**Purpose:** Initialisiert Datenbankstruktur.
+
+**Sample output:**  
+Terminal: "Database has been initialized."
+
+---
+
+## Hilfsfunktionen
+
+### `CalculateResult.calcResults()`
+
+**Purpose:** Berechnet Risikobewertung basierend auf Benutzerantworten.
+
+**Sample output:**  
+Return-Tuple: `("grün", 85)`
+
+---
+
+### `PdfGenerator.generate_pdf()`
+
+**Purpose:** Erstellt strukturierte PDF-Reports mit ReportLab.
+
+**Sample output:**  
+Generiert `Nachhaltigkeitsbericht.pdf`
+
+---
+
+### `load_user()`
+
+**Purpose:** Lädt Benutzerobjekt für Flask-Login.
+
+**Sample output:**  
+User-Objekt oder `None`
+
+---

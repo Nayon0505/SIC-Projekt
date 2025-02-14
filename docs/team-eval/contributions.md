@@ -5,7 +5,7 @@ nav_order: 4
 ---
 
 {: .label }
-Anil Öker, Nayon Lenz
+Anil Öker
 
 {: .no_toc }
 # Summary of individual contributions
@@ -17,17 +17,25 @@ Anil Öker, Nayon Lenz
 {: toc }
 </details>
 
-## [Jane Dane]
-
-Contributions
-: Lorem ipsum dolor
-: Consetetur sadipscing elitr
-: ...
-
 ## Nayon Lenz
 
 Contributions
-: Datenmodel und SQLAlchemy integration in der gesamten Anwendung
-: Ausführlicher Test und Schnelltest
-: Bootstrap designing
-: 
+: Mein Bereich erstellt (PDf's nachträglich anzeigen und außerdem downloaden können)
+: Grundlegende Struktur der Flask-Anwendung (Routing und Grundkonzept)
+: Login und Registrierung
+: Datenbank Logik
+: Design mit Bootstrap
+: verteilen des Codes auf mehrere .py Datein für die Übersichtlichkeit
+: Navigation Bar
+: AusführlicherTest Version 1
+: Theoretische Vorarbeit
+
+## Anil Öker
+
+Contributions
+: SchnellTest
+: AusführlicherTest überarbeitete Version
+: CalculateResult.py
+: PdfGenerator
+: Navigation Bar
+: Theoretische Vorarbeit

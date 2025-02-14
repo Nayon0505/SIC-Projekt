@@ -1,67 +1,36 @@
 {% extends "base.html" %}
 {% import "bootstrap/form.html" as wtf %}
 {% block title %}Startseite{% endblock %}
-{%block content %}
-    
-<h1 class="text-center my-4"><u><strong>Schnelltest - Fragebogen</strong></u></h1>
+{% block content %}
+<div class="container">
+    <h2 class="my-4">Schnellcheck - Fragebogen</h2>
 
-<form method="POST" action="/schnelltest" class="p-4 bg-light border rounded shadow">
-    {{ form.hidden_tag() }}
+    <form method="POST" action="/schnelltest">
+        {{ form.hidden_tag() }}
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                {{ wtf.render_field(form.betrieb) }}
+                {{ wtf.render_field(form.tse) }}
+                {{ wtf.render_field(form.beleg) }}
+                {{ wtf.render_field(form.pruefung) }}
+                {{ wtf.render_field(form.trennung) }}
+                {{ wtf.render_field(form.einnahmen) }}
+                {{ wtf.render_field(form.steuererklärungen) }}
+                {{ wtf.render_field(form.nachforderungen) }}
+                {{ wtf.render_field(form.trinkgelder) }}
+                {{ wtf.render_field(form.schulung) }}
+            </div>
+        </div>
 
-    <div class="mb-3">
-        {{ form.betrieb.label(class="form-label fw-bold") }}
-        {{ form.betrieb(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.tse.label(class="form-label fw-bold") }}
-        {{ form.tse(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.beleg.label(class="form-label fw-bold") }}
-        {{ form.beleg(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.pruefung.label(class="form-label fw-bold") }}
-        {{ form.pruefung(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.trennung.label(class="form-label fw-bold") }}
-        {{ form.trennung(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.einnahmen.label(class="form-label fw-bold") }}
-        {{ form.einnahmen(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.steuererklärungen.label(class="form-label fw-bold") }}
-        {{ form.steuererklärungen(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.nachforderungen.label(class="form-label fw-bold") }}
-        {{ form.nachforderungen(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.trinkgelder.label(class="form-label fw-bold") }}
-        {{ form.trinkgelder(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="mb-3">
-        {{ form.schulung.label(class="form-label fw-bold") }}
-        {{ form.schulung(class="form-control list-unstyled") }}
-    </div>
-
-    <div class="d-flex justify-content-between mt-4">
-        <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
-        <a href="{{ url_for('index') }}" class="btn btn-secondary">Zurück zur Startseite</a>
-    </div>
-</form>
-
-  {% endblock %}
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                ← Zurück zur Startseite
+            </a>
+            <button type="submit" class="btn btn-success">
+                {{ form.submit.label.text }} →
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,32 +1,104 @@
 {% extends "base.html" %}
 {% import "bootstrap/form.html" as wtf %}
-
-{% block title %}Test{% endblock %}
+{% block title %}Ausführlicher Check{% endblock %}
 
 {% block content %}
+<div class="container">
+    <h2 class="my-4">Ausführlicher Check</h2>
 
-<h1><u><strong>Ausführlicher Test - Fragebogen</strong></u></h1>
-
-<!-- Fortschrittsanzeige -->
-<p>Schritt {{ session['step'] }} von 5</p>
-
-<form method="POST" action="{{ url_for('ausführlicherTest') }}">
-    {{ form.hidden_tag() }}
-
-    <div class="p-4 bg-light border rounded">
-
-        <!-- Dynamische Felder -->
-        {% for field in form if field.name != "csrf_token" and field.name != "submit" %}
-            <div class="mb-3">
-                {{ field.label }}
-                {{ field(class_="form-control list-unstyled") }}
-            </div>
-        {% endfor %}
-
-        <div>
-            <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+    <!-- Bei welchem Schritt ist man -->
+    <div class="progress mb-4">
+        <div class="progress-bar" role="progressbar" 
+             style="width: {{ (current_step / 5) * 100 }}%;" 
+             aria-valuenow="{{ current_step }}" 
+             aria-valuemin="1" 
+             aria-valuemax="5">
+            Schritt {{ current_step }} von 5
         </div>
     </div>
-</form>
 
+    <!-- Beschreibung des Schrittes auf dem man gerade ist -->
+    <div class="mb-4">
+        <p class="text-muted">
+            {% if current_step == 1 %}
+                Schritt 1: Allgemeine Informationen zu Ihrem Betrieb
+            {% elif current_step == 2 %}
+                Schritt 2: Kassensystem und Belegausgabe
+            {% elif current_step == 3 %}
+                Schritt 3: Buchhaltung und Umsatzsteuer
+            {% elif current_step == 4 %}
+                Schritt 4: Steuererklärungen und Dokumentation
+            {% elif current_step == 5 %}
+                Schritt 5: Trinkgelder und Mitarbeiterschulungen
+            {% endif %}
+        </p>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                {% if current_step == 1 %}
+                    {{ wtf.render_field(form.betrieb) }}
+                    {{ wtf.render_field(form.standort_zahl) }}
+                    {{ wtf.render_field(form.mitarbeiter_zahl) }}
+                    {{ wtf.render_field(form.jahresumsatz) }}
+                    {{ wtf.render_field(form.trennung) }}
+                    
+                {% elif current_step == 2 %}
+                    {{ wtf.render_field(form.kassensystem) }}
+                    {{ wtf.render_field(form.kassensytem_prüfung) }}
+                    {{ wtf.render_field(form.tse1) }}
+                    {{ wtf.render_field(form.beleg) }}
+                    {{ wtf.render_field(form.belegs_anforderungen) }}
+                    {{ wtf.render_field(form.kassendaten) }}
+                    
+                {% elif current_step == 3 %}
+                    {{ wtf.render_field(form.trennung_essen_trinken) }}
+                    {{ wtf.render_field(form.buchhaltungssystem) }}
+                    {{ wtf.render_field(form.einnahme_erfassung) }}
+                    {{ wtf.render_field(form.umsatzsteuer) }}
+                    {{ wtf.render_field(form.nachforderungen) }}
+                    
+                {% elif current_step == 4 %}
+                    {{ wtf.render_field(form.steuererklärungen) }}
+                    {{ wtf.render_field(form.einkommensdokumentation) }}
+                    {{ wtf.render_field(form.getrennte_steuersätze) }}
+                    {{ wtf.render_field(form.steuerprüfung) }}
+                    {{ wtf.render_field(form.nachforderungsdokumentation) }}
+                    {{ wtf.render_field(form.audits) }}
+                    
+                {% elif current_step == 5 %}
+                    {{ wtf.render_field(form.trinkgelder_dokumentation) }}
+                    {{ wtf.render_field(form.trinkgelder_steuer) }}
+                    {{ wtf.render_field(form.mitarbeiterschulungen) }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            {% if current_step > 1 %}
+                <button type="submit" name="direction" value="back" 
+                        class="btn btn-secondary">
+                    ← Zurück
+                </button>
+            {% else %}
+                <div></div>
+            {% endif %}
+            
+            {% if current_step < 5 %}
+                <button type="submit" name="direction" value="next" 
+                        class="btn btn-primary">
+                    Weiter →
+                </button>
+            {% else %}
+                <button type="submit" name="direction" value="submit" 
+                        class="btn btn-success">
+                    Abschließen
+                </button>
+            {% endif %}
+        </div>
+    </form>
+</div>
 {% endblock %}
