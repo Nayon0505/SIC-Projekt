@@ -2,6 +2,7 @@ from datetime import datetime
 import click
 from flask import json
 from flask_sqlalchemy import SQLAlchemy as sa
+from sqlalchemy import select
 import werkzeug
 from app import app
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
@@ -46,8 +47,11 @@ login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    user = db.session.execute(
+        select(User).filter_by(id=int(user_id))
+    ).scalar_one_or_none()
 
+    return user
 
 
 class User(db.Model, UserMixin):
@@ -77,8 +81,7 @@ class RegisterForm(FlaskForm):
         userRow =  db.session.execute(db.select(User).filter_by(username = username.data)).first()
         if userRow:
             existing_user_username = userRow[0]
-        #existing_user_username = User.query.filter_by(
-        #   username=username.data).first()
+            
             if existing_user_username:
                 raise ValidationError(
                     'Der Name ist vergeben. Bitte nehme einen anderen.')

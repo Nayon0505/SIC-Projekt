@@ -201,7 +201,6 @@ class PdfGenerator():
             story.append(Paragraph(hinweis_steuererklärungen, blocksatz_style))
         story.append(Paragraph("", abstand_style))
 
-        # 8. Frage
         story.append(Paragraph(f"8. Umsatzsteuer-Nachforderungen innerhalb der letzten 2 Jahre erhalten: {form.get('nachforderungen')}", h2_style))
         story.append(Paragraph("", abstand_style))
 

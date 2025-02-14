@@ -145,6 +145,39 @@ Wir zogen diese beiden Optionen in Betracht
 
 ---
 
+### Meta
+
+Status
+: Work in progress - **Decided** - Obsolete
+
+Updated
+: 14-Feb-2025
+
+### Problem statement
+
+Verwenden wir für ``READ`` Operationen in unsere ``SQLAlchemy`` Datenbank weiterhin ``session.query()`` oder ``session.execute()``?
+### Decision
+
+Wir wechseln auf ``session.execute()``
+
+Seit ``SQLAlchemy 2.0``, gab es ein großes rework, was die  ``session.query() API`` durch ``session.execute() API`` ersetzte. Um nachhaltiger zu programmieren wechseln wir auf ``session.execute()``, obwohl uns persönlich ``session.query()`` einfacher scheint.
+*Entscheindung wurde getroffen von* github.com/nayon0505
+
+### Regarded options
+
+Wir zogen diese beiden Optionen in Betracht
+
++ session.query()
++ session.execute()
+
+| Kriterien | session.query() | session.execute() |
+| --- | --- | --- |
+| **Simplizität** | ✔️  | ❌ Nicht so simpel wir `session.query()` |
+| **Nachhaltigkeit** | ❌ Veraltet | ✔️ Neu seit ``SQLAlchemy 2.0``|
+
+
+---
+
 <!--
 ### Decision steht aus
 

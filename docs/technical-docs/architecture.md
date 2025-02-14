@@ -56,27 +56,70 @@ journey
 ## Codemap
 
 ### 1. Datamodel
-db.py:
-- Klasse User und Report
+Alle Datenmodell-Klassen und Datenbankoperationen befinden sich in `db.py`:
+- class User 
+- class Report
 
 ### 2. Forms
 Bearbeitung jeglicher Forms kann an folgenden Stellen vorgenommen werden:
 
-AusführlicherCheckForm.py:
+`AusführlicherCheckForm.py`:
 - class AusführlicherCheckForm1
 - class AusführlicherCheckForm2
 - class AusführlicherCheckForm3
 - class AusführlicherCheckForm4
 - class AusführlicherCheckForm5
 
-SchnellCheckForm.py:
+`SchnellCheckForm.py`:
 - class SchnellCheckForm
 
-db.py:
+`db.py`:
 - class RegisterForm
 - class LoginForm
 
-### 
+### Logik der Checks
+Das Test Limit kann in app.py bestimt werden in der Variable "MAX_REPORTS_PER_USER"
+
+**Schnellcheck:**
+- `app.py`, app.route('schnelltest')
+- `PDFGenerator.py`
+- `CalculateResult.py`
+**Ausführlicher Check:**
+- `app.py`, app.route('ausführlicherTest')
+- `PDFGenerator.py`
+- `CalculateResult.py`
+
+### Handhaben von Reports
+
+**Generieren:**
+- `PDFGernerator.py`
+
+**Herunterladen:**
+- `app.py`, app.route('/download/<'Filename'>'), (Direkt nach den Tests)
+- `app.py`, @app.route('/download_pdf/<'int:report_id'>'), (In "Mein Bereich" von der Datenbank aus)
+
+**Löschen**
+- `app.py`, app.route('/deleteReport')
+
+**Speichern in der Datenbank:**
+- `app.py`, app.route('schnelltest')
+- `app.py`, app.route('ausführlicherTest')
+
+## Architecture Invariants
+
+### 1. Trennung von Verantwortlichkeiten
+- Alle datenbankbezogenen Operationen befinden sich in `db.py`.
+- Formularlogik ist in separate Dateien ausgelagert, um Modularität und Wartbarkeit zu gewährleisten.
+- Routen sind in `app.py` definiert und verweisen auf Hilfsklassen für Berechnungen, PDF-Erstellung und Datenbankoperationen.
+
+### 2. State Management
+- **Session Management:** Die Flask-Session wird verwendet, um Check-Daten und Status (Schnell oder Ausführlich) zwischen Routen zu speichern.
+- **Datenbank:** Angemeldete Nutzer können ihre Berichte abrufen, da diese persistiert werden.
+
+### 3. Fehlerbehandlung
+- **Formulare:** Validierungslogik (z. B. maximale Berichte pro Nutzer) ist zentral in den Formular-Klassen definiert.
+- **PDF-Fehler:** Falls bei der Generierung ein Fehler auftritt, wird dies dem Nutzer mit einer klaren Fehlermeldung angezeigt.
+
 
 <!-- Unsere App läuft wie folgt ab:
 ### 1. Homepage
@@ -98,5 +141,8 @@ Das Login/Register System ist sehr simpel gehalten. Mit den Routes "login" und "
 [Describe how your app is structured. Don't aim for completeness, rather describe *just* the most important parts.]
 
 ## Cross-cutting concerns
+
+Die Tests sind in zwei aufgeiteilt (Schnell/Ausführlich) und während der Schnelle aus einem Formular besteht, ist der zweite aus mehreren Formularen. Die Daten werden zwischen gespeichert mit `flask_session`. Wir verwenden Schritte in ``app.py`` um darzustellen bei welchem Formular wir uns derzeit befinden.
+
 
 [Describe anything that is important for a solid understanding of your codebase. Most likely, you want to explain the behavior of (parts of) your application. In this section, you may also link to important [design decisions](../design-decisions.md).]

@@ -1,7 +1,6 @@
 
 from flask import Flask, flash, redirect, render_template, url_for, request, send_file, session
 from flask_bootstrap import Bootstrap5
-from flask_bcrypt import Bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy import func
 import werkzeug
@@ -16,7 +15,6 @@ import logging
 
 
 app = Flask(__name__) 
-bcrypt = Bcrypt(app)
 pdf_generator = PdfGenerator()
 app.logger.setLevel(logging.DEBUG)  
 
@@ -30,10 +28,10 @@ from db import *
 
 bootstrap = Bootstrap5(app)
 
-MAX_REPORTS_PER_USER = 3
+MAX_REPORTS_PER_USER = 4
 
 
-@app.route('/', methods=['GET', 'POST'])   #Homepage
+@app.route('/', methods=['GET', 'POST'])  
 def index():
     # session['step'] = 1
     session.pop('form_data', default= None)
@@ -59,10 +57,10 @@ def login():
                      
 @app.route('/register', methods=['GET', 'POST'])       
 def register():          
-     print("Request-Methode:", request.method)  # Debugging
+     print("Request-Methode:", request.method)  
 
    
-     if request.method == 'POST':  # Prüfen, ob POST-Request ankommt
+     if request.method == 'POST': 
         print("POST-Request erhalten!")
 
      form = RegisterForm()
@@ -70,7 +68,6 @@ def register():
      if form.validate_on_submit():    
         
             app.logger.debug('Validating...')
-            #hashed_password = bcrypt.generate_password_hash(form.password.data)
             hashed_password = werkzeug.security.generate_password_hash(form.password.data, method='scrypt', salt_length=16)
             app.logger.debug(f'Hashed pw {hashed_password}') 
             new_user = User(username=form.username.data, password=hashed_password)
@@ -89,8 +86,8 @@ def register():
 @login_required  
 def meinBereich():            
     user_name = current_user.username
-    user_reports = Report.query.filter_by(parent_id=current_user.id).all()
-    app.logger.debug(f'Past Checks:{user_reports}')
+    user_reports = db.session.execute(
+    db.select(Report).filter_by(parent_id=current_user.id)).scalars().all()
 
     return render_template('meinBereich.html', name=user_name, reports = user_reports,hide_login_register = True)
 
@@ -163,7 +160,9 @@ def schnelltest():
         return redirect(url_for('result', filename = filename))
 
     if current_user.is_authenticated:
-        user_report_count = db.session.query(func.count(Report.id)).filter_by(parent_id=current_user.id).scalar() + 1
+        user_report_count = db.session.execute(
+            db.select(func.count(Report.id)).filter_by(parent_id=current_user.id)).scalar() + 1
+        
         if user_report_count >= MAX_REPORTS_PER_USER:
             flash("Sie haben das Limit an gespeicherten Berichten erreicht. Löschen sie einen um einen neuen zu starten.", "danger")
             return redirect(url_for('meinBereich'))
@@ -280,7 +279,9 @@ def ausführlicherTest():
         return redirect(url_for('result', filename=filename))
         
     if current_user.is_authenticated:
-        user_report_count = db.session.query(func.count(Report.id)).filter_by(parent_id=current_user.id).scalar() + 1
+        user_report_count = db.session.execute(
+            db.select(func.count(Report.id)).filter_by(parent_id=current_user.id)
+        ).scalar() + 1        
         app.logger.debug(f'Reportscount: {user_report_count}')
         if user_report_count >= MAX_REPORTS_PER_USER:
             app.logger.debug(f'Entereded If clause: {user_report_count}')
