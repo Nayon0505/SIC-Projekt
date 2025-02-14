@@ -15,6 +15,7 @@ class PdfGenerator():
         document = SimpleDocTemplate(filename, pagesize=letter)
         styles = getSampleStyleSheet()
 
+        #Styles von ChatGPT generiert
         h1_style = ParagraphStyle(
             "h1ueberschrift", 
             parent=styles["Normal"],
@@ -58,6 +59,8 @@ class PdfGenerator():
         ampelfarbe_paragraph = f"<font color={ampelfarbe_dict[ampelfarbe]}><b>Ampelfarbe: {ampelfarbe.capitalize()}</b></font>"
         story.append(Paragraph(ampelfarbe_paragraph, styles["Normal"]))
         story.append(Spacer(1, 10))
+        story.append(Paragraph(f"Um die Links aufzurufen, kopieren Sie am besten die URL aus den Klammern und fügen sie dann im Browser ein, danke!",blocksatz_style))
+        story.append(Spacer(1, 10))
 
         # Damit zwischen den test Typen unterschieden werden kann, also ob Schneller oder Ausführlicher
         if test_type == "Schnell":
@@ -100,8 +103,8 @@ class PdfGenerator():
         }
         Beleg_hinweise = {
             "ja":"Wenn die Antwort „Ja“ lautet, bedeutet dies, dass für jede Transaktion, egal ob der Kunde den Beleg anfordert oder nicht, ein Kassenbeleg ausgestellt werden muss. Dies ist gemäß der Belegausgabepflicht in Deutschland erforderlich. Diese Verpflichtung betrifft alle bargeld- und kartenzahlenden Kunden und gilt unabhängig von der Art des Geschäfts, auch für Online-Transaktionen. Die Kassensicherungsverordnung (KassenSichV) fordert, dass jeder Kassenbeleg auf elektronisch erfassten Transaktionen basieren muss. Der Beleg muss die grundlegenden Informationen wie den Betrag, den Zeitpunkt und die Art der Transaktion beinhalten. Falls ein manueller Beleg oder eine handschriftliche Quittung ausgestellt wird, sind auch hier die Informationen zur Transaktion eindeutig festzuhalten (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Zusätzlich muss der Kassenbeleg die verwendete Zahlungsmethode (Barzahlung, EC, Kreditkarte etc.) sowie die vollständigen Umsatzsteuerangaben enthalten. Die Belege dürfen nicht manipuliert werden können, weshalb ein zertifiziertes Kassensystem erforderlich ist. Eine lückenlose Dokumentation ist auch für die Steuergerechtigkeit erforderlich, um dem Finanzamt nachweisen zu können, dass alle Einnahmen korrekt versteuert wurden (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html).",
-            "teilweise":"Wenn die Antwort „Teilweise“ lautet, bedeutet dies, dass in bestimmten Fällen oder für bestimmte Arten von Transaktionen kein Beleg ausgestellt werden muss. Zum Beispiel könnte dies in Situationen zutreffen, in denen der Kunde auf den Beleg verzichtet, etwa bei kleinen Beträgen oder wiederkehrenden Kunden. Dennoch bleibt die Belegausgabepflicht grundsätzlich bestehen. In einigen Fällen, wie bei Online-Geschäften oder Transaktionen über elektronische Kassensysteme, kann der Beleg in elektronischer Form ausgegeben werden. Dabei muss jedoch sichergestellt werden, dass alle relevanten Informationen wie der Betrag, die Art der Transaktion, die verwendete Zahlungsmethode und der Steuersatz korrekt erfasst sind. Für den Fall, dass Belege nicht ausgestellt werden, sollte das Unternehmen in der Lage sein, durch andere Dokumentationsmittel nachzuweisen, dass die Transaktionen ordnungsgemäß erfasst wurden. Das bedeutet, dass auch für Transaktionen, bei denen keine Papierbelege ausgestellt werden, eine lückenlose Erfassung der Einnahmen im Kassensystem erforderlich ist. Dies entspricht den Anforderungen der Kassensicherungsverordnung (KassenSichV) und stellt sicher, dass keine Umsatzsteuerminderungen oder Steuerhinterziehungen vorgenommen werden (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Die Belegausgabepflicht verlangt, dass Unternehmen sicherstellen, dass dem Kunden der Beleg angeboten wird, auch wenn er diesen nicht immer annehmen möchte. Falls keine Belege ausgegeben werden, muss das Unternehmen jedoch einen anderen Nachweis erbringen, um die Einnahmen und Transaktionen korrekt zu dokumentieren (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html)."
-            #"nein": ""
+            "teilweise":"Wenn die Antwort „Teilweise“ lautet, bedeutet dies, dass in bestimmten Fällen oder für bestimmte Arten von Transaktionen kein Beleg ausgestellt werden muss. Zum Beispiel könnte dies in Situationen zutreffen, in denen der Kunde auf den Beleg verzichtet, etwa bei kleinen Beträgen oder wiederkehrenden Kunden. Dennoch bleibt die Belegausgabepflicht grundsätzlich bestehen. In einigen Fällen, wie bei Online-Geschäften oder Transaktionen über elektronische Kassensysteme, kann der Beleg in elektronischer Form ausgegeben werden. Dabei muss jedoch sichergestellt werden, dass alle relevanten Informationen wie der Betrag, die Art der Transaktion, die verwendete Zahlungsmethode und der Steuersatz korrekt erfasst sind. Für den Fall, dass Belege nicht ausgestellt werden, sollte das Unternehmen in der Lage sein, durch andere Dokumentationsmittel nachzuweisen, dass die Transaktionen ordnungsgemäß erfasst wurden. Das bedeutet, dass auch für Transaktionen, bei denen keine Papierbelege ausgestellt werden, eine lückenlose Erfassung der Einnahmen im Kassensystem erforderlich ist. Dies entspricht den Anforderungen der Kassensicherungsverordnung (KassenSichV) und stellt sicher, dass keine Umsatzsteuerminderungen oder Steuerhinterziehungen vorgenommen werden (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Die Belegausgabepflicht verlangt, dass Unternehmen sicherstellen, dass dem Kunden der Beleg angeboten wird, auch wenn er diesen nicht immer annehmen möchte. Falls keine Belege ausgegeben werden, muss das Unternehmen jedoch einen anderen Nachweis erbringen, um die Einnahmen und Transaktionen korrekt zu dokumentieren (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html).",
+            "nein":"Riskant! Ohne Belegausgabe machen Sie sich strafbar. Sofort ändern!"
         }
         Pruefung_hinweise = {
             "ja":"Wenn Ihr Kassensystem innerhalb der letzten 12 Monate geprüft oder zertifiziert wurde, erfüllen Sie bereits die Anforderungen der Kassensicherungsverordnung (KassenSichV), die sicherstellt, dass Ihre Kasse manipulationssicher ist. Nach der KassenSichV müssen elektronische Kassensysteme mit einer technischen Sicherheitseinrichtung (TSE) ausgestattet sein, die die Speicherung der Kassendaten sicherstellt. Diese Sicherheitsvorkehrungen verhindern, dass Daten verändert oder gelöscht werden können, was für eine ordnungsgemäße steuerliche Überprüfung notwendig ist (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Darüber hinaus sind Sie verpflichtet, die Belegausgabepflicht einzuhalten, die besagt, dass bei jedem Verkauf ein Kassenbeleg erstellt und dem Kunden zur Verfügung gestellt wird (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html). Falls Sie in den letzten 12 Monaten zusätzliche Anpassungen oder Änderungen vorgenommen haben (z. B. ein Update Ihres Kassensystems), sollten Sie sicherstellen, dass diese ebenfalls den geltenden gesetzlichen Anforderungen entsprechen. Stellen Sie sicher, dass Ihre Kassenbelege korrekt und vollständig sind. Seit dem 1. Januar 2024 müssen auch neue Pflichtangaben, wie z. B. Umweltkosten für Verpackungen, auf den Kassenbons erscheinen (https://www.hwk.de/neuepflichtangaben-fuer-kassenbonsab-2024/).",
@@ -187,42 +190,224 @@ class PdfGenerator():
         betrieb = form.get('betrieb')
         standort_zahl = form.get('standort_zahl')
         mitarbeiter_zahl = form.get('mitarbeiter_zahl')
+        jahresumsatz = form.get('jahresumsatz')
+        trennung = form.get('trennung')
+        kassensystem = form.get('kassensystem')
+        kassensytem_prüfung = form.get('kassensytem_prüfung')
+        tse1 = form.get('tse1')
+        beleg = form.get('beleg')
+        belegs_anforderungen = form.get('belegs_anforderungen')
+        kassendaten = form.get('kassendaten')
+        trennung_essen_trinken = form.get('trennung_essen_trinken')
+        buchhaltungssystem = form.get('buchhaltungssystem')
+        einnahme_erfassung = form.get('einnahme_erfassung')
+        umsatzsteuer = form.get('umsatzsteuer')
+        nachforderungen = form.get('nachforderungen')
+        steuererklärungen = form.get('steuererklärungen')
+        einkommensdokumentation = form.get('einkommensdokumentation')
+        getrennte_steuersätze = form.get('getrennte_steuersätze')
+        steuerprüfung = form.get('steuerprüfung')
+        nachforderungsdokumentation = form.get('nachforderungsdokumentation')
+        audits = form.get('audits')
+        trinkgelder_dokumentation = form.get('trinkgelder_dokumentation')
+        trinkgelder_steuer = form.get('trinkgelder_steuer')
+        mitarbeiterschulungen = form.get('mitarbeiterschulungen')
 
-        # wenn mit numerischen zahlen gearbeitet werden soll
+        # für die behandlung von Integern
         if isinstance(mitarbeiter_zahl, int):
             if mitarbeiter_zahl <= 5:
                 mitarbeiter_category = "1-5"
-            elif 6 <= mitarbeiter_zahl <= 10:
-                mitarbeiter_category = "6-10"
-            elif 11 <= mitarbeiter_zahl <= 20:
-                mitarbeiter_category = "11-20"
+            elif 6 <= mitarbeiter_zahl <= 15:
+                mitarbeiter_category = "6-15"
             else:
-                mitarbeiter_category = "21+"
+                mitarbeiter_category = "16+"
         else:
             mitarbeiter_category = mitarbeiter_zahl
 
+        if isinstance(jahresumsatz, int):
+            if jahresumsatz <= 50000:
+                jahresumsatz_category = '0-50k'
+            elif 50001 <= jahresumsatz <= 250000:
+                jahresumsatz_category = '50k-250k'
+            elif 250001 <= jahresumsatz <= 600000:
+                jahresumsatz_category = '250k-600k'
+            else:
+                jahresumsatz_category = '600k+'
+        else:
+            jahresumsatz_category = jahresumsatz
+
+        if isinstance(umsatzsteuer, int):
+            if umsatzsteuer <= 100:
+                umsatzsteuer_category = '0-100'
+            elif 101 <= umsatzsteuer <= 500:
+                umsatzsteuer_category = '101-500'
+            elif 501 <= umsatzsteuer <= 2000:
+                umsatzsteuer_category = '501-2000'
+            elif 2001 <= umsatzsteuer <= 5000:
+                umsatzsteuer_category = '2001-5000'
+            else:
+                umsatzsteuer_category = '5000+'
+        else:
+            umsatzsteuer_category = umsatzsteuer
+
+
+
         betrieb_hinweise = {
-            "restaurant": "Ein Restaurant muss bei seiner Steuertransparenz zahlreiche gesetzliche Vorgaben einhalten. Zunächst ist es wichtig, dass alle Einnahmen und Ausgaben in einem manipulationssicheren Kassensystem erfasst werden. Das schreibt die Kassensicherungsverordnung (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html) vor, die sicherstellen soll, dass keine Umsätze „vergessen“ werden können. Manipulationssichere Kassensysteme müssen zertifiziert sein und alle Buchungen digital speichern. Außerdem gibt es die Belegausgabepflicht, die verlangt, dass jedem Kunden ein Kassenbon ausgehändigt wird. Diese Pflicht gilt unabhängig davon, ob der Kunde den Bon möchte oder nicht (https://www.gesetze-im-internet.de/ao_1977/BJNR006130976.html). Restaurants müssen auch bei der Umsatzsteuer gut aufpassen. Für Speisen gilt meistens der ermäßigte Steuersatz von 7 %, aber für Getränke und andere Zusatzleistungen, wie Catering oder Lieferdienste, gilt der volle Satz von 19 % (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Eine häufige Fehlerquelle ist die korrekte Trennung dieser Steuersätze, die sorgfältig dokumentiert werden muss. Zusätzlich müssen Trinkgelder korrekt behandelt werden. Sie sind steuerfrei, wenn sie freiwillig vom Kunden direkt an die Mitarbeiter gegeben werden. Werden Trinkgelder über das Kassensystem gesammelt oder an das Team verteilt, können andere Regelungen gelten (https://www.vlh.de/arbeiten-pendeln/beruf/trinkgeld-ist-nicht-immer-steuerfrei.html). Auch die Dokumentation des Wareneinsatzes ist wichtig, um sicherzustellen, dass die verbrauchten Lebensmittel zu den Einnahmen passen – das Finanzamt prüft solche Abweichungen.",  # Keep your existing restaurant text
-            "cafe": "In einem Café müssen selbst kleine Beträge, wie der Verkauf von Kaffee, Tee oder Gebäck, lückenlos erfasst werden. Dazu ist ein elektronisches Kassensystem Pflicht, das den Vorgaben der Kassensicherungsverordnung (KassenSichV) entspricht. Jedes Café ist außerdem verpflichtet, jedem Kunden einen Kassenbon auszuhändigen, egal ob die Bestellung klein oder groß ist (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html).Ein kritischer Punkt für Cafés ist die Umsatzsteuer. Wenn ein Kunde seinen Kaffee mitnimmt, gilt der ermäßigte Steuersatz von 7 %. Trinkt der Kunde seinen Kaffee im Café, fällt jedoch der volle Steuersatz von 19 % an. Diese Unterscheidung ist essenziell, da sie Auswirkungen auf die Steuerabrechnung hat (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Außerdem müssen Cafés darauf achten, ihre Verpackungskosten korrekt zu berücksichtigen. Seit dem 1. Januar 2024 gelten neue Anforderungen an die Angaben auf Kassenbons. So müssen beispielsweise Umweltkosten für Mehrweg- oder Einwegverpackungen ausgewiesen werden (https://www.hwk.de/neuepflichtangaben-fuer-kassenbonsab-2024/).",        # Keep your existing cafe text
-            "bar":"Bars stehen vor der Herausforderung, dass sie oft mit hohen Bargeldeinnahmen arbeiten, die besonders streng kontrolliert werden. Nach der Kassensicherungsverordnung (KassenSichV) ist auch hier ein zertifiziertes Kassensystem Pflicht. Um die Einnahmen korrekt zu erfassen, ist es wichtig, dass die Bons bei jedem Verkauf automatisch erstellt und gespeichert werden (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Ein weiterer wichtiger Punkt ist die Umsatzsteuer. Alkoholische Getränke werden generell mit 19 % Umsatzsteuer belegt, während Snacks oder kleine Speisen, die eventuell angeboten werden, nur 7 % unterliegen können (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Veranstaltungen wie Happy Hours oder Events erfordern besondere Sorgfalt, da Rabatte oder Sonderpreise in der Buchhaltung nachvollziehbar dokumentiert werden müssen. Auch Trinkgelder spielen in Bars eine große Rolle. Diese sind steuerfrei, wenn sie freiwillig direkt vom Gast an das Personal gegeben werden. Werden Trinkgelder zentral erfasst oder weiterverteilt, müssen sie jedoch korrekt in der Lohnabrechnung berücksichtigt werden (https://www.vlh.de/arbeiten-pendeln/beruf/trinkgeld-ist-nicht-immer-steuerfrei.html).",
-            "imbiss":"Imbisse arbeiten oft mit kleinen Beträgen und schnellem Kundenkontakt. Auch hier ist die Verwendung eines manipulationssicheren Kassensystems Pflicht (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Besonders wichtig ist die Unterscheidung der Umsatzsteuer: Für Speisen, die mitgenommen werden, gilt der ermäßigte Steuersatz von 7 %, während der Verzehr vor Ort mit 19 % besteuert wird (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Imbissbetriebe müssen außerdem die Belegausgabepflicht beachten. Auch wenn viele Kunden ihre Bons nicht mitnehmen möchten, muss ein Beleg erstellt und dem Kunden angeboten werden (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html).",
-            "catering":"Catering-Unternehmen haben oft umfangreiche Geschäftsbeziehungen, die sauber dokumentiert werden müssen. Jede Einnahme und Ausgabe muss in einem manipulationssicheren Kassensystem oder einer Buchhaltungssoftware erfasst werden (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html). Besonders wichtig ist die Abgrenzung der Umsatzsteuer: Während Dienstleistungen wie die Bereitstellung von Servicekräften dem vollen Steuersatz von 19 % unterliegen, können reine Speisenlieferungen ermäßigt besteuert werden (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Zusätzlich müssen Reisekosten und Materialaufwendungen für das Catering genau erfasst werden. Bewirtungskosten, etwa für Geschäftskunden, müssen zwischen abzugsfähigen und nicht abzugsfähigen Kosten unterschieden werden.",
-            "hotel":"Hotels mit gastronomischem Angebot müssen die Einnahmen aus Übernachtungen und Gastronomie getrennt erfassen. Für Übernachtungen gilt der ermäßigte Umsatzsteuersatz von 7 %, für Speisen und Getränke jedoch der volle Satz von 19 % (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Für Veranstaltungen wie Bankette oder Tagungen ist es wichtig, diese korrekt in der Buchhaltung auszuweisen, da solche Leistungen meist vollständig dem 19%-Steuersatz unterliegen. Die Kassensicherungsverordnung (KassenSichV) verpflichtet Hotels zudem, manipulationssichere Kassensysteme zu verwenden, die sämtliche Einnahmen digital speichern und absichern (https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html).",
-            "sonstiges":"Betriebe wie Foodtrucks oder Pop-up-Restaurants unterliegen ebenfalls der Kassensicherungsverordnung (KassenSichV) und der Belegausgabepflicht. Für saisonale Geschäfte, wie Weihnachtsmarktstände, ist es besonders wichtig, die Einnahmen trotz des kurzen Betriebszeitraums vollständig zu dokumentieren (https://www.bundesfinanzministerium.de/Content/DE/FAQ/FAQ-steuergerechtigkeitbelegpflicht.html). Lieferdienste müssen Einnahmen aus Dienstleistungen und Speisen getrennt erfassen, da unterschiedliche Steuersätze gelten (https://usth.bundesfinanzministerium.de/usth/2023/A-Umsatzsteuergesetz/inhalt.html). Trinkgelder, die vom Kunden freiwillig gegeben werden, sind steuerfrei, sofern sie direkt an die Mitarbeiter gehen (https://www.vlh.de/arbeiten-pendeln/beruf/trinkgeld-ist-nicht-immer-steuerfrei.html)."
+            "restaurant": "Für Restaurants gelten spezielle Regeln zur Kassensicherung. Sie müssen alle Umsätze genau dokumentieren, besonders wenn Sie Speisen und Getränke kombinieren. Gut zu wissen: Bei Speisen gilt ein reduzierter Mehrwertsteuersatz.[dehoga-nrw.de](https://www.dehoga-nrw.de/fachthemen/mehrwertsteuer-aenderungen-in-2024), [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)",  
+            "cafe": "In Cafés wird zwischen 'kalten' und 'warmen' Snacks unterschieden. Achten Sie darauf, Kaffee zum Mitnehmen und vor Ort getrennt zu buchen. Tipp: Für reine Kaffee-Verkäufe gelten einfachere Regeln. [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)",       
+            "bar":"Bei alkoholischen Getränken müssen Sie die gesetzlichen Ausweiskontrollen dokumentieren. Wichtig: Notieren Sie Sonderaktionen wie Happy Hour genau, da diese steuerlich relevant sind. [bundesfinanzministerium.de](https://www.bundesfinanzministerium.de/Content/DE/Glossareintraege/A/alkoholsteuer.html?view=renderHelp), [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)",
+            "imbiss":"Für Imbissbetriebe ist die Bonpflicht auch bei kleinen Beträgen wichtig. Einfacher Tipp: Nutzen Sie ein Kassensystem mit täglicher Umsatzübersicht für weniger Papierkram. [dross.blog](https://dross.blog/ueber-uns/leitfaden-fuer-die-eroeffnung-eines-imbissbetriebs/), [amberg.de](https://amberg.de/fileadmin/Ordnungsamt/Imbisswaegen_und_Imbissbetriebe_Merkblatt.pdf), [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)",
+            "catering":"Catering-Dienstleistungen müssen immer mit Rechnungen dokumentiert werden. Merken: Auch Fahrtkosten und Verpackungen gehören in die Steuerunterlagen. [catering-nimmersatt.de](https://www.catering-nimmersatt.de/blogs/guides/mehrwertsteuer-catering?srsltid=AfmBOoo927rwbyBLi8hwZbc7CR4fA80pmblN-xj_j8_5sHqqaVeUBCHA), [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)",
+            "hotel":"Trennen Sie genau zwischen Übernachtungs- und Verpflegungsumsätzen. Praktisch: Frühstück für Hotelgäste hat andere Steuerregeln als externe Restaurantgäste. [ihk.de](https://www.ihk.de/schwerin/standort-westmecklenburg/tourismus-und-gastgewerbe/rechtsfragen/steuersaetze-in-gastronomie-und-hotellerie-4835520), [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)",
+            "sonstiges":"Lassen Sie sich individuell beraten, da Sonderformen besondere Regeln haben können. Wichtig: Dokumentieren Sie alle Einnahmequellen genau. [ihk.de](https://www.ihk.de/ostbrandenburg/zielgruppeneinstieg-gruender/hotellerie/existenzgruendung-im-gastgewerbe-2318136)"
         }
 
         standort_zahl_hinweise = {
-            "1":"Papier",
-            "2":"Test test",
-            "3-5":"Alo",
-            "Mehr als 5":"aywa läuft"
+            "1":"Mit einem Standort haben Sie einfachere Steuerunterlagen. Sie müssen nur eine monatliche Umsatzsteuervoranmeldung machen.",
+            "2":"Bei zwei Standorten müssen Sie für jeden separat Buch führen. Gut zu wissen: Sie können die Steuererklärung aber zusammengefasst abgeben.",
+            "3-5":"Ab 3 Standorten empfiehlt sich eine digitale Buchhaltung. Wichtig: Prüfen Sie ob Sie für jeden Standort eine separate Gewerbeanmeldung brauchen.",
+            "Mehr als 5":"Für mehrere Standorte benötigen Sie professionelle Buchhaltungssoftware. Tipp: Lassen Sie sich zur Gruppierungsoption bei der Umsatzsteuer beraten."
         }
 
         mitarbeiter_zahl_hinweise = {
-            "1-5":"sie haben zwischen 1 und 5 mitarbeiter",
-            "6-10":"Sie haben zwischen 6 und 10 mitarbeiter",
-            "11-20":"Sie haben zwischen 11 und 20 mitarbeiter",
-            "21+":"Sie haben 21 oder mehr mitarbeiter"
+            "1-5":"Kleine Teams profitieren von Pauschalbesteuerung bei Minijobbern. Dokumentieren Sie klar zwischen Festangestellten und Saisonhilfen.",
+            "6-15":"Ab 6 Mitarbeitern wird monatliche Lohnsteueranmeldung pflichtig. Führen Sie getrennte Aufzeichnungen für Vollzeit/Teilzeit/Aushilfen. [elster.de](https://www.elster.de/eportal/start)",
+            "16+":"Großbetriebe müssen elektronische Lohnsteueranmeldungen abgeben. Beachten Sie die Dokumentationspflichten nach Mindestlohngesetz und Arbeitszeitverordnung. [ihk.de](https://www.ihk.de/koblenz/unternehmensservice/recht/arbeitsrecht/mindestlohn-minijob-und-aushilfen/aufzeichnungspflichten-nach-dem-mindestlohngesetz-1478366)"
+        }
+
+        jahresumsatz_hinweise = {
+            "0-50k":"Kleinunternehmerregelung möglich - Verzicht auf Umsatzsteuererhebung bei entsprechendem Antrag. Jährliche EÜR ausreichend. (https://www.ihk.de/stuttgart/fuer-unternehmen/recht-und-steuern/steuerrecht/umsatzsteuer-verbrauchssteuer/umsatzsteuer-national/kleinunternehmerregelung-in-der-umsatzsteuer-1843632)",
+            "50k-250k":"Monatliche Umsatzsteuervoranmeldungen erforderlich. Quartalsweise Gewinnermittlung empfohlen.[accountable.de](https://www.accountable.de/blog/umsatzsteuervoranmeldung-elster/), [elster.de](https://www.elster.de/eportal/formulare-leistungen/alleformulare/ustvaeru)",
+            "250k-600k":"Verpflichtung zur doppelten Buchführung. Einrichtung eines steuerlichen Beraterkontos für Vorsteuerabzug empfohlen.[gruenderplattform.de](https://gruenderplattform.de/unternehmen-gruenden/doppelte-buchfuehrung)",
+            "600k+":"Automatische Einstufung als Großbetrieb mit täglicher Kassendifferenzmeldung. Externes Jahresaudit empfohlen. [ihk.de](https://www.ihk.de/berlin/service-und-beratung/recht-und-steuern/kaufmaennische-pflichten/veroeffentlichungs-offenlegungs-bekanntmachungspflichten-4336858)"
+        }
+
+        trennung_hinweise = {
+            "0-25 %":"Geringe Barzahlungen bedeuten weniger Kontrollrisiko. Trotzdem wichtig: Bewahren Sie alle Kartenzahlungsbelege und Online-Buchungsbestätigungen auf. [gesetze-im-internet.de](https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html), [kassensichv.com](https://kassensichv.com), ",
+            "26-50 %":"Documentieren Sie Barzahlungen besonders sorgfältig. Praktisch: Führen Sie ein Tageskassenbuch mit Unterschrift der Schichtverantwortlichen. [ready2order.com](https://ready2order.com/de/post/belegausgabepflicht/)",
+            "51-75 %":"Bei hohen Barumsätzen sind Registrierkassen mit Speicherfunktion Pflicht. Tipp: Machen Sie tägliche Kassenstürze und notieren Sie Abweichungen sofort.",
+            "Über 75%":"Sehr hohe Barumsätze werden vom Finanzamt besonders geprüft. Wichtig: Verwenden Sie ein zertifiziertes Kassensystem und lagern Sie Bons 10 Jahre. [ready2order.com](https://ready2order.com/de/post/belegausgabepflicht/)"
+        }
+
+        kassensystem_hinweise = {
+            "Ja, für alle Standorte":"Super! Damit erfüllen Sie die gesetzlichen Vorgaben. Wichtig: Stellen Sie sicher, dass alle Kassen regelmäßig Updates erhalten. [kassensichv.com](https://kassensichv.com)",
+            "Teilweise":"Achtung: Nicht konforme Kassen können Strafen nach sich ziehen. Tipp: Rüsten Sie alle Standorte innerhalb von 3 Monaten nach. [ihk.de](https://www.ihk.de/bayreuth/hauptnavigation/service/steuern/aktuelle-steuerinfos/steuermeldungen-news/letzte-frist-jetzt-unbedingt-die-kasse-nachruesten-4726124)",
+            "Nein":"Das ist gesetzlich Pflicht! Handeln Sie schnell: Einfache Systeme gibt es schon ab 200€. Vermeiden Sie sonst hohe Nachzahlungen. [heimpel.com](https://www.heimpel.com/kassensysteme-strafen-bussgelder-sanktionen)"
+        }
+
+        kassensytem_prüfung_hinweise = {
+            "Innerhalb der letzen 12 Monate":"Gut gemacht! Planen Sie die nächste Prüfung spätestens in 10 Monaten. Merken: Protokolle 5 Jahre aufbewahren. [BZSt.de](https://www.bzst.de/DE/Home/home_node.html)",
+            "Vor mehr als 12 Monaten":"Das Risiko steigt - alte Systeme haben oft Sicherheitslücken. Tipp: Lassen Sie die Kasse innerhalb von 4 Wochen checken. [tuvit.de](https://www.tuvit.de/de/tuevit/elektronische-kassensysteme/)",
+            "Nie":"Sehr riskant! Ohne Prüfung sind Strafen bis 25.000€ möglich. Dringend: Beauftragen Sie umgehend einen Fachbetrieb. [gesetze-im-internet.de ](https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html)"
+        }
+
+        tse1_hinweise = {
+            "Ja":"Perfekt! Die TSE macht Ihre Kasse fälschungssicher. Einfacher Tipp: Kontrollieren Sie monatlich das TSE-Siegel. [bsi.bund.de](https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/Zertifizierung-und-Anerkennung/Listen/Zertifizierte-Produkte-nach-TR/Technische_Sicherheitseinrichtungen/TSE_node.html)",
+            "Nein":"Das ist seit 2020 Pflicht! Handeln Sie jetzt: Nachrüstkits gibt es ab 150€. Sonst drohen Bußgelder.",
+            "Unsicher":"Checken Sie das schnell: Öffnen Sie die Kasse - steht dort 'TSE' oder ein grünes Zertifikat? Wenn nein: Techniker rufen. [fiskaly.com](https://www.fiskaly.com/de/blog/fiskalcheck)"
+        }
+
+        beleg_hinweise = {
+            "Ja immer":"Richtig so! Jeder Kunde muss einen Beleg erhalten. Praktisch: Hängen Sie einen Hinweis 'Bitte nehmen Sie Ihren Bon' sichtbar auf. [ready2order.com](https://ready2order.com/de/post/belegausgabepflicht/), [gesetze-im-internet.de](https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html)",
+            "Teilweise":"Vorsicht: Fehlende Belege können als Steuerhinterziehung gewertet werden. Einfache Lösung: Kassensystem mit automatischer Bon-Ausgabe. [ready2order.com](https://ready2order.com/de/post/belegausgabepflicht/), [gesetze-im-internet.de](https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html",
+            "Nein":"Das ist illegal! Sofort ändern: Nutzen Sie Notizblöcke, bis ein Kassensystem vorhanden ist. Bons müssen 10 Jahre archiviert werden. [bzst.de](https://www.bzst.de/DE/Unternehmen/Umsatzsteuer/ZusammenfassendeMeldung/Downloadbereich/downloadbereich_node.html), [ready2order.com](https://ready2order.com/de/post/belegausgabepflicht/), [gesetze-im-internet.de](https://www.gesetze-im-internet.de/kassensichv/BJNR351500017.html)"
+        }
+    
+        belegs_anforderungen_hinweise = {
+            "Ja":"Top! Ihre Belege müssen enthalten: Datum, Uhrzeit, Steuerbeträge und eine fortlaufende Nummer. Kontrollieren Sie das monatlich. [bundesfinanzministerium.de](https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Steuerarten/Umsatzsteuer/2024-12-06-anpassung-vordruckmuster.html)",
+            "Teilweise":"Überprüfen Sie Beispielbelege: Fehlen MwSt-Aufschlüsselung oder Firmenadresse? Dann nachbessern! Vorlagen gibt es online. [datev.de](https://www.datev.de/web/de/datev-shop/betriebliches-rechnungswesen/belege-online/)",
+            "Nein":"Gefährlich! Ungültige Belege = Kein Nachweis fürs Finanzamt. Sofortmaßnahme: Lassen Sie Belegvorlagen von einem Steuerberater prüfen. [jochen-muth.de](http://www.jochen-muth.de/mandatsvermittlung.html)"
+        }
+
+        kassendaten_hinweise = {
+            "Täglich":"Perfekt! Sichern Sie zusätzlich wöchentlich auf einer externen Festplatte. Einfacher Trick: Erinnerung im Kalender einstellen. [datev.de](https://www.datev.de/web/de/m/presse/im-fokus/themenreihen/kasse/kassendaten-sicher-archivieren-und-automatisiert-verarbeiten/), [comwer.de](https://www.comwer.de/Backup-Touch-Modelle.pdf)",
+            "Wöchentlich":"Okay, aber riskant bei Stromausfällen. Besser: Cloud-Backup einrichten (kostet oft weniger als 10€/Monat). [datev.de](https://www.datev.de/web/de/m/presse/im-fokus/themenreihen/kasse/kassendaten-sicher-archivieren-und-automatisiert-verarbeiten/), [comwer.de](https://www.comwer.de/Backup-Touch-Modelle.pdf)",
+            "Monatlich":"Zu lang! Bei Datenverlust müssen Sie alle Umsätze schätzen lassen. Mindestens: Wöchentliche Sicherung + Papierprotokolle. [datev.de](https://www.datev.de/web/de/m/presse/im-fokus/themenreihen/kasse/kassendaten-sicher-archivieren-und-automatisiert-verarbeiten/), [comwer.de](https://www.comwer.de/Backup-Touch-Modelle.pdf)",
+            "Nicht regelmäßig":"Extrem riskant! Ohne Daten haben Sie keine Beweise bei Prüfungen. Starten Sie heute: Automatische Sicherung einrichten. [datev.de](https://www.datev.de/web/de/m/presse/im-fokus/themenreihen/kasse/kassendaten-sicher-archivieren-und-automatisiert-verarbeiten/), [comwer.de](https://www.comwer.de/Backup-Touch-Modelle.pdf)"
+        }
+
+        trennung_essen_trinken_hinweise = {
+            "Ja":"Wichtig für die Steuer! Beispiel: Ein Kaffee zum Mitnehmen ist 19%, ein belegtes Brötchen 7%. Kontrollieren Sie wöchentlich die Buchung. [lexware.de](https://www.lexware.de/wissen/buchhaltung-finanzen/mehrwertsteuer-gastronomie/)",
+            "Teilweise":"Vorsicht: Falsche Trennung führt zu Nachzahlungen. Einfache Hilfe: Farbige Etiketten für Speisen/Getränke an der Kasse. [datev.de](https://www.datev.de/dnlexom/v2/content/files/st9007200705405451_de.pdf)",
+            "Nein":"Pauschale 19%-Besteuerung ist illegal. Sofort ändern: Lassen Sie sich vom Lieferanten die MwSt-Sätze der Produkte bestätigen."
+        }
+
+        buchhaltungssystem_hinweise = {
+            "Ja, vollständig integriert":"Optimal! Automatische Steuerberechnung spart Zeit. Tipp: Exportieren Sie monatlich eine PDF-Übersicht fürs Finanzamt. [datev.de](https://www.datev.de/web/de/marktplatz/datev-schnittstellen-anbieter/)",
+            "Teilweise digital":"Fehlerquelle! Nutzen Sie Apps wie Lexoffice oder SevDesk - die übernehmen sogar Foto-Belegeinsendungen. Papierbelege müssen gescannt und indexiert werden (§147 AO). Digitalisieren Sie binnen 6 Monaten vollständig. [ao.bundesfinanzministerium.de](https://ao.bundesfinanzministerium.de/ao/2021/Anhaenge/BMF-Schreiben-und-gleichlautende-Laendererlasse/Anhang-64/anhang-64.html)",
+            "Nein, rein manuell":"Sehr fehleranfällig! Starten Sie mit kostenlosen Tools wie Wave Apps. Manuelle Buchungen dauern 3x länger!. Förderungen möglich. [foerderdatenbank.de](https://www.foerderdatenbank.de/FDB/Content/DE/Foerderprogramm/Bund/BMWi/digitalisierung-go-digital-bund.html)"
+        }
+
+        einnahme_erfassung_hinweise = {
+            "Ja, vollständig":"Perfekt! Trennen Sie z.B. Lieferando, Bar und EC. Einfacher Check: Monatliche Abgleich mit Bankauszügen.",
+            "Teilweise":"Problem: Unklare Quellen = Streit mit dem Finanzamt. Lösung: Getrennte Kassen-Schubladen für Bar/Karte.",
+            "Nein":"Riskant! Ohne Trennung drohen pauschale Schätzungen. Sofort starten: Notizbuch für tägliche Zahlungsarten anlegen."
+        }
+#fehlt
+        umsatzsteuer_hinweise = {
+            "0-100":"Ihre monatliche Umsatzsteuerzahlung ist sehr niedrig. Falls Sie unter die Kleinunternehmerregelung fallen, beachten Sie bitte, dass Sie nur dann von dieser Regelung profitieren können, wenn Ihr Umsatz bestimmte Grenzen nicht überschreitet. Überprüfen Sie Ihre Umsätze und Belege, um sicherzugehen, dass alles korrekt erfasst ist. [ihk.de](https://www.ihk.de/blueprint/servlet/resource/blob/4838596/b06a94ca4bdbe751162cbb5292ae1c8f/checkliste-umsatzsteuersenkung-ab-1-7-2020-data.pdf)",
+            "101-500":"Ihre Umsatzsteuerzahlungen liegen im niedrigen Bereich. Dies könnte auf einen moderaten Umsatz hindeuten. Achten Sie darauf, dass alle steuerlichen Vorgaben eingehalten werden und alle Abzüge korrekt berücksichtigt sind. [ihk.de](https://www.ihk.de/blueprint/servlet/resource/blob/4838596/b06a94ca4bdbe751162cbb5292ae1c8f/checkliste-umsatzsteuersenkung-ab-1-7-2020-data.pdf)",
+            "501-2000":"Die Höhe Ihrer monatlichen Umsatzsteuerzahlungen liegt im mittleren Bereich. Es ist sinnvoll, regelmäßig zu prüfen, ob alle Vorsteuerbeträge und Abzüge vollständig und korrekt erfasst sind. Bei Unklarheiten kann eine Beratung durch einen Steuerexperten hilfreich sein. [ihk.de](https://www.ihk.de/blueprint/servlet/resource/blob/4838596/b06a94ca4bdbe751162cbb5292ae1c8f/checkliste-umsatzsteuersenkung-ab-1-7-2020-data.pdf)",
+            "2001-5000":"Ihre Umsatzsteuerzahlungen sind relativ hoch. Stellen Sie sicher, dass Sie alle steuerlichen Abzüge optimal nutzen und alle Vorsteuerbeträge korrekt verbucht haben. Eine professionelle steuerliche Beratung könnte hier Optimierungspotenzial aufdecken. [ihk.de](https://www.ihk.de/blueprint/servlet/resource/blob/4838596/b06a94ca4bdbe751162cbb5292ae1c8f/checkliste-umsatzsteuersenkung-ab-1-7-2020-data.pdf)",
+            "5000+":"Bei solch hohen Umsatzsteuerzahlungen sollten Sie Ihre Buchhaltung besonders sorgfältig überprüfen. Achten Sie darauf, dass alle steuerlichen Regelungen eingehalten werden und alle Abzüge sowie Vorsteuern korrekt erfasst sind. Es ist ratsam, in diesem Fall einen erfahrenen Steuerberater hinzuzuziehen, um Optimierungsmöglichkeiten zu identifizieren. [ihk.de](https://www.ihk.de/blueprint/servlet/resource/blob/4838596/b06a94ca4bdbe751162cbb5292ae1c8f/checkliste-umsatzsteuersenkung-ab-1-7-2020-data.pdf)"
+        }
+
+        nachforderungen_hinweise = {
+            "Ja":"Handeln Sie: Lassen Sie die letzten 3 Jahre prüfen. Oft liegt der Fehler in falsch zugeordneten Beträgen (z.B. Catering vs. normale Verkäufe). [bundesfinanzministerium.de](https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Weitere_Steuerthemen/Abgabenordnung/AO-Anwendungserlass/2024-03-11-aenderung-gobd.html)",
+            "Nein":"Weiter so! Dokumentieren Sie besonders Sonderaktionen (z.B. Events) - diese prüft das Finanzamt oft extra. [bundesfinanzministerium.de](https://www.bundesfinanzministerium.de/Content/DE/Downloads/BMF_Schreiben/Weitere_Steuerthemen/Abgabenordnung/AO-Anwendungserlass/2024-03-11-aenderung-gobd.html)"
+        }
+    
+        steuererklärungen_hinweise = {
+            "Ja, immer":"Das spart Ärger und Verspätungsgebühren! Tipp: Legen Sie einen Ordner mit allen Fristen an (z.B. 10. Mai für Umsatzsteuer).",
+            "Manchmal verspätet":"Vorsicht: Jeder verspätete Monat kann 25€ Strafe kosten. Einfacher Trick: Stellen Sie Handy-Erinnerungen 2 Wochen vor Abgabetermin ein.",
+            "Oft verspätet":"Riskant! Das Finanzamt kann Schätzungen vornehmen. Sofort handeln: Beauftragen Sie einen Steuerhelfer für die Grundbuchhaltung."
+        }
+
+        einkommensdokumentation_hinweise = {
+            "Ja":"Perfekt! Speichern Sie Kassenbons, Lieferando-Berichte und EC-Auszüge zusammen ab. Beispiel: Ein Monat = Ein Ordner.",
+            "Teilweise":"Fehlende Belege = Verdacht auf Schwarzarbeit. Lösung: Machen Sie täglich ein Handy-Foto von allen Einnahmequellen.",
+            "Nein":"Sehr gefährlich! Starten Sie heute: Notieren Sie zumindest Tagesendsummen in einem Kalender an der Kasse."
+        }
+
+        getrennte_steuersätze_hinweise = {
+            "Ja":"Wichtig bei Lieferungen: Essen zum Mitnehmen hat 7%, Getränke immer 19%. Kontrollieren Sie wöchentlich die Kassen-Einstellungen.",
+            "Teilweise":"Achtung: Falsche Sätze führen zu Nachzahlungen. Test: Bestellen Sie selbst online - steht die richtige MwSt auf dem Bon?",
+            "Nein":"Das kann teuer werden! Sofort ändern: Lassen Sie Ihr Kassensystem mit Steuerberater-Beratung einrichten."
+        }
+
+        steuerprüfung_hinweise = {
+            "Ja, mehrmals":"Seien Sie vorbereitet: Halten Sie alle Unterlagen der letzten 7 Jahre griffbereit. Tipp: Scannen Sie wichtige Dokumente ein.",
+            "Ja, einmal":"Lernen Sie daraus: Heben Sie besonders Quittungen für Großgeräte (z.B. neue Kühltheke) 10 Jahre auf.",
+            "Nein":"Trotzdem vorbereiten: Legen Sie einen Musterordner mit Kassenbons, Lieferscheinen und Bankauszügen für 2023 an."
+        }
+
+        nachforderungsdokumentation_hinweise = {
+            "Detailliert im Buchhaltungssystem":"Optimal! Fügen Sie immer das Finanzamt-Schreiben als PDF hinzu. Beispiel: 'Nachforderung_2023-04_Steuerberater.pdf'",
+            "Manuell in separaten Unterlagen":"Übergangslösung: Kleben Sie Briefe in einen Schnellhefter mit Datums-Stichworten. Besser: Digitalisieren mit Handy-Scanner-Apps.",
+            "Keine Dokumentation":"Problem: Bei Wiederholungsfall drohen höhere Strafen. Sofort starten: Sammeln Sie alle Briefe in einer Schuhschachtel."
+        }
+
+        audits_hinweise = {
+            "Ja, monatlich":"Top! Prüfen Sie dabei immer: Kassenabschlüsse, Belegnummern-Lücken und MwSt-Zuordnung. Protokoll hilft bei Prüfungen.",
+            "Ja, jährlich":"Gut, aber riskant: Fehler fallen erst spät auf. Besser: Machen Sie zusätzlich Stichproben vor Quartalsenden.",
+            "Nein":"Starten Sie mit 3-Monats-Checks: Vergleichen Sie Kassen-Tagesberichte mit Bankeinzügen. Dauert nur 10 Minuten pro Woche."
+        }
+
+        trinkgelder_dokumentation_hinweise = {
+            "Ja, vollständig":"Wichtig für Sozialabgaben! Beispiel: Notieren Sie täglich Trinkgeldverteilung im Schichtbuch - wer bekam wieviel?",
+            "Teilweise":"Vorsicht: Nicht erfasste Trinkgelder können als Lohnbetrug gelten. Einfache Lösung: Transparente Trinkgeldbox mit Protokollblatt.",
+            "Nein":"Gesetzliche Pflicht! Sofort ändern: Führen Sie ein A4-Blatt an der Pinnwand, wo jede Schicht ihr Trinkgeld einträgt."
+        }
+
+        trinkgelder_steuer_hinweise = {
+            "Ja":"Korrekt: Über die Kasse gezahlte Trinkgelder gehören ins Gehalt. Check: Steht im Lohnzettel ein separater Posten 'Trinkgeld'? ",
+            "Nein":"Das ist illegal! Ändern Sie die Lohnabrechnungen sofort. Tipp: Bargeld-Trinkgelder sind steuerfrei, wenn direkt an Mitarbeiter",
+            "Unsicher":"Kontrollieren Sie: Wenn Trinkgeld über die Kasse läuft (z.B. Kartenzahlung), muss es versteuert werden. Sonst nicht."
+        }
+
+        mitarbeiterschulungen_hinweise = {
+            "Ja":"Super! Halten Sie Teilnehmerlisten mit Unterschriften bereit. Praxis-Tipp: Machen Sie jährlich ein Quiz zu Kassenregeln.",
+            "Nein":"Riskant: Fehler von Mitarbeitern werden Ihnen angelastet. Starten Sie mit 20-Minuten-Einweisungen zu Bon-Pflicht und TSE. [ihk.de](https://www.ihk.de/bodensee-oberschwaben/weiterbildung/seminare-und-lhrgaenge/ihk-hoc-online-trainings-1943526)",
         }
 
         story.append(Paragraph(f"1. Gastronomiebetrieb: {betrieb}", h2_style))
@@ -233,8 +418,124 @@ class PdfGenerator():
         story.append(Paragraph(f"2. standort_zahl: {standort_zahl}", h2_style))
         story.append(Spacer(1, 10))  
         story.append(Paragraph(standort_zahl_hinweise.get(standort_zahl, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
 
         story.append(Paragraph(f"3. mitarbeiter_zahl: {mitarbeiter_zahl}", h2_style))
         story.append(Spacer(1, 10))  
         story.append(Paragraph(mitarbeiter_zahl_hinweise.get(mitarbeiter_category), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"4. jahresumsatz: {jahresumsatz}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(jahresumsatz_hinweise.get(jahresumsatz_category), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"5. trennung: {trennung}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(trennung_hinweise.get(trennung, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"6. kassensystem: {kassensystem}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(kassensystem_hinweise.get(kassensystem, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"7. kassensytem_prüfung: {kassensytem_prüfung}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(kassensytem_prüfung_hinweise.get(kassensytem_prüfung, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"8. tse1: {tse1}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(tse1_hinweise.get(tse1, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"9. beleg: {beleg}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(beleg_hinweise.get(beleg, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"10. belegs_anforderungen: {belegs_anforderungen}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(belegs_anforderungen_hinweise.get(belegs_anforderungen, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"11. kassendaten: {kassendaten}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(kassendaten_hinweise.get(kassendaten, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"12. trennung_essen_trinken: {trennung_essen_trinken}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(trennung_essen_trinken_hinweise.get(trennung_essen_trinken, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"13. buchhaltungssystem: {buchhaltungssystem}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(buchhaltungssystem_hinweise.get(buchhaltungssystem, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"14. einnahme_erfassung: {einnahme_erfassung}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(einnahme_erfassung_hinweise.get(einnahme_erfassung, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"15. umsatzsteuer: {umsatzsteuer}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(umsatzsteuer_hinweise.get(umsatzsteuer_category), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"16. nachforderungen: {nachforderungen}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(nachforderungen_hinweise.get(nachforderungen, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"17. steuererklärungen: {steuererklärungen}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(steuererklärungen_hinweise.get(steuererklärungen, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"18. einkommensdokumentation: {einkommensdokumentation}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(einkommensdokumentation_hinweise.get(einkommensdokumentation, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"19. getrennte_steuersätze: {getrennte_steuersätze}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(getrennte_steuersätze_hinweise.get(getrennte_steuersätze, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"20. steuererklärungen: {steuererklärungen}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(steuererklärungen_hinweise.get(steuererklärungen, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"21. steuerprüfung: {steuerprüfung}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(steuerprüfung_hinweise.get(steuerprüfung, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"22. nachforderungsdokumentation: {nachforderungsdokumentation}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(nachforderungsdokumentation_hinweise.get(nachforderungsdokumentation, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"23. audits: {audits}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(audits_hinweise.get(audits, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"24. trinkgelder_dokumentation: {trinkgelder_dokumentation}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(trinkgelder_dokumentation_hinweise.get(trinkgelder_dokumentation, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"25. trinkgelder_steuer: {trinkgelder_steuer}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(trinkgelder_steuer_hinweise.get(trinkgelder_steuer, ""), blocksatz_style))
+        story.append(Spacer(1, 10))
+
+        story.append(Paragraph(f"26. mitarbeiterschulungen: {mitarbeiterschulungen}", h2_style))
+        story.append(Spacer(1, 10))  
+        story.append(Paragraph(mitarbeiterschulungen_hinweise.get(mitarbeiterschulungen, ""), blocksatz_style))
         story.append(PageBreak())

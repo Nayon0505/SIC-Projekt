@@ -22,36 +22,41 @@ class CalculateResult:
         if isinstance(mitarbeiter, int):
             if mitarbeiter <= 5:
                 self.form_data['mitarbeiter_zahl'] = '1-5'
-            elif 6 <= mitarbeiter <= 10:
-                self.form_data['mitarbeiter_zahl'] = '6-10'
-            elif 11 <= mitarbeiter <= 20:
-                self.form_data['mitarbeiter_zahl'] = '11-20'
+            elif 6 <= mitarbeiter <= 15:
+                self.form_data['mitarbeiter_zahl'] = '6-15'
             else:
-                self.form_data['mitarbeiter_zahl'] = '21+'
+                self.form_data['mitarbeiter_zahl'] = '16+'
 
         # Jahresumsatz Kategorizieren
         umsatz = self.form_data.get('jahresumsatz')
         if isinstance(umsatz, int):
-            if umsatz <= 100000:
-                self.form_data['jahresumsatz'] = '0-100k'
-            elif 100001 <= umsatz <= 500000:
-                self.form_data['jahresumsatz'] = '100k-500k'
+            if umsatz <= 50000:
+                self.form_data['jahresumsatz'] = '0-50k'
+            elif 50001 <= umsatz <= 250000:
+                self.form_data['jahresumsatz'] = '50k-250k'
+            elif 250001 <= umsatz <= 600000:
+                self.form_data['jahresumsatz'] = '250k-600k'
             else:
-                self.form_data['jahresumsatz'] = '500k+'
+                self.form_data['jahresumsatz'] = '600k+'
 
         # Umsatzsteuer Kategorizieren
         ust = self.form_data.get('umsatzsteuer')
         if isinstance(ust, int):
-            if ust <= 1000:
-                self.form_data['umsatzsteuer'] = '0-1000'
-            elif 1001 <= ust <= 5000:
-                self.form_data['umsatzsteuer'] = '1001-5000'
+            if ust <= 100:
+                self.form_data['umsatzsteuer'] = '0-100'
+            elif 101 <= ust <= 500:
+                self.form_data['umsatzsteuer'] = '101-500'
+            elif 501 <= ust <= 2000:
+                self.form_data['umsatzsteuer'] = '501-2000'
+            elif 2001 <= ust <= 5000:
+                self.form_data['umsatzsteuer'] = '2001-5000'
             else:
                 self.form_data['umsatzsteuer'] = '5000+'
 
     def _build_bewertungskriterien(self):
         """Define scoring rules for different test types"""
         if self.test_type == "Schnell":
+            #für den SchnellCheck
             #62
             self.bewertungskriterien = [
                 (self.form_data.get('tse'), ["ja"], 10),
@@ -65,6 +70,7 @@ class CalculateResult:
                 (self.form_data.get('schulung'), ["ja"], 4),
             ]
         else:
+            #für den AusführlichenCheck
             #132
             self.bewertungskriterien = [
                 # Step 1: Allgemeine Informationen
