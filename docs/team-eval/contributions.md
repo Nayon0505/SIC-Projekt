@@ -17,16 +17,25 @@ nav_order: 4
 {: toc }
 </details>
 
-## [Jane Dane]
+## [Nayon Lenz]
 
 Contributions
-: Lorem ipsum dolor
-: Consetetur sadipscing elitr
-: ...
+: Mein Bereich erstellt (PDf's nachträglich anzeigen und außerdem downloaden können)
+: Grundlegende Struktur der Flask-Anwendung (Routing und Grundkonzept)
+: Login und Registrierung
+: Datenbank Logik
+: Design mit Bootstrap
+: verteilen des Codes auf mehrere .py Datein für die Übersichtlichkeit
+: Navigation Bar
+: AusführlicherTest Version 1
+: Theoretische Vorarbeit
 
-## [Joe Doe]
+## [Anil Öker]
 
 Contributions
-: Diam nonumy eirmod
-: Tempor invidunt ut labore
-: ...
+: SchnellTest
+: AusführlicherTest überarbeitete Version
+: CalculateResult.py
+: PdfGenerator
+: Navigation Bar
+: Theoretische Vorarbeit
