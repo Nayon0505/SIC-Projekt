@@ -11,7 +11,7 @@ Der Sustainable Innovation Check ermöglicht es KMUs kostengünstig ihr Unterneh
 
 ## Team members
 
-### Anil Öker
+### Anil Emircan Öker
 
 About
 : Wirtschaftsinformatik Student 
