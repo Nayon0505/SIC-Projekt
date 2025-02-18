@@ -168,7 +168,9 @@ def schnelltest():
     else:
         return render_template('schnelltest.html', form=form,hide_mein_bereich = True, hide_logout = True)
     
+
 @app.route('/ausführlicherTest', methods=['GET', 'POST'])
+@login_required
 def ausführlicherTest():
     session.setdefault('form_data_ausführlich', {})
     session.setdefault('step', 1)
